@@ -73,7 +73,7 @@
             </div>
 
             <div class="uk-margin-small uk-padding-small  uk-padding-remove-vertical">
-                <!--  <label class="uk-form-label" for="form-stacked-text">From:</label> -->
+               <!--departure input with custom autocomplete (default is turned off) -->
                 <div class="uk-form-controls relative">
                     <input autocomplete="off" class="uk-input uk-border-rounded fa" id="going-from" type="text"
                         placeholder="&#xf5b0;  From:">
@@ -81,7 +81,7 @@
             </div>
 
             <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical">
-                <!--<label class="uk-form-label" for="form-stacked-select">To:</label> -->
+                <!--arrival inpute with custom autocomplete (default is turned off) -->
                 <div class="uk-form-controls relative">
                     <input autocomplete="off" class="uk-input uk-border-rounded fa" id="going-to" type="text"
                         placeholder="&#xf5af;  To:">
@@ -93,10 +93,10 @@
 
                 <div id="trip" class="uk-form-controls uk-align-right">
 
-
+                    <!--radio buttons one way/round trip-->
                     <label><input class="uk-radio" type="radio" name="radio1"> One-way</label>
 
-                    <label><input class="uk-radio" type="radio" name="radio1"> Round</label>
+                    <label><input class="uk-radio" type="radio" name="radio1"> Round trip</label>
 
 
 
@@ -114,7 +114,7 @@
 
 
             <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical hide">
-                <!--<label class="uk-form-label" for="form-stacked-select">To:</label> -->
+       <!-- check-in datepicker -->
                 <div class="uk-form-controls">
                     <input class="uk-input uk-border-rounded fa" readonly
                         data-uk-datepicker="{minDate:0,format:'&#xf783; MMMM DD YYYY'}" id="check-in" type="text"
@@ -126,8 +126,10 @@
             </div>
 
             <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical hide">
-                <!--<label class="uk-form-label" for="form-stacked-select">To:</label> -->
+          
                 <div class="uk-form-controls">
+
+                    <!--check out datepicker-->
                     <input class="uk-input uk-border-rounded fa" readonly
                         data-uk-datepicker="{minDate:1,format:'&#xf783; MMMM DD YYYY'}" id="check-out" type="text"
                         placeholder="&#xf783;  Check Out:">
@@ -358,8 +360,8 @@
 
         <!--this is a single hotel. this grid must be generated dynamically through JS-->
 
-        <div class="uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal">
-            <div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s  uk-background-muted">
+        <div class="uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal margin-zero test-border">
+            <div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s  uk-background-muted uk-padding-remove-horizontal margin-zero">
 
                 <img class="uk-border-rounded"
                     src="https://images.trvl-media.com/hotels/1000000/30000/20900/20835/88bc9393.jpg">
