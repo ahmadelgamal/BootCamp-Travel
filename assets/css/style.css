@@ -74,6 +74,12 @@ header {
 
     font-weight: 900;
 }
+
+.relative {
+
+position:relative;
+
+}
 .autocomplete-items {
     position: absolute;
     cursor:pointer;
@@ -81,7 +87,7 @@ header {
     border: 1px solid #ffffff;
     border-bottom: none;
     border-top: none;
-    z-index: 99;
+    z-index: 1000;
     /*position the autocomplete items to be the same width as the container:*/
     top: 100%;
     

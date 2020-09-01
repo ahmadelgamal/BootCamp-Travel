@@ -124,6 +124,8 @@ function autocomplete(inp, arr) {
         a.setAttribute("class", "autocomplete-items");
         /*append the DIV element as a child of the autocomplete container:*/
         this.parentNode.appendChild(a);
+    
+       
         /*for each item in the array...*/
         for (i = 0; i < arr.length; i++) {
             /*check if the item starts with the same letters as the text field value:*/
@@ -134,6 +136,7 @@ function autocomplete(inp, arr) {
                 /*make the matching letters bold:*/
                 b.innerHTML = "<strong>" + arr[i].name.substr(0, val.length) + "</strong>";
                 b.innerHTML += arr[i].name.substr(val.length)+", "+arr[i].country;
+               
                 if(this.id == "going-from") icon = "&#xf5b0; ";
                 if(this.id == "going-to") icon = "&#xf5af; ";
                 /*insert a input field that will hold the current array item's value:*/
@@ -141,7 +144,7 @@ function autocomplete(inp, arr) {
                 /*execute a function when someone clicks on the item value (DIV element):*/
                 b.addEventListener("click", function (e) {
                     /*insert the value for the autocomplete text field:*/
-
+                    console.log(this.parentNode);
                     inp.value =  this.getElementsByTagName("input")[0].value;
                     /*close the list of autocompleted values,
                     (or any other open lists of autocompleted values:*/
