@@ -5,6 +5,8 @@ var flightsBtn = document.querySelector("#flights");
 var hotelsBtn = document.querySelector("#hotels");
 
 
+
+
 var flightsHandler = function (event) {
 
     var goingFrom = document.querySelector("#going-from").parentElement.parentElement;

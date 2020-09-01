@@ -48,14 +48,31 @@ header {
 
 }
 
+.test-border{
+
+
+    border: 1px solid #000000;
+}
+
+.stronger{
+
+
+    font-size:20px;
+}
+
 .hide {
 
     display:none;
 }
 
-.relative {
+.uk-nav li{
 
-    position:relative;
+   border-bottom:1px solid #cccccc;
+}
+
+.active {
+
+    font-weight: 900;
 }
 .autocomplete-items {
     position: absolute;
@@ -72,3 +89,27 @@ header {
     right: 0;
   }
 
+.margin-zero {
+
+
+    margin:0px;
+}
+
+.dropdown{
+
+
+    width:130px;
+}
+
+@media screen and (min-width: 960px) {
+
+
+    .dropdown{
+
+
+        width:230px;
+    }
+
+
+   
+  }

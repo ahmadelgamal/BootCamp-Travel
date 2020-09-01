@@ -18,8 +18,7 @@
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/css/addons/uikit.gradient.addons.min.css">
 
-        <script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/js/uikit.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/js/uikit.min.js"></script>
 
     <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/js/addons/datepicker.min.js"></script>
@@ -60,7 +59,7 @@
     <div class="hero uk-flex uk-flex-center uk-flex-middle">
 
 
-        <form id="form"
+        <form autocomplete="off" id="form"
             class="uk-form-stacked uk-width-1-4@l uk-width-1-2@s uk-background-default uk-border-rounded uk-box-shadow-large">
 
 
@@ -76,7 +75,7 @@
             <div class="uk-margin-small uk-padding-small  uk-padding-remove-vertical">
                 <!--  <label class="uk-form-label" for="form-stacked-text">From:</label> -->
                 <div class="uk-form-controls relative">
-                    <input class="uk-input uk-border-rounded fa" id="going-from" type="text"
+                    <input autocomplete="off" class="uk-input uk-border-rounded fa" id="going-from" type="text"
                         placeholder="&#xf5b0;  From:">
                 </div>
             </div>
@@ -84,7 +83,8 @@
             <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical">
                 <!--<label class="uk-form-label" for="form-stacked-select">To:</label> -->
                 <div class="uk-form-controls relative">
-                    <input class="uk-input uk-border-rounded fa" id="going-to" type="text" placeholder="&#xf5af;  To:">
+                    <input autocomplete="off" class="uk-input uk-border-rounded fa" id="going-to" type="text"
+                        placeholder="&#xf5af;  To:">
 
                 </div>
             </div>
@@ -146,60 +146,241 @@
 
         </form>
     </div>
-    
 
 
 
 
-
-
-
-
-
-    
 
     <div class="uk-container uk-padding-small">
+
+
+
+
+
+        <div class="uk-grid uk-border-rounded uk-padding-remove-horizontal margin-zero">
+            <div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s">
+
+
+
+                <button class="uk-button uk-button-default dropdown" type="button">Price</button>
+                <div uk-dropdown>
+                    <ul class="uk-nav uk-dropdown-nav stronger">
+
+                        <li class="active">Lowest</li>
+                        <li>Highest</li>
+
+                    </ul>
+                </div>
+
+                <button class="uk-button uk-button-default dropdown" type="button">Arrival</button>
+                <div uk-dropdown>
+                    <ul class="uk-nav uk-dropdown-nav stronger">
+
+                        <li>Early Morning</li>
+                        <li class="active">Morning</li>
+                        <li>Afternoon</li>
+                        <li>Evening</li>
+                        <li>All</li>
+
+                    </ul>
+
+                </div>
+
+
+                <button class="uk-button uk-button-default dropdown" type="button">Departure</button>
+                <div uk-dropdown>
+                    <ul class="uk-nav uk-dropdown-nav stronger">
+
+                        <li class="active">Early Morning</li>
+                        <li>Morning</li>
+                        <li>Afternoon</li>
+                        <li>Evening</li>
+                        <li>All</li>
+
+                    </ul>
+
+                </div>
+
+
+
+            </div>
+
+
+            <div id="flights"
+                class="uk-grid uk-width-2-3@m uk-width-1-1@s uk-border-rounded uk-padding-remove-horizontal margin-zero">
+
+                <div class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero">
+
+
+                    <div class="uk-width-1-2 uk-padding-remove-horizontal">
+
+                        <h4>Delta Airlines </h4>
+
+                        <img width="70px" height="70px" class="uk-border-rounded"
+                            src="https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/DL_sq.svg">
+
+                        <p><span class="fa stronger">LAX &#xf072; SFO </span> </p>
+                        </p>
+                        <p>6:55pm to - 8:17pm<br>
+                            <span class="stronger">1h:22min (non-stop)</span> <span class="fa"> &#xf152; &#xf1eb;
+                                &#xf5e7;</span> </p>
+
+                        <p>Delta 3557 operated by Skywest DBA Delta
+
+                        </p>
+
+                    </div>
+
+                    <div class="uk-border-rounded uk-width-1-2 uk-padding-small price">
+
+
+
+                        <h2 class="uk-margin-remove-vertical">
+                            $96</h2>
+                        <b>Round trip</b>
+
+
+
+                        <button
+                            class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded">Select</button>
+
+
+
+
+                    </div>
+                </div>
+
+
+                <div class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero">
+
+
+                    <div class="uk-width-1-2 uk-padding-remove-horizontal">
+
+                        <h4>Alaska Airlines </h4>
+
+                        <img width="70px" height="70px" class="uk-border-rounded"
+                            src="https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/AS_sq.svg">
+
+                        <p><span class="fa stronger">LAX &#xf072; SFO </span> </p>
+                        </p>
+                        <p>6:55pm to - 8:17pm<br>
+                            <span class="stronger">1h:22min (non-stop)</span> <span class="fa"> &#xf152; &#xf1eb;
+                                &#xf5e7;</span> </p>
+
+                        <p>Delta 3557 operated by Skywest DBA Delta
+
+                        </p>
+
+                    </div>
+
+                    <div class="uk-border-rounded uk-width-1-2 uk-padding-small price">
+
+
+
+                        <h2 class="uk-margin-remove-vertical">
+                            $96</h2>
+                        <b>Round trip</b>
+
+
+
+                        <button
+                            class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded">Select</button>
+
+
+
+
+                    </div>
+                </div>
+
+                <div class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero">
+
+
+                    <div class="uk-width-1-2 uk-padding-remove-horizontal">
+
+                        <h4>American Airlines </h4>
+
+                        <img width="70px" height="70px" class="uk-border-rounded"
+                            src="https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/AA_sq.svg">
+
+                        <p><span class="fa stronger">LAX &#xf072; SFO </span> </p>
+                        </p>
+                        <p>6:55pm to - 8:17pm<br>
+                            <span class="stronger">1h:22min (non-stop)</span> <span class="fa"> &#xf152; &#xf1eb;
+                                &#xf5e7;</span> </p>
+
+                        <p>Delta 3557 operated by Skywest DBA Delta
+
+                        </p>
+
+                    </div>
+
+                    <div class="uk-border-rounded uk-width-1-2 uk-padding-small price">
+
+
+
+                        <h2 class="uk-margin-remove-vertical">
+                            $96</h2>
+                        <b>Round trip</b>
+
+
+
+                        <button
+                            class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded">Select</button>
+
+
+
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
 
 
         <div class="uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal">
             <div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s  uk-background-muted">
 
-                <img  class="uk-border-rounded"
+                <img class="uk-border-rounded"
                     src="https://images.trvl-media.com/hotels/1000000/30000/20900/20835/88bc9393.jpg">
             </div>
 
 
             <div class="uk-grid uk-width-2-3@m uk-width-1-1@s">
-            <div class="uk-width-1-2 uk-margin-medium">
+                <div class="uk-width-1-2 uk-margin-medium">
 
-                <h4>Travelodge by Wyndham, Santa Clarita/Valencia </h4>
-                <p>Canyon Country <br>
-                    <span class="uk-text-success">Reserve Now, Pay Later</span><br>
-                    <span class="uk-text-success">Free Cancellation</span>
+                    <h4>Travelodge by Wyndham, Santa Clarita/Valencia </h4>
+                    <p>Canyon Country <br>
+                        <span class="uk-text-success">Reserve Now, Pay Later</span><br>
+                        <span class="uk-text-success">Free Cancellation</span>
 
-                </p>
-                <span class="uk-position-bottom uk-position-relative">3.3/5 Rating (1000 Reviews)</span>
+                    </p>
+                    <span class="uk-position-bottom uk-position-relative">3.3/5 Rating (1000 Reviews)</span>
 
+                </div>
+
+                <div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price">
+
+
+
+                    <h2 class="uk-margin-remove-vertical">
+                        $109</h2>
+                    <b>per Night</b>
+
+
+
+                    <button
+                        class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded">Reserve</button>
+
+
+
+
+                </div>
             </div>
-
-            <div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price">
-
-
-
-                <h2 class="uk-margin-remove-vertical">
-                    $109</h2>
-                <b>per Night</b>
-
-
-
-                <button
-                    class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded">Reserve</button>
-
-
-
-
-            </div>
-        </div>
         </div>
 
 
@@ -208,42 +389,42 @@
         <div class="uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal">
             <div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s  uk-background-muted">
 
-                <img  class="uk-border-rounded"
+                <img class="uk-border-rounded"
                     src="https://images.trvl-media.com/hotels/25000000/24390000/24389000/24388925/639d6472.jpg">
             </div>
 
 
             <div class="uk-grid uk-width-2-3@m uk-width-1-1@s">
-            <div class="uk-width-1-2 uk-margin-medium">
+                <div class="uk-width-1-2 uk-margin-medium">
 
-                <h4>Luxe 3br W/ Hot Tub & Mountain View 3 Bedroom Home </h4>
-                <p>Canyon Country <br>
-                    <span class="uk-text-success">Reserve Now, Pay Later</span><br>
-                    <span class="uk-text-success">Free Cancellation</span>
+                    <h4>Luxe 3br W/ Hot Tub & Mountain View 3 Bedroom Home </h4>
+                    <p>Canyon Country <br>
+                        <span class="uk-text-success">Reserve Now, Pay Later</span><br>
+                        <span class="uk-text-success">Free Cancellation</span>
 
-                </p>
-                <span class="uk-position-bottom uk-position-relative">3.3/5 Rating (1000 Reviews)</span>
+                    </p>
+                    <span class="uk-position-bottom uk-position-relative">3.3/5 Rating (1000 Reviews)</span>
 
+                </div>
+
+                <div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price">
+
+
+
+                    <h2 class="uk-margin-remove-vertical">
+                        $109</h2>
+                    <b>per Night</b>
+
+
+
+                    <button
+                        class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded">Reserve</button>
+
+
+
+
+                </div>
             </div>
-
-            <div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price">
-
-
-
-                <h2 class="uk-margin-remove-vertical">
-                    $109</h2>
-                <b>per Night</b>
-
-
-
-                <button
-                    class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded">Reserve</button>
-
-
-
-
-            </div>
-        </div>
         </div>
 
 
@@ -251,90 +432,90 @@
         <div class="uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal">
             <div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s uk-background-muted">
 
-                <img  class="uk-border-rounded"
+                <img class="uk-border-rounded"
                     src="https://images.trvl-media.com/hotels/43000000/42280000/42279900/42279838/4fbd4c93.jpg">
             </div>
 
 
             <div class="uk-grid uk-width-2-3@m uk-width-1-1@s">
-            <div class="uk-width-1-2 uk-margin-medium">
+                <div class="uk-width-1-2 uk-margin-medium">
 
-                <h4>Adorable House With Fireplace in Backyard</h4>
-                <p>Canyon Country <br>
-                    <span class="uk-text-success">Reserve Now, Pay Later</span><br>
-                    <span class="uk-text-success">Free Cancellation</span>
+                    <h4>Adorable House With Fireplace in Backyard</h4>
+                    <p>Canyon Country <br>
+                        <span class="uk-text-success">Reserve Now, Pay Later</span><br>
+                        <span class="uk-text-success">Free Cancellation</span>
 
-                </p>
-                <span class="uk-position-bottom uk-position-relative">3.3/5 Rating (1000 Reviews)</span>
+                    </p>
+                    <span class="uk-position-bottom uk-position-relative">3.3/5 Rating (1000 Reviews)</span>
 
-            </div>
+                </div>
 
-            <div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price">
-
-
-
-                <h2 class="uk-margin-remove-vertical">
-                    $109</h2>
-                <b>per Night</b>
+                <div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price">
 
 
 
-                <button
-                    class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded">Reserve</button>
+                    <h2 class="uk-margin-remove-vertical">
+                        $109</h2>
+                    <b>per Night</b>
+
+
+
+                    <button
+                        class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded">Reserve</button>
 
 
 
 
+                </div>
             </div>
         </div>
-        </div>
-        
+
 
 
         <div class="uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal">
             <div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s uk-background-muted">
 
-                <img  class="uk-border-rounded"
+                <img class="uk-border-rounded"
                     src="https://images.trvl-media.com/hotels/49000000/48720000/48719600/48719502/f3c76e5d.jpg">
             </div>
 
 
             <div class="uk-grid uk-width-2-3@m uk-width-1-1@s">
-            <div class="uk-width-1-2 uk-margin-medium">
+                <div class="uk-width-1-2 uk-margin-medium">
 
-                <h4>Private Dream Resort in a Safe and Quiet Neighborhood Only 35 min From LA</h4>
-                <p>Canyon Country <br>
-                    <span class="uk-text-success">Reserve Now, Pay Later</span><br>
-                    <span class="uk-text-success">Free Cancellation</span>
+                    <h4>Private Dream Resort in a Safe and Quiet Neighborhood Only 35 min From LA</h4>
+                    <p>Canyon Country <br>
+                        <span class="uk-text-success">Reserve Now, Pay Later</span><br>
+                        <span class="uk-text-success">Free Cancellation</span>
 
-                </p>
-                <span class="uk-position-bottom uk-position-relative">3.3/5 Rating (1000 Reviews)</span>
+                    </p>
+                    <span class="uk-position-bottom uk-position-relative">3.3/5 Rating (1000 Reviews)</span>
 
-            </div>
+                </div>
 
-            <div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price">
-
-
-
-                <h2 class="uk-margin-remove-vertical">
-                    $109</h2>
-                <b>per Night</b>
+                <div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price">
 
 
 
-                <button
-                    class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded">Reserve</button>
+                    <h2 class="uk-margin-remove-vertical">
+                        $109</h2>
+                    <b>per Night</b>
+
+
+
+                    <button
+                        class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded">Reserve</button>
 
 
 
 
+                </div>
             </div>
         </div>
-        </div>
-     
 
 
-        
+
+
 
     </div>
 
