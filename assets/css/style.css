@@ -107,6 +107,17 @@ position:relative;
     width:130px;
 }
 
+.width-maxed{
+
+
+    max-width: 1000px;
+}
+
+.padding-left-small{
+
+    padding:0 0 0 6px;
+}
+
 @media screen and (min-width: 960px) {
 
 
@@ -117,5 +128,21 @@ position:relative;
     }
 
 
+
    
+  }
+
+  @media screen and (max-width: 960px) {
+
+  .padding-left-small{
+
+    padding:0 0 0 0px;
+  }
+
+    .test-border{
+
+
+        border: 0px;
+    }
+
   }
