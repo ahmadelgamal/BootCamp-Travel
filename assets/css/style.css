@@ -48,14 +48,37 @@ header {
 
 }
 
+.test-border{
+
+
+    border: 1px solid #000000;
+}
+
+.stronger{
+
+
+    font-size:20px;
+}
+
 .hide {
 
     display:none;
 }
 
+.uk-nav li{
+
+   border-bottom:1px solid #cccccc;
+}
+
+.active {
+
+    font-weight: 900;
+}
+
 .relative {
 
-    position:relative;
+position:relative;
+
 }
 .autocomplete-items {
     position: absolute;
@@ -64,7 +87,7 @@ header {
     border: 1px solid #ffffff;
     border-bottom: none;
     border-top: none;
-    z-index: 99;
+    z-index: 1000;
     /*position the autocomplete items to be the same width as the container:*/
     top: 100%;
     
@@ -72,3 +95,62 @@ header {
     right: 0;
   }
 
+.margin-zero {
+
+
+    margin:0px;
+}
+
+.dropdown{
+
+
+    width:130px;
+
+}
+
+.xs-size-button {
+
+
+   padding:5px;
+   max-width:30%;
+}
+
+.width-maxed{
+
+
+    max-width: 1000px;
+}
+
+.padding-left-small{
+
+    padding:0 0 0 6px;
+}
+
+@media screen and (min-width: 960px) {
+
+
+    .dropdown{
+
+
+        width:230px;
+    }
+
+
+
+   
+  }
+
+  @media screen and (max-width: 960px) {
+
+  .padding-left-small{
+
+    padding:0 0 0 0px;
+  }
+
+    .test-border{
+
+
+        border: 0px;
+    }
+
+  }
