@@ -13,14 +13,26 @@ var accessToken = "U6L7iz6A54EKpuGTGAVBHyF2coMw";
 // `value` of `headers` "Authorization" `key`
 var authorizationValue = "Bearer " + accessToken;
 
-/* ---------- declares variables for "flight offers search" amadeus api ---------- */
+// path for flight offers search
 var flightOffersSearchPath = "/v2/shopping/flight-offers";
+
+/* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
 var queryOrigin = "?originLocationCode=";
 var queryDestination = "&destinationLocationCode=";
 var queryDepartureDate = "&departureDate=";
 var queryNumberOfAdults = "&adults=";
-var queryCurrency = "&currencyCode=";
-var queryReturnDate = "&returnDate=";
+
+/* ---------- declares optional query variables for "flight offers search" amadeus api ---------- */
+var queryCurrency = "&currencyCode="; // default is EUR, so needed for USD
+var queryReturnDate = "&returnDate="; // required for roundtrip flights
+var queryChildren = "&children="; // for travelers between 2 and 12 on date of departure with own separate seat
+var queryInfants = "&infants="; // for travelers 2 or less on date of departure. infants sit on lap of adult (# of infants must not exceed # of adults)
+var travelClass = "&travelClass="; // ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
+var nonStop = "&nonStop="; // boolean
+var maxPrice = "&maxPrice="; // max price per traveler. no decimals
+var max = "&max="; // maximum number of flight options (default is 250)
+var includedAirlineCodes = "&includedAirlineCodes="; // multiple airlines allowed, separate with comma (no spaces). cannot be combined with excludedAirlineCodes
+var excludedAirlineCodes = "&excludedAirlineCodes="; // multiple airlines allowed, separate with comma (no spaces). cannot be combined with includedAirlineCodes
 
 /* ---------- declares variables for user input for "flight offers search" amadeus api ---------- */
 // HARDCODING. MUST BE CHANGED TO USER INPUT
