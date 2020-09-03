@@ -9,7 +9,7 @@ var baseUrl = "https://test.api.amadeus.com";
 // url for requesting and checking on access token
 var accessTokenPath = "/v1/security/oauth2/token/";
 // access token must be renewed for 30 minutes at a time
-var accessToken = "GFLJrdwhA1d3kAK8OsKJqF0RKVL7";
+var accessToken = "U6L7iz6A54EKpuGTGAVBHyF2coMw";
 // `value` of `headers` "Authorization" `key`
 var authorizationValue = "Bearer " + accessToken;
 
@@ -20,6 +20,7 @@ var queryDestination = "&destinationLocationCode=";
 var queryDepartureDate = "&departureDate=";
 var queryNumberOfAdults = "&adults=";
 var queryCurrency = "&currencyCode=";
+var queryReturnDate = "&returnDate=";
 
 /* ---------- declares variables for user input for "flight offers search" amadeus api ---------- */
 // HARDCODING. MUST BE CHANGED TO USER INPUT
@@ -28,9 +29,10 @@ var destinationCode = "LAX";
 var departureDate = "2020-10-10";
 var numberOfAdults = "1";
 var currencyCode = "USD";
+var returnDate = "2020-10-20";
 
 // full "flight offers search" api url
-var flightOffersSearchApiUrl =
+var oneWayFlightOffersSearchApiUrl =
   baseUrl +
   flightOffersSearchPath +
   queryOrigin +
@@ -43,6 +45,10 @@ var flightOffersSearchApiUrl =
   numberOfAdults +
   queryCurrency +
   currencyCode;
+
+// full "flight offers search" api url
+var roundTripFlightOffersSearchApiUrl =
+  oneWayFlightOffersSearchApiUrl + queryReturnDate + returnDate;
 
 /* ---------- declares variables for "ai-generated photos" amadeus api ---------- */
 // amadeus url variables
@@ -98,7 +104,7 @@ var getAiGeneratedPhotos = function () {
 
 /* ---------- gets "flight offers search" amadeus api ---------- */
 var getFlightOffersSearch = function () {
-  fetch(flightOffersSearchApiUrl, {
+  fetch(roundTripFlightOffersSearchApiUrl, {
     method: "GET",
     headers: {
       Authorization: authorizationValue,
@@ -133,111 +139,123 @@ var writeData = function (data) {
 
   // each flight details
   for (var i = 0; i < flightCount; i++) {
-    // html elements
     var flightListItemEl = document.createElement("li");
-    var segmentListEl = document.createElement("ol");
-    // number of segments for each flight. it is also "number of stops" for "trip"
-    var segmentCount = data.data[i].itineraries[0].segments.length;
+    var itineraryListEl = document.createElement("ol");
+    var intineraryCount = data.data[i].itineraries.length;
 
-    for (var x = 0; x < segmentCount; x++) {
-      var segmentListItemEl = document.createElement("li");
-      // essential details
-      var cabin =
-        data.data[i].travelerPricings[0].fareDetailsBySegment[x].cabin;
-      var grandTotalPrice = data.data[i].price.grandTotal;
-      var currencyCode = data.data[i].price.currency;
-      var aircraftFull = aircraftCodeList[aircraftCode];
-      var carrierFull = carriersCodeList[carrierCode];
-      var departureCityCode =
-        data.data[i].itineraries[0].segments[x].departure.iataCode;
-      var arrivalCityCode =
-        data.data[i].itineraries[0].segments[x].arrival.iataCode;
-      var departureTerminal =
-        data.data[i].itineraries[0].segments[x].departure.terminal;
-      var arrivalTerminal =
-        data.data[i].itineraries[0].segments[x].arrival.terminal;
-      var oneWay = data.data[i].oneWay;
-      var flightNumber = data.data[i].itineraries[0].segments[x].number;
-      var departureTime = data.data[i].itineraries[0].segments[x].departure.at;
-      var arrivalTime = data.data[i].itineraries[0].segments[x].arrival.at;
+    for (var y = 0; y < intineraryCount; y++) {
+      // html elements
+      var itineraryListItemEl = document.createElement("li");
+      var segmentListEl = document.createElement("ol");
+      // number of segments for each flight. it is also "number of stops" for "trip"
+      var segmentCount = data.data[i].itineraries[0].segments.length;
 
-      // more details
-      var flightDuration = data.data[i].itineraries[0].segments[x].duration;
-      var numberOfBookableSeats = data.data[i].numberOfBookableSeats;
-      var airClass =
-        data.data[i].travelerPricings[0].fareDetailsBySegment[x].class;
-      var lastTicketingDate = data.data[i].lastTicketingDate;
+      for (var x = 0; x < segmentCount; x++) {
+        var segmentListItemEl = document.createElement("li");
+        // essential details
+        var cabin =
+          data.data[i].travelerPricings[0].fareDetailsBySegment[x].cabin;
+        var grandTotalPrice = data.data[i].price.grandTotal;
+        var currencyCode = data.data[i].price.currency;
+        var aircraftFull = aircraftCodeList[aircraftCode];
+        var carrierFull = carriersCodeList[carrierCode];
+        var departureCityCode =
+          data.data[i].itineraries[0].segments[x].departure.iataCode;
+        var arrivalCityCode =
+          data.data[i].itineraries[0].segments[x].arrival.iataCode;
+        var departureTerminal =
+          data.data[i].itineraries[0].segments[x].departure.terminal;
+        var arrivalTerminal =
+          data.data[i].itineraries[0].segments[x].arrival.terminal;
+        var oneWay = data.data[i].oneWay;
+        var flightNumber = data.data[i].itineraries[0].segments[x].number;
+        var departureTime =
+          data.data[i].itineraries[0].segments[x].departure.at;
+        var arrivalTime = data.data[i].itineraries[0].segments[x].arrival.at;
 
-      // optional details
-      var departureCountryCode =
-        locationsCityCodeList[departureCityCode].countryCode;
-      var arrivalCountryCode =
-        locationsCityCodeList[arrivalCityCode].countryCode;
-      var basePrice = data.data[i].price.base;
-      var totalPrice = data.data[i].price.total;
-      // checks if there is data for operator, otherwise it does not look for it
-      if (
-        typeof data.data[i].itineraries[0].segments[x].operating !== "undefined"
-      ) {
-        var operatorCode =
-          data.data[i].itineraries[0].segments[x].operating.carrierCode;
-        var operatorFull = carriersCodeList[operatorCode];
+        // more details
+        var flightDuration = data.data[i].itineraries[0].segments[x].duration;
+        var numberOfBookableSeats = data.data[i].numberOfBookableSeats;
+        var airClass =
+          data.data[i].travelerPricings[0].fareDetailsBySegment[x].class;
+        var lastTicketingDate = data.data[i].lastTicketingDate;
+
+        // optional details
+        var departureCountryCode =
+          locationsCityCodeList[departureCityCode].countryCode;
+        var arrivalCountryCode =
+          locationsCityCodeList[arrivalCityCode].countryCode;
+        var basePrice = data.data[i].price.base;
+        var totalPrice = data.data[i].price.total;
+        // checks if there is data for operator, otherwise it does not look for it
+        if (
+          typeof data.data[i].itineraries[0].segments[x].operating !==
+          "undefined"
+        ) {
+          var operatorCode =
+            data.data[i].itineraries[0].segments[x].operating.carrierCode;
+          var operatorFull = carriersCodeList[operatorCode];
+        }
+
+        // hidden details
+        var currencyFull = currenciesCodeList[currencyCode];
+        var aircraftCode =
+          data.data[i].itineraries[0].segments[x].aircraft.code;
+        var carrierCode = data.data[i].itineraries[0].segments[x].carrierCode;
+        var numberOfStops =
+          data.data[i].itineraries[0].segments[x].numberOfStops;
+
+        // combines above data
+        var segmentDetails =
+          i +
+          "-" +
+          x +
+          " | Cabin: " +
+          cabin +
+          " | class: " +
+          airClass +
+          " | aircraft: " +
+          aircraftFull +
+          " | carrier: " +
+          carrierFull +
+          " | operated by: " +
+          operatorFull +
+          "<br /> | from: " +
+          departureCityCode +
+          ", " +
+          departureCountryCode +
+          " | terminal: " +
+          departureTerminal +
+          " | to: " +
+          arrivalCityCode +
+          ", " +
+          arrivalCountryCode +
+          " | terminal: " +
+          arrivalTerminal +
+          " | number of stops: " +
+          numberOfStops +
+          "<br /> | Base Price = " +
+          basePrice +
+          " " +
+          currencyCode +
+          " | Total Price = " +
+          totalPrice +
+          " " +
+          currencyFull +
+          " | Grand Total Price = " +
+          grandTotalPrice +
+          " " +
+          currencyFull;
+
+        // creates a new listing for each segment
+        segmentListItemEl.innerHTML = segmentDetails;
+        segmentListEl.appendChild(segmentListItemEl);
       }
-
-      // hidden details
-      var currencyFull = currenciesCodeList[currencyCode];
-      var aircraftCode = data.data[i].itineraries[0].segments[x].aircraft.code;
-      var carrierCode = data.data[i].itineraries[0].segments[x].carrierCode;
-      var numberOfStops = data.data[i].itineraries[0].segments[x].numberOfStops;
-
-      // combines above data
-      var segmentDetails =
-        i +
-        "-" +
-        x +
-        " | Cabin: " +
-        cabin +
-        " | class: " +
-        airClass +
-        " | aircraft: " +
-        aircraftFull +
-        " | carrier: " +
-        carrierFull +
-        " | operated by: " +
-        operatorFull +
-        " | from: " +
-        departureCityCode +
-        ", " +
-        departureCountryCode +
-        " | terminal: " +
-        departureTerminal +
-        " | to: " +
-        arrivalCityCode +
-        ", " +
-        arrivalCountryCode +
-        " | terminal: " +
-        arrivalTerminal +
-        " | number of stops: " +
-        numberOfStops +
-        " | Base Price = " +
-        basePrice +
-        " " +
-        currencyCode +
-        " | Total Price = " +
-        totalPrice +
-        " " +
-        currencyFull +
-        " | Grand Total Price = " +
-        grandTotalPrice +
-        " " +
-        currencyFull;
-
-      // creates a new listing for each segment
-      segmentListItemEl.textContent = segmentDetails;
-      segmentListEl.appendChild(segmentListItemEl);
+      itineraryListItemEl.appendChild(segmentListEl);
+      itineraryListEl.appendChild(itineraryListItemEl);
     }
     // creates a new listing for each flight
-    flightListItemEl.appendChild(segmentListEl);
+    flightListItemEl.appendChild(itineraryListEl);
     flightsListEl.appendChild(flightListItemEl);
   }
 };
