@@ -5,8 +5,8 @@ var flightCountEl = document.getElementById("flight-count");
 // gets "flight offers search" amadeus api
 var getFlightOffersSearch = function () {
   // HARDCODING. MUST BE CHANGED TO USER INPUT
-  var originCode = "LAX";
-  var destinationCode = "CDG";
+  var originCode = "CDG";
+  var destinationCode = "LAX";
   var departureDate = "2020-10-10";
   var numberOfAdults = "1";
   var currencyCode = "USD";
@@ -30,19 +30,18 @@ var getFlightOffersSearch = function () {
     queryDepartureDate +
     departureDate +
     queryNumberOfAdults +
-    numberOfAdults + 
+    numberOfAdults +
     queryCurrency +
     currencyCode;
 
-
   // access token must be renewed for 30 minutes at a time
-  var accessToken = "pY8hWWrNcbp2dAVEJkseMH0me3it";
+  var accessToken = "xOKI5AqLGbAleIyQnyWDzw2nCgqj";
   var authorizationValue = "Bearer " + accessToken;
 
   fetch(apiUrl, {
-    "method": "GET",
-    "headers": {
-      "Authorization": authorizationValue,
+    method: "GET",
+    headers: {
+      Authorization: authorizationValue,
     },
   })
     .then(function (response) {
@@ -61,7 +60,7 @@ var writeData = function (data) {
   var aircraftCodeList = data.dictionaries.aircraft;
   var carriersCodeList = data.dictionaries.carriers;
   var currenciesCodeList = data.dictionaries.currencies;
-  var locationsCodeList = data.dictionaries.locations;
+  var locationsCityCodeList = data.dictionaries.locations;
 
   // number of flights available per user input
   var flightCount = data.meta.count;
@@ -70,6 +69,7 @@ var writeData = function (data) {
 
   // each flight details
   for (var i = 0; i < flightCount; i++) {
+    // if (typeof data.foo !== "undefined") {
     var cabin = data.data[i].travelerPricings[0].fareDetailsBySegment[0].cabin;
     var airClass =
       data.data[i].travelerPricings[0].fareDetailsBySegment[0].class;
@@ -85,14 +85,15 @@ var writeData = function (data) {
     var operatorCode =
       data.data[i].itineraries[0].segments[0].operating.carrierCode;
     var operatorFull = carriersCodeList[operatorCode];
-    var departureCode =
+    var departureCityCode =
       data.data[i].itineraries[0].segments[0].departure.iataCode;
-    var departureFull = locationsCodeList[departureCode];
+    var departureCountryCode =
+      locationsCityCodeList[departureCityCode].countryCode;
     var departureTerminal =
       data.data[i].itineraries[0].segments[0].departure.terminal;
-    var arrivalCode =
-      data.data[i].itineraries[0].segments[0].departure.iataCode;
-    var arrivalFull = locationsCodeList[arrivalCode];
+    var arrivalCityCode =
+      data.data[i].itineraries[0].segments[0].arrival.iataCode;
+    var arrivalCountryCode = locationsCityCodeList[arrivalCityCode].countryCode;
     var arrivalTerminal =
       data.data[i].itineraries[0].segments[0].arrival.iataCode;
     var numberOfStops = data.data[i].itineraries[0].segments[0].numberOfStops;
@@ -110,13 +111,17 @@ var writeData = function (data) {
       " | operated by: " +
       operatorFull +
       " | from: " +
-      departureFull +
+      departureCityCode +
+      ", " +
+      departureCountryCode +
       " | terminal: " +
       departureTerminal +
       " | to: " +
-      arrivalFull +
-      " | terminal: ";
-    arrivalTerminal +
+      arrivalCityCode +
+      ", " +
+      arrivalCountryCode +
+      " | terminal: " +
+      arrivalTerminal +
       " | number of stops: " +
       numberOfStops +
       " | Base Price = " +
@@ -136,6 +141,7 @@ var writeData = function (data) {
     flightListItemEl.textContent = flightDetails;
     flightsListEl.appendChild(flightListItemEl);
   }
+  // }
 };
 
 // check status of access token. it expires every 30 minutes
