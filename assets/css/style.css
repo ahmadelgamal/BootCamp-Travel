@@ -105,6 +105,14 @@ position:relative;
 
 
     width:130px;
+
+}
+
+.xs-size-button {
+
+
+   padding:5px;
+   max-width:30%;
 }
 
 .width-maxed{

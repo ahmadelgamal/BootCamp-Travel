@@ -7,6 +7,8 @@ var flightsContainer = document.querySelector("#flights-container");
 
 var hotelsContainer = document.querySelector("#hotels-container");
 
+var searchContainer = document.querySelector("#past-search-container");
+
 
 
 var showFlightsMenu = function () {
@@ -31,8 +33,7 @@ var showFlightsMenu = function () {
     var dArrival = document.querySelector("#date-arrival").parentElement.parentElement;
     dArrival.setAttribute("class", "uk-margin-small uk-padding-small uk-padding-remove-vertical");
 
-    var flightsSubMenu = document.querySelector("#flights-sub-menu");
-    flightsSubMenu.style.display = "";
+
 
 
 }
@@ -60,14 +61,14 @@ var showHotelsMenu = function () {
     var dArrival = document.querySelector("#date-arrival").parentElement.parentElement;
     dArrival.setAttribute("class", "uk-margin-small uk-padding-small uk-padding-remove-vertical hide");
 
-    var flightsSubMenu = document.querySelector("#flights-sub-menu");
-    flightsSubMenu.style.display = "none";
+  
 
 }
 
 
 var showFlights = function () {
 
+    searchContainer.style.display = "none";
     hotelsContainer.style.display = "none";
     flightsContainer.style.display = "";
 
@@ -78,6 +79,16 @@ var showHotels = function () {
 
     hotelsContainer.style.display = "";
     flightsContainer.style.display = "none";
+    searchContainer.style.display = "none";
+
+}
+
+
+var showSearchHistory = function (){
+
+    hotelsContainer.style.display = "none";
+    flightsContainer.style.display = "none";
+    searchContainer.style.display = "";
 
 }
 
@@ -109,8 +120,7 @@ var init = function () {
 
 
 
-    showFlights();
-    showFlightsMenu();
+    showSearchHistory();
 }
 
 
