@@ -1,7 +1,9 @@
 // DECLARE GLOBAL VARIABLES
 var flightsListEl = document.getElementById("flights-list");
+var flightCountEl = document.getElementById("flight-count");
 
-var getFlightInfo = function () {
+// gets "flight offers search" amadeus api
+var getFlightOffersSearch = function () {
   // HARDCODING. MUST BE CHANGED TO USER INPUT
   var originCode = "LAX";
   var destinationCode = "CDG";
@@ -29,7 +31,7 @@ var getFlightInfo = function () {
     numberOfAdults;
 
   // access token must be renewed for 30 minutes at a time
-  var accessToken = "80oPFkdWLCDCGPyHdIIcLQQzl1BS";
+  var accessToken = "NAih82hsKMzfxUy1DYiN9KMeIV7j";
   var authorizationValue = "Bearer " + accessToken;
 
   fetch(apiUrl, {
@@ -45,19 +47,75 @@ var getFlightInfo = function () {
     });
 };
 
-getFlightInfo();
+getFlightOffersSearch();
 
 // write first 20 flight options
 var writeData = function (data) {
-  console.log(data.data[0].price);
-  for (var i = 0; i < 20; i++) {
+  // dictionary of codes
+  var aircraftCodeList = data.dictionaries.aircraft;
+  var carriersCodeList = data.dictionaries.carriers;
+  var currenciesCodeList = data.dictionaries.currencies;
+  var locationsCodeList = data.dictionaries.locations;
+  
+  // number of flights available per user input
+  var flightCount = data.meta.count;
+  flightCountEl.textContent = "There are: " + flightCount + " available for your selected route!";
+  
+  // each flight details
+  for (var i = 0; i < flightCount; i++) {
     var cabin = data.data[i].travelerPricings[0].fareDetailsBySegment[0].cabin;
-    var airClass = data.data[i].travelerPricings[0].fareDetailsBySegment[0].class;
+    var airClass =
+    data.data[i].travelerPricings[0].fareDetailsBySegment[0].class;
     var basePrice = data.data[i].price.base;
-    var currency = data.data[i].price.currency;
+    var currencyCode = data.data[i].price.currency;
+    var currencyFull = currenciesCodeList[currencyCode];
     var totalPrice = data.data[i].price.total;
-    var flightDetails = "Cabin: " + cabin + " | class: " + airClass + " | Base Price = " + basePrice + " " + currency + "| after fees = " + totalPrice + " " + currency;
-    
+    var grandTotalPrice = data.data[i].price.grandTotal;
+    var aircraftCode = data.data[i].itineraries[0].segments[0].aircraft.code;
+    var aircraftFull = aircraftCodeList[aircraftCode];
+    var carrierCode = data.data[i].itineraries[0].segments[0].carrierCode;
+    var carrierFull = carriersCodeList[carrierCode];
+    var operatorCode = data.data[i].itineraries[0].segments[0].operating.carrierCode;
+    var operatorFull = carriersCodeList[operatorCode];
+    var departureCode = data.data[i].itineraries[0].segments[0].departure.iataCode;
+    var departureFull = locationsCodeList[departureCode];
+    var departureTerminal = data.data[i].itineraries[0].segments[0].departure.terminal;
+    var arrivalCode = data.data[i].itineraries[0].segments[0].departure.iataCode;
+    var arrivalFull = locationsCodeList[arrivalCode];
+    var arrivalTerminal = data.data[i].itineraries[0].segments[0].arrival.iataCode;
+    var numberOfStops = data.data[i].itineraries[0].segments[0].numberOfStops;
+
+    // combine above data
+    var flightDetails =
+      "Cabin: " +
+      cabin +
+      " | class: " +
+      airClass +
+      " | aircraft: " +
+      aircraftFull +
+      " | carrier: " +
+      carrierFull +
+      " | operated by: " +
+      operatorFull +
+      " | from: " +
+      departureFull +
+      " | to: " +
+      arrivalFull +
+      " | number of stops: " +
+      numberOfStops +
+      " | Base Price = " +
+      basePrice +
+      " " +
+      currencyCode +
+      " | Total Price = " +
+      totalPrice +
+      " " +
+      currencyFull +
+      " | Grand Total Price = " +
+      grandTotalPrice +
+      " " +
+      currencyFull;
+
     var flightListItemEl = document.createElement("li");
     flightListItemEl.textContent = flightDetails;
     flightsListEl.appendChild(flightListItemEl);
