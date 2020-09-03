@@ -35,7 +35,7 @@ var getFlightOffersSearch = function () {
     currencyCode;
 
   // access token must be renewed for 30 minutes at a time
-  var accessToken = "xOKI5AqLGbAleIyQnyWDzw2nCgqj";
+  var accessToken = "b44xfsgmZPwWe0lQYyJUOdYt03i1";
   var authorizationValue = "Bearer " + accessToken;
 
   fetch(apiUrl, {
@@ -65,38 +65,56 @@ var writeData = function (data) {
   // number of flights available per user input
   var flightCount = data.meta.count;
   flightCountEl.textContent =
-    "There are: " + flightCount + " available for your selected route!";
+    "There are " + flightCount + " flights available for your selected route!";
 
   // each flight details
   for (var i = 0; i < flightCount; i++) {
-    // if (typeof data.foo !== "undefined") {
+    // vital details
     var cabin = data.data[i].travelerPricings[0].fareDetailsBySegment[0].cabin;
-    var airClass =
-      data.data[i].travelerPricings[0].fareDetailsBySegment[0].class;
-    var basePrice = data.data[i].price.base;
-    var currencyCode = data.data[i].price.currency;
-    var currencyFull = currenciesCodeList[currencyCode];
-    var totalPrice = data.data[i].price.total;
     var grandTotalPrice = data.data[i].price.grandTotal;
-    var aircraftCode = data.data[i].itineraries[0].segments[0].aircraft.code;
+    var currencyCode = data.data[i].price.currency;
     var aircraftFull = aircraftCodeList[aircraftCode];
-    var carrierCode = data.data[i].itineraries[0].segments[0].carrierCode;
     var carrierFull = carriersCodeList[carrierCode];
-    var operatorCode =
-      data.data[i].itineraries[0].segments[0].operating.carrierCode;
-    var operatorFull = carriersCodeList[operatorCode];
     var departureCityCode =
       data.data[i].itineraries[0].segments[0].departure.iataCode;
-    var departureCountryCode =
-      locationsCityCodeList[departureCityCode].countryCode;
-    var departureTerminal =
-      data.data[i].itineraries[0].segments[0].departure.terminal;
     var arrivalCityCode =
       data.data[i].itineraries[0].segments[0].arrival.iataCode;
-    var arrivalCountryCode = locationsCityCodeList[arrivalCityCode].countryCode;
+    var departureTerminal =
+      data.data[i].itineraries[0].segments[0].departure.terminal;
     var arrivalTerminal =
-      data.data[i].itineraries[0].segments[0].arrival.iataCode;
+      data.data[i].itineraries[0].segments[0].arrival.terminal;
+    var oneWay = data.data[i].oneWay;
+    var flightNumber = data.data[i].itineraries[0].segments[0].number;
+    var departureTime = data.data[i].itineraries[0].segments[0].departure.at;
+    var arrivalTime = data.data[i].itineraries[0].segments[0].arrival.at;
+
+    // hidden details
+    var currencyFull = currenciesCodeList[currencyCode];
+    var aircraftCode = data.data[i].itineraries[0].segments[0].aircraft.code;
+    var carrierCode = data.data[i].itineraries[0].segments[0].carrierCode;
+
+    // additional details
     var numberOfStops = data.data[i].itineraries[0].segments[0].numberOfStops;
+    var flightDuration = data.data[i].itineraries[0].segments[0].duration;
+    var numberOfBookableSeats = data.data[i].numberOfBookableSeats;
+    var airClass =
+      data.data[i].travelerPricings[0].fareDetailsBySegment[0].class;
+    var lastTicketingDate = data.data[i].lastTicketingDate;
+
+    // optional details
+    var departureCountryCode =
+      locationsCityCodeList[departureCityCode].countryCode;
+    var arrivalCountryCode = locationsCityCodeList[arrivalCityCode].countryCode;
+    var basePrice = data.data[i].price.base;
+    var totalPrice = data.data[i].price.total;
+    // checks if there is data for operator, otherwise it does not look for it
+    if (
+      typeof data.data[i].itineraries[0].segments[0].operating !== "undefined"
+    ) {
+      var operatorCode =
+        data.data[i].itineraries[0].segments[0].operating.carrierCode;
+      var operatorFull = carriersCodeList[operatorCode];
+    }
 
     // combine above data
     var flightDetails =
@@ -141,7 +159,6 @@ var writeData = function (data) {
     flightListItemEl.textContent = flightDetails;
     flightsListEl.appendChild(flightListItemEl);
   }
-  // }
 };
 
 // check status of access token. it expires every 30 minutes
