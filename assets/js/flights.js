@@ -9,6 +9,7 @@ var getFlightOffersSearch = function () {
   var destinationCode = "CDG";
   var departureDate = "2020-10-10";
   var numberOfAdults = "1";
+  var currencyCode = "USD";
 
   // amadeus variables
   var host = "https://test.api.amadeus.com/";
@@ -17,6 +18,7 @@ var getFlightOffersSearch = function () {
   var queryDestination = "&destinationLocationCode=";
   var queryDepartureDate = "&departureDate=";
   var queryNumberOfAdults = "&adults=";
+  var queryCurrency = "&currencyCode=";
 
   var apiUrl =
     host +
@@ -28,15 +30,19 @@ var getFlightOffersSearch = function () {
     queryDepartureDate +
     departureDate +
     queryNumberOfAdults +
-    numberOfAdults;
+    numberOfAdults + 
+    queryCurrency +
+    currencyCode;
+
 
   // access token must be renewed for 30 minutes at a time
-  var accessToken = "NAih82hsKMzfxUy1DYiN9KMeIV7j";
+  var accessToken = "pY8hWWrNcbp2dAVEJkseMH0me3it";
   var authorizationValue = "Bearer " + accessToken;
 
   fetch(apiUrl, {
-    headers: {
-      Authorization: authorizationValue,
+    "method": "GET",
+    "headers": {
+      "Authorization": authorizationValue,
     },
   })
     .then(function (response) {
@@ -56,16 +62,17 @@ var writeData = function (data) {
   var carriersCodeList = data.dictionaries.carriers;
   var currenciesCodeList = data.dictionaries.currencies;
   var locationsCodeList = data.dictionaries.locations;
-  
+
   // number of flights available per user input
   var flightCount = data.meta.count;
-  flightCountEl.textContent = "There are: " + flightCount + " available for your selected route!";
-  
+  flightCountEl.textContent =
+    "There are: " + flightCount + " available for your selected route!";
+
   // each flight details
   for (var i = 0; i < flightCount; i++) {
     var cabin = data.data[i].travelerPricings[0].fareDetailsBySegment[0].cabin;
     var airClass =
-    data.data[i].travelerPricings[0].fareDetailsBySegment[0].class;
+      data.data[i].travelerPricings[0].fareDetailsBySegment[0].class;
     var basePrice = data.data[i].price.base;
     var currencyCode = data.data[i].price.currency;
     var currencyFull = currenciesCodeList[currencyCode];
@@ -75,14 +82,19 @@ var writeData = function (data) {
     var aircraftFull = aircraftCodeList[aircraftCode];
     var carrierCode = data.data[i].itineraries[0].segments[0].carrierCode;
     var carrierFull = carriersCodeList[carrierCode];
-    var operatorCode = data.data[i].itineraries[0].segments[0].operating.carrierCode;
+    var operatorCode =
+      data.data[i].itineraries[0].segments[0].operating.carrierCode;
     var operatorFull = carriersCodeList[operatorCode];
-    var departureCode = data.data[i].itineraries[0].segments[0].departure.iataCode;
+    var departureCode =
+      data.data[i].itineraries[0].segments[0].departure.iataCode;
     var departureFull = locationsCodeList[departureCode];
-    var departureTerminal = data.data[i].itineraries[0].segments[0].departure.terminal;
-    var arrivalCode = data.data[i].itineraries[0].segments[0].departure.iataCode;
+    var departureTerminal =
+      data.data[i].itineraries[0].segments[0].departure.terminal;
+    var arrivalCode =
+      data.data[i].itineraries[0].segments[0].departure.iataCode;
     var arrivalFull = locationsCodeList[arrivalCode];
-    var arrivalTerminal = data.data[i].itineraries[0].segments[0].arrival.iataCode;
+    var arrivalTerminal =
+      data.data[i].itineraries[0].segments[0].arrival.iataCode;
     var numberOfStops = data.data[i].itineraries[0].segments[0].numberOfStops;
 
     // combine above data
@@ -99,8 +111,12 @@ var writeData = function (data) {
       operatorFull +
       " | from: " +
       departureFull +
+      " | terminal: " +
+      departureTerminal +
       " | to: " +
       arrivalFull +
+      " | terminal: ";
+    arrivalTerminal +
       " | number of stops: " +
       numberOfStops +
       " | Base Price = " +
