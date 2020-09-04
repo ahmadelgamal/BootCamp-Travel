@@ -204,3 +204,77 @@ flightsBtn.addEventListener("click", flightsHandler);
 hotelsBtn.addEventListener("click", hotelsHandler);
 
 init();
+
+/*
+fetch("https://hotels4.p.rapidapi.com/properties/get-details?locale=en_US&currency=USD&checkOut=2020-01-15&adults1=1&checkIn=2020-01-08&id=424023", {
+	"method": "GET",
+	"headers": {
+		"x-rapidapi-host": "hotels4.p.rapidapi.com",
+		"x-rapidapi-key": "93082b1212mshd3a2c1d12755730p1e1d81jsnb5d712dfa144"
+    }})
+    .then(function(response){
+
+return response.json();
+    })
+    .then(function(data)
+    {
+
+console.log(data);
+    });
+    */
+
+
+   var getFlightOffersSearch = function () {
+    // HARDCODING. MUST BE CHANGED TO USER INPUT
+    var originCode = "LAX";
+    var destinationCode = "CDG";
+    var departureDate = "2020-10-10";
+    var numberOfAdults = "1";
+    var currencyCode = "USD";
+  
+    // amadeus variables
+    var host = "https://test.api.amadeus.com/";
+    var flightOffersSearchPath = "v2/shopping/flight-offers";
+    var queryOrigin = "?originLocationCode=";
+    var queryDestination = "&destinationLocationCode=";
+    var queryDepartureDate = "&departureDate=";
+    var queryNumberOfAdults = "&adults=";
+    var queryCurrency = "&currencyCode=";
+  
+    var apiUrl =
+      host +
+      flightOffersSearchPath +
+      queryOrigin +
+      originCode +
+      queryDestination +
+      destinationCode +
+      queryDepartureDate +
+      departureDate +
+      queryNumberOfAdults +
+      numberOfAdults + 
+      queryCurrency +
+      currencyCode;
+  
+  
+    // access token must be renewed for 30 minutes at a time
+    var accessToken = "pY8hWWrNcbp2dAVEJkseMH0me3it";
+    var authorizationValue = "Bearer " + accessToken;
+  
+    fetch(apiUrl, {
+      "method": "GET",
+      "headers": {
+        "Authorization": authorizationValue,
+      },
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        console.log(data);
+      });
+  };
+
+
+  getFlightOffersSearch();
+
+
