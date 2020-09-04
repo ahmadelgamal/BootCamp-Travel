@@ -16,20 +16,28 @@ input.empty {
 
 }
 
+nav {
 
-header h3 {
+    height:50px;
+    
+}
+
+
+nav h3 {
 
     font-family: 'Black Ops One', cursive;
-    color: white;
+    color:#39f;
   
 }
 
+nav span {
 
-header {
-
-    max-height: 40px;
-    background-color: rgb(95, 121, 160);
+    font-family: 'Black Ops One', cursive;
+    color:#39f;
 }
+
+
+
 
 .hotel {
 
