@@ -1,7 +1,7 @@
 
 var id = 0;
 var urls = [];
-var urlKey = "d351718311msh1c40add783cf9f0p106e07jsn94643e004895";
+var urlKey = "65d33f6388mshf2a0d623af782fdp16ab98jsn692079e3395f";
 var newHotellay1 = document.getElementById("hotels-grid");
 
 
@@ -15,6 +15,8 @@ checkout = moment(checkout).format("YYYY-MM-DD")
 var adults = 1;
 curr = "USD";
 var sortOrd = "PRICE";
+
+var allImageUrl = [];
 
 
 
@@ -64,7 +66,7 @@ var sortOrd = "PRICE";
 }
 */
 
-var displayImage = function (url) {
+var getImage = function (url,j) {
 
     fetch(url, {
         "method": "GET",
@@ -81,8 +83,15 @@ var displayImage = function (url) {
                 var url2 = data2.hotelImages[0].baseUrl;
                 var url3 = url2.split('_');
                 var url4 = url3[0] + "_y.jpg";
+                var hotellayvar = "hotellay" + j.toString();
+                console.log("vally:  "+ hotellayvar);
                 
-               $("#hotellay1").append('<div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s uk-background-muted" id="hotellay2"> <img class="uk-border-rounded" src='+url4+'> </div>');
+            //   $('#'+hotellayvar).append('<div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s uk-background-muted"> <img class="uk-border-rounded" src='+url4+'> </div>');
+            allImageUrl[j] = url4;
+            var hotellayvar = "hotellay" + j.toString();
+            $(newHotellay1).append('<div class = "uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal" id = "'+ hotellayvar+'">');
+            var newHotellay2 = document.getElementById(hotellayvar); 
+            $(newHotellay2).append('<div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s uk-background-muted"> <img class="uk-border-rounded" src='+url4+'> </div>');
             })
         })
         .catch(err => {
@@ -92,9 +101,9 @@ var displayImage = function (url) {
 
 }
 
-var displayPropertyInfo = function (identity, checkindate, checkoutdate, numberofadults, currency) {
+var displayPropertyInfo = function (identity, checkindate, checkoutdate, numberofadults, currency, j) {
 
-    formurl = "https://hotels4.p.rapidapi.com/properties/get-details?locale=en_US&currency=" + curr + "&checkOut=" + checkoutdate + "&adults1=" + numberofadults + "&checkIn=" + checkindate + "&id=" + identity;
+    formurl = "https://hotels4.p.rapidapi.com/properties/get-details?locale=en_US&currency=" + currency + "&checkOut=" + checkoutdate + "&adults1=" + numberofadults + "&checkIn=" + checkindate + "&id=" + identity;
 
     fetch(formurl, {
         "method": "GET",
@@ -127,12 +136,13 @@ var displayPropertyInfo = function (identity, checkindate, checkoutdate, numbero
 
              
                 
-                
-                $(newHotellay1).append('<div class = "uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal" id = "hotellay1">');
-                var newHotellay2 = document.getElementById("hotellay1");
+               var hotellayvar = "hotellay" + j.toString();
+               // $(newHotellay1).append('<div class = "uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal" id = "'+ hotellayvar+'">');
+                var newHotellay2 = document.getElementById(hotellayvar);
                 // $(newHotellay2).append('<div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s uk-background-muted" id="hotellay2"> <img class="uk-border-rounded" src="https://images.trvl-media.com/hotels/43000000/42280000/42279900/42279838/4fbd4c93.jpg"> </div>');
-                $(newHotellay2).append('<div class="uk-grid uk-width-2-3@m uk-width-1-1@s"> <div class="uk-width-1-2 uk-margin-medium"> <h4>' + propertyName+'<br>' +tagline + ' "</h4>  <p>' + neighborhood + ' <br> <span class="uk-text-success">Reserve Now, Pay Later</span><br> <span class="uk-text-success">Free Cancellation</span> </p>  <span class="uk-position-bottom uk-position-relative">' + reviewRating + '/10 Rating (' + totalReviews + ' Reviews)</span>  </div>');
-                $(newHotellay2).append('<div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price"> <h2 class="uk-margin-remove-vertical">' + price + '</h2> <b>per Night</b> <button class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide">Reserve</button> </div>');
+                $(newHotellay2).append('<div class="uk-grid uk-width-2-3@m uk-width-1-1@s"> <div class="uk-width-1-2 uk-margin-medium"> <h4>' + propertyName+'<br>' +tagline + ' "</h4>  <p>' + neighborhood + ' <br> <span class="uk-text-success">Reserve Now, Pay Later</span><br> <span class="uk-text-success">Free Cancellation</span> </p>  <span class="uk-position-bottom uk-position-relative">' + reviewRating + '/10 Rating (' + totalReviews + ' Reviews)</span></div> <div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price"> <h2 class="uk-margin-remove-vertical">' + price + '</h2> <b>per Night</b> <button class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded">Reserve</button> </div> </div>');
+
+               // $(newHotellay2).append('<div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price"> <h2 class="uk-margin-remove-vertical">' + price + '</h2> <b>per Night</b> <button class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide">Reserve</button> </div> </div>');
 
             })
         })
@@ -205,8 +215,8 @@ var getProperties = function (idcity, currency, sortOrder, pgNumb, checkInDate, 
 
                         propIde[i] = data6.data.body.searchResults.results[i].id;
                         var urlb = "https://hotels4.p.rapidapi.com/properties/get-hotel-photos?id=" + propIde[i];
-                        displayImage(urlb);
-                        displayPropertyInfo(propIde[i], checkInDate, checkOutDate, adultNumber, currency);
+                        getImage(urlb,i);
+                        displayPropertyInfo(propIde[i], checkInDate, checkOutDate, adultNumber, currency,i);
 
                     }
                 })  
@@ -219,4 +229,5 @@ var getProperties = function (idcity, currency, sortOrder, pgNumb, checkInDate, 
 
 }
 
-var ids = GetIdhotel("Sacramento");
+var ids = GetIdhotel("Chicago");
+console.log(allImageUrl);
