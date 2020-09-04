@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html lang="en" class="uk-background-muted">
 
 <head>
     <meta charset="UTF-8">
@@ -11,30 +12,23 @@
 
 
 
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    
 
 
 
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/css/addons/uikit.gradient.addons.min.css">
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/js/uikit.min.js"></script>
-
-    <script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/js/addons/datepicker.min.js"></script>
-
-
-
-
+  
 
     <!-- UIkit CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.5.7/css/uikit.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.5.7/css/uikit.min.css"
+    />
 
-    <!-- UIkit JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.5.7/js/uikit.min.js"></script>
 
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+    
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/solid.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
@@ -46,17 +40,51 @@
 
 </head>
 
-<body class="uk-background-muted">
+<body>
 
+    <link href="assets/css/style.css" rel="stylesheet" />
+  </head>
 
+  <body class="uk-background-muted">
     <header class="uk-flex uk-flex-center uk-flex-middle">
-        <h3 class="uk-margin-small-top"> <span class="fa">&#xf19c;</span> Bootcamp Travel </h3>
-
+      <h3 class="uk-margin-small-top">
+        <span class="fa">&#xf19c;</span> Bootcamp Travel
+      </h3>
     </header>
 
-
-
     <div class="hero uk-flex uk-flex-center uk-flex-middle">
+      <form
+        id="form"
+        class="uk-form-stacked uk-width-1-4@l uk-width-1-2@s uk-background-default uk-border-rounded uk-box-shadow-large"
+      >
+        <div class="uk-margin-small-top">
+          <ul class="uk-flex-center" uk-tab>
+            <li class="uk-active">
+              <a id="flights" href="#"
+                ><span class="fa">&#xf072; </span>Flights</a
+              >
+            </li>
+            <li>
+              <a id="hotels" href="#"
+                ><span class="fa">&#xf594; </span>Hotels</a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical"
+        >
+          <!--  <label class="uk-form-label" for="form-stacked-text">From:</label> -->
+          <div class="uk-form-controls relative">
+            <input
+              class="uk-input uk-border-rounded fa"
+              id="going-from"
+              type="text"
+              placeholder="&#xf5b0;  From:"
+            />
+          </div>
+        </div>
 
 
         <form autocomplete="off" id="form"
@@ -67,13 +95,13 @@
 
             <div class="uk-margin-small-top">
                 <ul class="uk-flex-center" uk-tab>
-                    <li class="uk-active"><a id="flights" href="#"><span class="fa">&#xf072; </span>Flights</a></li>
-                    <li><a id="hotels" href="#"><span class="fa">&#xf594; </span>Hotels</a></li>
+                    <li class="uk-active"><a id="flights-btn" href="#"><span class="fa">&#xf072; </span>Flights</a></li>
+                    <li><a id="hotels-btn" href="#"><span class="fa">&#xf594; </span>Hotels</a></li>
                 </ul>
             </div>
 
             <div class="uk-margin-small uk-padding-small  uk-padding-remove-vertical">
-                <!--  <label class="uk-form-label" for="form-stacked-text">From:</label> -->
+               <!--departure input with custom autocomplete (default is turned off) -->
                 <div class="uk-form-controls relative">
                     <input autocomplete="off" class="uk-input uk-border-rounded fa" id="going-from" type="text"
                         placeholder="&#xf5b0;  From:">
@@ -81,7 +109,7 @@
             </div>
 
             <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical">
-                <!--<label class="uk-form-label" for="form-stacked-select">To:</label> -->
+                <!--arrival input with custom autocomplete (default browser autocomplete is turned off) -->
                 <div class="uk-form-controls relative">
                     <input autocomplete="off" class="uk-input uk-border-rounded fa" id="going-to" type="text"
                         placeholder="&#xf5af;  To:">
@@ -89,35 +117,46 @@
                 </div>
             </div>
 
-            <div class="uk-margin-small uk-padding-small  uk-padding-remove-vertical">
+            <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical">
+            <div class="uk-form-controls">
 
-                <div id="trip" class="uk-form-controls uk-align-right">
+                <!--departure datepicker-->
+                <input class="uk-input uk-border-rounded uk-width-1-3 fa" readonly
+                    data-uk-datepicker="{minDate:1,format:'&#xf783; MM/DD/YY'}" id="date-departure" type="text"
+                    placeholder="&#xf783;  Departs:">
+
+                    <input class="uk-input uk-border-rounded uk-width-1-3 fa" readonly
+                    data-uk-datepicker="{minDate:1,format:'&#xf783; MM/DD/YY'}" id="date-arrival" type="text"
+                    placeholder="&#xf783;  Arrives:">
 
 
-                    <label><input class="uk-radio" type="radio" name="radio1"> One-way</label>
+            <div id="trip" class="uk-margin-small-top">
 
-                    <label><input class="uk-radio" type="radio" name="radio1"> Round</label>
-
-
-
-
-                </div>
-
+                <!--radio buttons one way/round trip-->
+                <label class="uk-align-right margin-zero"><input class="uk-radio" type="radio" name="radio1"> One-way</label>
+                
+                <label class="uk-align-right uk-margin-small-right " ><input class="uk-radio" type="radio" name="radio1"> Round trip</label>
 
 
 
 
             </div>
+                    
+                  
+            </div>
+        </div>
+
+          
 
 
 
 
 
             <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical hide">
-                <!--<label class="uk-form-label" for="form-stacked-select">To:</label> -->
+       <!-- check-in datepicker -->
                 <div class="uk-form-controls">
                     <input class="uk-input uk-border-rounded fa" readonly
-                        data-uk-datepicker="{minDate:0,format:'&#xf783; MMMM DD YYYY'}" id="check-in" type="text"
+                        data-uk-datepicker="{minDate:0,format:'&#xf783; MM/DD/YYYY'}" id="check-in" type="text"
                         placeholder="&#xf783;  Check In:">
 
                 </div>
@@ -126,45 +165,187 @@
             </div>
 
             <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical hide">
-                <!--<label class="uk-form-label" for="form-stacked-select">To:</label> -->
+          
                 <div class="uk-form-controls">
+
+                    <!--check out datepicker-->
                     <input class="uk-input uk-border-rounded fa" readonly
-                        data-uk-datepicker="{minDate:1,format:'&#xf783; MMMM DD YYYY'}" id="check-out" type="text"
+                        data-uk-datepicker="{minDate:1,format:'&#xf783; MM/DD/YYYY'}" id="check-out" type="text"
                         placeholder="&#xf783;  Check Out:">
 
                 </div>
 
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical"
+        >
+          <div id="trip" class="uk-form-controls uk-align-right">
+            <label
+              ><input class="uk-radio" type="radio" name="radio1" />
+              One-way</label
+            >
 
-            </div>
+            <label
+              ><input class="uk-radio" type="radio" name="radio1" />
+              Round</label
+            >
+          </div>
+        </div>
 
-            <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical">
-                <div id="trip" class="uk-form-controls">
-                    <br>
-                    <button class="uk-button uk-button-large uk-button-primary uk-border-rounded">Search</button>
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical hide"
+        >
+          <!--<label class="uk-form-label" for="form-stacked-select">To:</label> -->
+          <div class="uk-form-controls">
+            <input
+              class="uk-input uk-border-rounded fa"
+              readonly
+              data-uk-datepicker="{minDate:0,format:'&#xf783; MMMM DD YYYY'}"
+              id="check-in"
+              type="text"
+              placeholder="&#xf783;  Check In:"
+            />
+          </div>
+        </div>
+
+
+
+            <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical ">
+                <div class="uk-form-controls">
+                    
+                    <button class="uk-button uk-button-small uk-button-primary uk-border-rounded uk-margin-remove-vertical xs-size-button">Search</button>
+                   
+                
+                
                 </div>
+
+        
             </div>
 
-        </form>
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical"
+        >
+          <div id="trip" class="uk-form-controls">
+            <br />
+            <button
+              class="uk-button uk-button-large uk-button-primary uk-border-rounded"
+            >
+              Search
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
 
+<!-- past search container begins-->
+
+    <div id="past-search-container" class="uk-container uk-container-center uk-padding-small width-maxed">
+
+        <h3>Your search history:</h3>
+        <!-- past search grid-->
+        <div id="past-search-grid"
+        
+        class="uk-grid uk-width-1-1 uk-border-rounded uk-background-muted uk-padding-remove-horizontal margin-zero">
+
+        <!-- this is a single past search, should be created dynamically with JS-->
+        <div class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero">
+
+
+            <div class="uk-width-1-2 uk-padding-remove-horizontal">
+
+                
+
+              
+                <p>Searched on 09.01.2020 </p>
+
+                
+                <h4><span class="fa">LAX &#xf072; SFO </span> </h4>
+                </p>
+                <p class="fa"> &#xf783; 10/08/2020 <br> &#xf783; 10/15/2020
+                     </p>
+
+
+            </div>
+
+            <div class="uk-border-rounded uk-width-1-2 uk-padding-small price">
+
+
+
+                <h3 class="uk-margin-remove-vertical uk-text-center fa">
+                    &#xf072; <br>   Round-Trip</h3>
+                
+
+
+
+                <button
+                    class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide">Select</button>
+
+
+            </div>
+
+            </div>
+<!-- end of single past search-->
+
+            <div class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero">
+
+
+                <div class="uk-width-1-2 uk-padding-remove-horizontal">
+    
+                    
+    
+                  
+                    <p>Searched on 09.01.2020 </p>
+    
+                    
+                    <h4><span class="fa">&#xf594; Los Angeles, California, USA </span> </h4>
+                    </p>
+                    <p class="fa"> &#xf783; 10/08/2020 <br> &#xf783; 10/15/2020
+                         </p>
+    
+    
+                </div>
+    
+                <div class="uk-border-rounded uk-width-1-2 uk-padding-small price">
+    
+    
+    
+                    <h3 class="uk-margin-remove-vertical uk-text-center fa">
+                        &#xf594; <br>
+                        Hotels</h3>
+                    
+    
+    
+    
+                    <button
+                        class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide">Select</button>
+    
+    
+                </div>
+    
+                </div>
+
+        </div>
+  <!-- end of past search grid-->
+    </div>
+    <!-- end of past search container-->
+
+
+
+<!-- this div is the overall flights container -->
+
+    <div id="flights-container" class="uk-container uk-container-center uk-padding-small width-maxed">
 
 
 
 
-    <div class="uk-container uk-padding-small">
+<!-- this div contains the flight menu / dropdowns -->
+        <div id="flights-sub-menu" class="uk-grid uk-border-rounded uk-padding-remove-horizontal margin-zero">
+            <div class="uk-border-rounded uk-width1-1 uk-padding-remove-horizontal uk-margin-small-bottom ">
 
 
 
-
-
-        <div class="uk-grid uk-border-rounded uk-padding-remove-horizontal margin-zero">
-            <div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s">
-
-
-
-                <button class="uk-button uk-button-default dropdown" type="button">Price</button>
+                <button class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button" type="button">Price</button>
                 <div uk-dropdown>
-                    <ul class="uk-nav uk-dropdown-nav stronger">
+                    <ul id="sort-flight-price" class="uk-nav uk-dropdown-nav stronger">
 
                         <li class="active">Lowest</li>
                         <li>Highest</li>
@@ -172,9 +353,9 @@
                     </ul>
                 </div>
 
-                <button class="uk-button uk-button-default dropdown" type="button">Arrival</button>
+                <button class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button" type="button">Arrival</button>
                 <div uk-dropdown>
-                    <ul class="uk-nav uk-dropdown-nav stronger">
+                    <ul id="sort-flight-arrival" class="uk-nav uk-dropdown-nav stronger">
 
                         <li>Early Morning</li>
                         <li class="active">Morning</li>
@@ -187,9 +368,9 @@
                 </div>
 
 
-                <button class="uk-button uk-button-default dropdown" type="button">Departure</button>
+                <button class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button" type="button">Departure</button>
                 <div uk-dropdown>
-                    <ul class="uk-nav uk-dropdown-nav stronger">
+                    <ul id="sort-flight-departure" class="uk-nav uk-dropdown-nav stronger">
 
                         <li class="active">Early Morning</li>
                         <li>Morning</li>
@@ -201,14 +382,19 @@
 
                 </div>
 
-
+<!-- end of flights menu container -->
 
             </div>
 
 
-            <div id="flights"
-                class="uk-grid uk-width-2-3@m uk-width-1-1@s uk-border-rounded uk-padding-remove-horizontal margin-zero">
 
+            <!-- this grid contains all flights-->
+
+            <div id="flights-grid"
+                class="uk-grid uk-width-1-1 uk-border-rounded uk-padding-remove-horizontal margin-zero">
+
+
+                <!-- this grid contains a single flight, must be generated dymanically with JS and then appended to the div above (id="flights-grid")-->
                 <div class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero">
 
 
@@ -222,12 +408,9 @@
                         <p><span class="fa stronger">LAX &#xf072; SFO </span> </p>
                         </p>
                         <p>6:55pm to - 8:17pm<br>
-                            <span class="stronger">1h:22min (non-stop)</span> <span class="fa"> &#xf152; &#xf1eb;
+                            <span class="stronger">1h:22min (non-stop)</span><br> <span class="fa"> &#xf152; &#xf1eb;
                                 &#xf5e7;</span> </p>
 
-                        <p>Delta 3557 operated by Skywest DBA Delta
-
-                        </p>
 
                     </div>
 
@@ -242,13 +425,16 @@
 
 
                         <button
-                            class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded">Select</button>
+                            class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide">Select</button>
 
 
 
 
                     </div>
                 </div>
+
+
+                <!-- end of single flight container -->
 
 
                 <div class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero">
@@ -337,13 +523,75 @@
 
         </div>
 
+        <!-- end of all flights container grid -->
+    </div>
+
+
+    <!-- this is the overall hotels container div-->
 
 
 
+        <div id="hotels-container"  class="uk-container uk-padding-small width-maxed">
+
+            <div id="hotels-sub-menu" class="uk-grid uk-border-rounded uk-padding-remove-horizontal margin-zero">
+                <div class="uk-border-rounded uk-width1-1 uk-padding-remove-horizontal uk-margin-small-bottom ">
+    
+    
+    
+                    <button class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button" type="button">Price</button>
+                    <div uk-dropdown>
+                        <ul id="sort-hotel-price" class="uk-nav uk-dropdown-nav stronger">
+    
+                            <li class="active">Lowest</li>
+                            <li>Highest</li>
+    
+                        </ul>
+                    </div>
+    
+                    <button class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button" type="button">Rating</button>
+                    <div uk-dropdown>
+                        <ul id="sort-hotel-rating" class="uk-nav uk-dropdown-nav stronger">
+    
+                            <li>Any</li>
+                            <li class="active">Wonderful (4.5+)</li>
+                            <li>Very Good (4+)</li>
+                            <li>Good (3.5+)</li>
+                            
+    
+                        </ul>
+    
+                    </div>
+    
+    
+                    <button class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button" type="button">Type</button>
+                    <div uk-dropdown>
+                        <ul id="sort-hotel-type" class="uk-nav uk-dropdown-nav stronger">
+    
+                            <li class="active">Hotel</li>
+                            <li>Motel</li>
+                            <li>Vacation Townhouse</li>
+                            <li>Condo</li>
+                            <li>All</li>
+    
+                        </ul>
+    
+                    </div>
+    
+    <!-- end of hotels menu container -->
+    
+                </div>
 
 
-        <div class="uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal">
-            <div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s  uk-background-muted">
+
+                <!-- this is the hotels container grid. All single hotel offers should be appended here with JS -->
+
+        <div id="hotels-grid"
+        class="uk-grid uk-width-1-1 uk-padding-remove-horizontal margin-zero">
+
+        <!--this is a single hotel. this grid must be generated dynamically through JS and appended to the div above (id="hotels-container")-->
+
+        <div class="uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal margin-zero test-border">
+            <div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s  uk-background-default padding-left-small  uk-flex uk-flex-middle margin-zero">
 
                 <img class="uk-border-rounded"
                     src="https://images.trvl-media.com/hotels/1000000/30000/20900/20835/88bc9393.jpg">
@@ -374,7 +622,7 @@
 
 
                     <button
-                        class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded">Reserve</button>
+                        class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide">Reserve</button>
 
 
 
@@ -383,7 +631,7 @@
             </div>
         </div>
 
-
+<!-- end of single hotel grid-->
 
 
         <div class="uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal">
@@ -513,20 +761,62 @@
             </div>
         </div>
 
+</div>
+<!-- end of hotels grid -->
 
+        <div class="uk-grid uk-width-2-3@m uk-width-1-1@s">
+          <div class="uk-width-1-2 uk-margin-medium">
+            <h4>
+              Private Dream Resort in a Safe and Quiet Neighborhood Only 35 min
+              From LA
+            </h4>
+            <p>
+              Canyon Country <br />
+              <span class="uk-text-success">Reserve Now, Pay Later</span><br />
+              <span class="uk-text-success">Free Cancellation</span>
+            </p>
+            <span class="uk-position-bottom uk-position-relative"
+              >3.3/5 Rating (1000 Reviews)</span
+            >
+          </div>
 
+          <div
+            class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price"
+          >
+            <h2 class="uk-margin-remove-vertical">
+              $109
+            </h2>
+            <b>per Night</b>
 
-
+            <button
+              class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded"
+            >
+              Reserve
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- end of hotels container div-->
+
+    <!-- UIkit JS -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/js/uikit.min.js"></script>
+
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/js/addons/datepicker.min.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.5.7/js/uikit.min.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
 
     <script src="assets/js/world-cities.js"></script>
     <script src="assets/js/script.js"></script>
 
-</body>
-
-
-
-
-
-
+  </body>
 </html>
+

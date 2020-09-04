@@ -74,6 +74,12 @@ header {
 
     font-weight: 900;
 }
+
+.relative {
+
+position:relative;
+
+}
 .autocomplete-items {
     position: absolute;
     cursor:pointer;
@@ -81,7 +87,7 @@ header {
     border: 1px solid #ffffff;
     border-bottom: none;
     border-top: none;
-    z-index: 99;
+    z-index: 1000;
     /*position the autocomplete items to be the same width as the container:*/
     top: 100%;
     
@@ -99,6 +105,25 @@ header {
 
 
     width:130px;
+
+}
+
+.xs-size-button {
+
+
+   padding:5px;
+   max-width:30%;
+}
+
+.width-maxed{
+
+
+    max-width: 1000px;
+}
+
+.padding-left-small{
+
+    padding:0 0 0 6px;
 }
 
 @media screen and (min-width: 960px) {
@@ -111,5 +136,21 @@ header {
     }
 
 
+
    
+  }
+
+  @media screen and (max-width: 960px) {
+
+  .padding-left-small{
+
+    padding:0 0 0 0px;
+  }
+
+    .test-border{
+
+
+        border: 0px;
+    }
+
   }
