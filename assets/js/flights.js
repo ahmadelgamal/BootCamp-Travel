@@ -324,10 +324,12 @@ var writeData = function (data) {
 };
 /* -------------------- ENDS METHODS -------------------- */
 
-/* -------------------- BEGINS CALLING FUNCTIONS/METHODS -------------------- */
-// not part of program. used for testing purposes
-// accessTokenStatus();
-
+/* -------------------- BEGINS EVENT HANDLERS -------------------- */
 // search form submit event handler
 searchFormEl.addEventListener("submit", searchFormHandler);
-/* -------------------- ENDS CALLING FUNCTIONS/METHODS -------------------- */
+/* -------------------- ENDS EVENT HANDLERS -------------------- */
+
+/* -------------------- BEGINS TESTING -------------------- */
+// not part of program. used for testing purposes
+// accessTokenStatus();
+/* -------------------- ENDS TESTING -------------------- */
