@@ -229,5 +229,5 @@ var getProperties = function (idcity, currency, sortOrder, pgNumb, checkInDate, 
 
 }
 
-var ids = GetIdhotel("Chicago");
+//var ids = GetIdhotel("Chicago");
 console.log(allImageUrl);
