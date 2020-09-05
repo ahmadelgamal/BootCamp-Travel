@@ -1,3 +1,4 @@
+/* -------------------------------------------------------------------------- */
 /* ----------------------------- UCB EXTENSION ------------------------------ */
 /* -------- ONLINE BLENDED | FULL STACK WEB DEVELOPMENT CERTIFICATE --------- */
 /* ------------------ PROJECT 1 GROUP 7 | BOOTCAMP TRAVEL ------------------- */
@@ -5,6 +6,7 @@
 /* ----------------------------- AHMAD EL GAMAL ----------------------------- */
 /* -------------------------- OTHER GROUP MEMBERS --------------------------- */
 /* ------------------- GAUTAM TANKHA & MARCO EVANGELISTA -------------------- */
+/* -------------------------------------------------------------------------- */
 
 /* ----------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ----------- */
 /* --------------- declares constants to point to html elements -------------- */
@@ -54,12 +56,14 @@ const queryDestination = "&destinationLocationCode=";
 const queryDepartureDate = "&departureDate=";
 const queryNumberOfAdults = "&adults=";
 
-/* ---------- declares optional query variables for "flight offers search" amadeus api ---------- */
-const queryCurrency = "&currencyCode="; // default is EUR, so needed for USD
+/* ---------- declares important query variables for "flight offers search" amadeus api ---------- */
 const queryReturnDate = "&returnDate="; // required for roundtrip flights
+const travelClass = "&travelClass="; // ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
+const queryCurrency = "&currencyCode="; // default is EUR, so needed for USD
+
+/* ---------- declares optional query variables for "flight offers search" amadeus api ---------- */
 const queryChildren = "&children="; // for travelers between 2 and 12 on date of departure with own separate seat
 const queryInfants = "&infants="; // for travelers 2 or less on date of departure. infants sit on lap of adult (# of infants must not exceed # of adults)
-const travelClass = "&travelClass="; // ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
 const nonStop = "&nonStop="; // boolean
 const maxPrice = "&maxPrice="; // max price per traveler. no decimals
 const max = "&max="; // maximum number of flight options (default is 250)
@@ -71,25 +75,6 @@ var oneWayFlightOffersSearchApiUrl;
 var roundTripFlightOffersSearchApiUrl;
 var apiUrl;
 /* -------------------- ENDS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES -------------------- */
-
-/* -------------------- BEGINS AMADEUS CREDENTIALS -------------------- */
-/* ---------- checks status of access token. expires every 30 minutes ---------- */
-/* not related to running of website application. used for testing only */
-var accessTokenStatus = function () {
-  var fetchAccessToken = baseUrl + accessTokenPath + accessToken;
-
-  fetch(fetchAccessToken)
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      console.log(data);
-    })
-    .catch(function (error) {
-      console.log("Catch-all error for check status of access token.");
-    });
-};
-/* -------------------- ENDS AMADEUS CREDENTIALS -------------------- */
 
 /* -------------------- BEGINS FETCH APIS -------------------- */
 /* ---------- gets "flight offers search" amadeus api ---------- */
@@ -329,7 +314,28 @@ var writeData = function (data) {
 searchFormEl.addEventListener("submit", searchFormHandler);
 /* -------------------- ENDS EVENT HANDLERS -------------------- */
 
-/* -------------------- BEGINS TESTING -------------------- */
-// not part of program. used for testing purposes
+/* --------------------------------------------------------------------------------- */
+/* ----- CODE BELOW IS NOT PART OF THE APP AND SHOULD BE DELETED BEFORE LAUNCH ----- */
+/* --------------------------------------------------------------------------------- */
+
+/* -------------------- BEGINS AMADEUS CREDENTIALS -------------------- */
+/* ---------- checks status of access token. expires every 30 minutes ---------- */
+/* ----- not related to running of website application. used for testing only ----- */
+var accessTokenStatus = function () {
+  var fetchAccessToken = baseUrl + accessTokenPath + accessToken;
+
+  fetch(fetchAccessToken)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+    })
+    .catch(function (error) {
+      console.log("Catch-all error for check status of access token.");
+    });
+};
+
+// Calls function to check on status of access token
 // accessTokenStatus();
-/* -------------------- ENDS TESTING -------------------- */
+/* -------------------- ENDS AMADEUS CREDENTIALS -------------------- */
