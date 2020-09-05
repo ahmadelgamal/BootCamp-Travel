@@ -38,6 +38,7 @@
       <!--<h3 class="uk-margin-small-top"> <span class="fa">&#xf07a;</span></h3>-->
     </header>
 
+    <!-- begins search form -->
     <div class="hero uk-flex uk-flex-center uk-flex-middle">
       <form
         autocomplete="off"
@@ -60,6 +61,7 @@
         </div>
 
         <!-- begins flights search form -->
+        <!-- "From:" container -->
         <div
           class="uk-margin-small uk-padding-small uk-padding-remove-vertical"
         >
@@ -75,6 +77,7 @@
           </div>
         </div>
 
+        <!-- "To:" container -->
         <div
           class="uk-margin-small uk-padding-small uk-padding-remove-vertical"
         >
@@ -90,6 +93,7 @@
           </div>
         </div>
 
+        <!-- container for "Departs:", "Returns:", and radio selectors for "Roundtrip" or "One-way" -->
         <div
           class="uk-margin-small uk-padding-small uk-padding-remove-vertical"
         >
@@ -104,6 +108,7 @@
               placeholder="&#xf783;  Departs:"
             />
 
+            <!--return datepicker-->
             <input
               class="uk-input uk-border-rounded uk-width-1-3 fa"
               readonly
@@ -113,6 +118,7 @@
               placeholder="&#xf783;  Returns:"
             />
 
+            <!--one-way or roundtrip radio selectors-->
             <div id="trip" class="uk-margin-small-top">
               <!--radio buttons one way/round trip-->
               <label class="uk-align-right margin-zero"
@@ -121,13 +127,15 @@
               >
 
               <label class="uk-align-right uk-margin-small-right"
-                ><input class="uk-radio" type="radio" name="radio1" /> Roundtrip</label
+                ><input class="uk-radio" type="radio" name="radio1" />
+                Roundtrip</label
               >
             </div>
           </div>
         </div>
         <!-- ends flights search form -->
 
+        <!-- begins hotels search form -->
         <div
           class="uk-margin-small uk-padding-small uk-padding-remove-vertical hide"
         >
@@ -159,7 +167,9 @@
             />
           </div>
         </div>
+        <!-- ends hotels search form -->
 
+        <!-- begins "search" button -->
         <div
           class="uk-margin-small uk-padding-small uk-padding-remove-vertical"
         >
@@ -171,21 +181,23 @@
             </button>
           </div>
         </div>
+        <!-- end "search" button -->
       </form>
     </div>
+    <!-- ends search form -->
 
-    <!-- past search container begins-->
+    <!-- begins past search container -->
     <div
       id="past-search-container"
       class="uk-container uk-container-center uk-padding-small width-maxed"
     >
       <h3>Your search history:</h3>
-      <!-- past search grid-->
+      <!-- begins past search grid-->
       <div
         id="past-search-grid"
         class="uk-grid uk-width-1-1 uk-border-rounded uk-background-muted uk-padding-remove-horizontal margin-zero"
       >
-        <!-- this is a single past search, should be created dynamically with JS-->
+        <!-- begins single past flights search, should be created dynamically with JS -->
         <div
           class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero"
         >
@@ -210,8 +222,9 @@
             </button>
           </div>
         </div>
-        <!-- end of single past search-->
+        <!-- ends single past flights search-->
 
+        <!-- begins single past hotels search, should be created dynamically with JS -->
         <div
           class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero"
         >
@@ -238,25 +251,27 @@
             </button>
           </div>
         </div>
+        <!-- ends single past hotels search-->
       </div>
-      <!-- end of past search grid-->
+      <!-- ends past search grid-->
     </div>
-    <!-- end of past search container-->
+    <!-- ends past search container -->
 
-    <!-- this div is the overall flights container -->
-
+    <!-- begins overall flights container -->
     <div
       id="flights-container"
       class="uk-container uk-container-center uk-padding-small width-maxed"
     >
-      <!-- this div contains the flight menu / dropdowns -->
+      <!-- begins flight sorting menu container -->
       <div
         id="flights-sub-menu"
         class="uk-grid uk-border-rounded uk-padding-remove-horizontal margin-zero"
       >
+        <!-- begins container that holds all sorting options -->
         <div
           class="uk-border-rounded uk-width1-1 uk-padding-remove-horizontal uk-margin-small-bottom"
         >
+          <!-- begins sort by price -->
           <button
             class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button"
             type="button"
@@ -269,7 +284,9 @@
               <li>Highest</li>
             </ul>
           </div>
+          <!-- ends sort by price -->
 
+          <!-- begins sort by arrival time -->
           <button
             class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button"
             type="button"
@@ -288,7 +305,9 @@
               <li>All</li>
             </ul>
           </div>
+          <!-- ends sort by arrival time -->
 
+          <!-- begins sort by departure time -->
           <button
             class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button"
             type="button"
@@ -307,17 +326,18 @@
               <li>All</li>
             </ul>
           </div>
-
-          <!-- end of flights menu container -->
+          <!-- ends sort by departure time -->
         </div>
+        <!-- ends container that holds all sorting options -->
       </div>
-      <!-- this grid contains all flights-->
+      <!-- ends flights sorting menu container -->
 
+      <!-- begins flights grid (search results) container-->
       <div
         id="flights-grid"
         class="uk-grid uk-width-1-1 uk-border-rounded uk-padding-remove-horizontal margin-zero"
       >
-        <!-- this grid contains a single flight, must be generated dymanically with JS and then appended to the div above (id="flights-grid")-->
+        <!-- begins single flight container, must be generated dymanically with JS and then appended to the div above (id="flights-grid")-->
         <div
           class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero"
         >
@@ -349,26 +369,27 @@
             </button>
           </div>
         </div>
-
-        <!-- end of single flight container -->
+        <!-- ends single flight container -->
       </div>
+      <!-- ends flights grid (search results) container -->
     </div>
+    <!-- ends overall flights container -->
 
-    <!-- end of all flights container grid -->
-
-    <!-- this is the overall hotels container div-->
-
+    <!-- begins overall hotels container div-->
     <div
       id="hotels-container"
       class="uk-container uk-padding-small width-maxed"
     >
+      <!-- begins container that holds all sorting options -->
       <div
         id="hotels-sub-menu"
         class="uk-grid uk-border-rounded uk-padding-remove-horizontal margin-zero"
       >
+        <!-- begins hotels sorting menu container -->
         <div
           class="uk-border-rounded uk-width1-1 uk-padding-remove-horizontal uk-margin-small-bottom"
         >
+          <!-- begins sort by price -->
           <button
             class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button"
             type="button"
@@ -381,7 +402,9 @@
               <li>Highest</li>
             </ul>
           </div>
+          <!-- ends sort by price -->
 
+          <!-- begins sort by rating -->
           <button
             class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button"
             type="button"
@@ -396,7 +419,9 @@
               <li>Good (3.5+)</li>
             </ul>
           </div>
+          <!-- ends sort by rating -->
 
+          <!-- begins sort by type -->
           <button
             class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button"
             type="button"
@@ -412,78 +437,84 @@
               <li>All</li>
             </ul>
           </div>
-
-          <!-- end of hotels menu container -->
+          <!-- ends sort by type -->
         </div>
+        <!-- ends hotels sorting menu container -->
+      </div>
+      <!-- ends container that holds all sorting options -->
 
-        <!-- this is the hotels container grid. All single hotel offers should be appended here with JS -->
+      <!-- begins hotels container grid (search results). All single hotel offers should be appended here with JS -->
+      <div
+        id="hotels-grid"
+        class="uk-grid uk-width-1-1 uk-padding-remove-horizontal margin-zero"
+      >
+        <!-- begins single hotel. this grid must be generated dynamically through JS and appended to the div above (id="hotels-container")-->
         <div
-          id="hotels-grid"
-          class="uk-grid uk-width-1-1 uk-padding-remove-horizontal margin-zero"
+          class="uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal margin-zero test-border"
         >
-          <!--this is a single hotel. this grid must be generated dynamically through JS and appended to the div above (id="hotels-container")-->
           <div
-            class="uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal margin-zero test-border"
+            class="uk-border-rounded uk-width-1-3@m uk-width1-1@s uk-background-default padding-left-small uk-flex uk-flex-middle margin-zero"
           >
-            <div
-              class="uk-border-rounded uk-width-1-3@m uk-width1-1@s uk-background-default padding-left-small uk-flex uk-flex-middle margin-zero"
-            >
-              <img
-                class="uk-border-rounded"
-                alt="hotel"
-                src="https://images.trvl-media.com/hotels/1000000/30000/20900/20835/88bc9393.jpg"
-              />
-            </div>
-
-            <div class="uk-grid uk-width-2-3@m uk-width-1-1@s">
-              <div class="uk-width-1-2 uk-margin-medium">
-                <h4>Travelodge by Wyndham, Santa Clarita/Valencia</h4>
-                <p>
-                  Canyon Country <br />
-                  <span class="uk-text-success">Reserve Now, Pay Later</span
-                  ><br />
-                  <span class="uk-text-success">Free Cancellation</span>
-                  <span class="uk-position-bottom uk-position-relative"
-                    >3.3/5 Rating (1000 Reviews)</span
-                  >
-                </p>
-              </div>
-
-              <div
-                class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price"
-              >
-                <h2 class="uk-margin-remove-vertical">
-                  $109
-                </h2>
-                <b>per Night</b>
-                <button
-                  class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide"
-                >
-                  Reserve
-                </button>
-              </div>
-            </div>
+            <img
+              class="uk-border-rounded"
+              alt="hotel"
+              src="https://images.trvl-media.com/hotels/1000000/30000/20900/20835/88bc9393.jpg"
+            />
           </div>
 
-          <!-- end of single hotel grid-->
+          <div class="uk-grid uk-width-2-3@m uk-width-1-1@s">
+            <div class="uk-width-1-2 uk-margin-medium">
+              <h4>Travelodge by Wyndham, Santa Clarita/Valencia</h4>
+              <p>
+                Canyon Country <br />
+                <span class="uk-text-success">Reserve Now, Pay Later</span
+                ><br />
+                <span class="uk-text-success">Free Cancellation</span>
+                <span class="uk-position-bottom uk-position-relative"
+                  >3.3/5 Rating (1000 Reviews)</span
+                >
+              </p>
+            </div>
+
+            <div
+              class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price"
+            >
+              <h2 class="uk-margin-remove-vertical">
+                $109
+              </h2>
+              <b>per Night</b>
+              <button
+                class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide"
+              >
+                Reserve
+              </button>
+            </div>
+          </div>
         </div>
-        <!-- end of hotels grid -->
+
+        <!-- ends single hotel grid -->
       </div>
+      <!-- ends hotels container grid (search results) -->
     </div>
+    <!-- ends overall hotels container div-->
 
-    <!-- end of hotels container div-->
-
-    <!-- UIkit JS -->
+    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 
+    <!-- UIkit JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/js/uikit.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/js/addons/datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.5.7/js/uikit.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
 
+    <!-- for autocomplete of cities in search form -->
     <script src="assets/js/world-cities.js"></script>
+
+    <!-- developed by Marco Evangelista -->
     <script src="assets/js/script.js"></script>
+    <!-- developed by Gautam Tankha for hotels search -->
     <!-- <script src="assets/js/hotel.js"></script> -->
+    <!-- developed by Ahmad El Gamal for flights search -->
     <script src="./assets/js/flights.js"></script>
   </body>
 </html>
