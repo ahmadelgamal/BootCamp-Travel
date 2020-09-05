@@ -1,14 +1,13 @@
-/* ------------------------------ UCB EXTENSION ------------------------------- */
-/* --------- ONLINE BLENDED | FULL STACK WEB DEVELOPMENT CERTIFICATE ---------- */
-/* ------------------- PROJECT 1 GROUP 7 | BOOTCAMP TRAVEL -------------------- */
-/* ------------------------ THIS FILE WAS DEVELOPED BY ------------------------ */
-/* ------------------------------ AHMAD EL GAMAL ------------------------------ */
+/* ----------------------------- UCB EXTENSION ------------------------------ */
+/* -------- ONLINE BLENDED | FULL STACK WEB DEVELOPMENT CERTIFICATE --------- */
+/* ------------------ PROJECT 1 GROUP 7 | BOOTCAMP TRAVEL ------------------- */
+/* ----------------------- THIS FILE WAS DEVELOPED BY ----------------------- */
+/* ----------------------------- AHMAD EL GAMAL ----------------------------- */
+/* -------------------------- OTHER GROUP MEMBERS --------------------------- */
+/* ------------------- GAUTAM TANKHA & MARCO EVANGELISTA -------------------- */
 
-/* -------------------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES -------------------- */
-/* ---------- declares constants to point to html elements ---------- */
-// var flightsListEl = document.getElementById("flights-list");
-// var flightCountEl = document.getElementById("flight-count");
-
+/* ----------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ----------- */
+/* --------------- declares constants to point to html elements -------------- */
 // constants that point to search form
 const searchFormEl = document.getElementById("form");
 const goingFromEl = document.getElementById("going-from");
@@ -19,7 +18,11 @@ const dateReturnEl = document.getElementById("date-return");
 // constants that point to flights grid
 const flightsGridEl = document.getElementById("flights-grid");
 
-/* ---------- declares variables for user input for "flight offers search" amadeus api ---------- */
+/* OLD. WAS USED FOR TESTING. REMOVE WHEN READY */
+// var flightsListEl = document.getElementById("flights-list");
+// var flightCountEl = document.getElementById("flight-count");
+
+/* ----- declares variables for user input for "flight offers search" amadeus api ----- */
 // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
 var originCode = goingFromEl.value;
 // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
@@ -32,57 +35,46 @@ var numberOfAdults = "1";
 // sets currency to USD in fetch request (default in amadeus is euro)
 const currencyCode = "USD";
 
-/* ---------- declares common variables of amadeus apis ---------- */
+/* ---------- declares common constants & variables of amadeus apis ---------- */
 // amadeus for developers testing baseUrl
-var baseUrl = "https://test.api.amadeus.com";
+const baseUrl = "https://test.api.amadeus.com";
 // url for requesting and checking on access token
-var accessTokenPath = "/v1/security/oauth2/token/";
+const accessTokenPath = "/v1/security/oauth2/token/";
 // access token must be renewed for 30 minutes at a time
-var accessToken = "0OXA6rGFx8tcsvcnOWAKo4r8fs8U";
+const accessToken = "0OXA6rGFx8tcsvcnOWAKo4r8fs8U";
 // `value` of `headers` "Authorization" `key`
-var authorizationValue = "Bearer " + accessToken;
+const authorizationValue = "Bearer " + accessToken;
 
 // path for flight offers search
-var flightOffersSearchPath = "/v2/shopping/flight-offers";
+const flightOffersSearchPath = "/v2/shopping/flight-offers";
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
-var queryOrigin = "?originLocationCode=";
-var queryDestination = "&destinationLocationCode=";
-var queryDepartureDate = "&departureDate=";
-var queryNumberOfAdults = "&adults=";
+const queryOrigin = "?originLocationCode=";
+const queryDestination = "&destinationLocationCode=";
+const queryDepartureDate = "&departureDate=";
+const queryNumberOfAdults = "&adults=";
 
 /* ---------- declares optional query variables for "flight offers search" amadeus api ---------- */
-var queryCurrency = "&currencyCode="; // default is EUR, so needed for USD
-var queryReturnDate = "&returnDate="; // required for roundtrip flights
-var queryChildren = "&children="; // for travelers between 2 and 12 on date of departure with own separate seat
-var queryInfants = "&infants="; // for travelers 2 or less on date of departure. infants sit on lap of adult (# of infants must not exceed # of adults)
-var travelClass = "&travelClass="; // ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
-var nonStop = "&nonStop="; // boolean
-var maxPrice = "&maxPrice="; // max price per traveler. no decimals
-var max = "&max="; // maximum number of flight options (default is 250)
-var includedAirlineCodes = "&includedAirlineCodes="; // multiple airlines allowed, separate with comma (no spaces). cannot be combined with excludedAirlineCodes
-var excludedAirlineCodes = "&excludedAirlineCodes="; // multiple airlines allowed, separate with comma (no spaces). cannot be combined with includedAirlineCodes
+const queryCurrency = "&currencyCode="; // default is EUR, so needed for USD
+const queryReturnDate = "&returnDate="; // required for roundtrip flights
+const queryChildren = "&children="; // for travelers between 2 and 12 on date of departure with own separate seat
+const queryInfants = "&infants="; // for travelers 2 or less on date of departure. infants sit on lap of adult (# of infants must not exceed # of adults)
+const travelClass = "&travelClass="; // ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
+const nonStop = "&nonStop="; // boolean
+const maxPrice = "&maxPrice="; // max price per traveler. no decimals
+const max = "&max="; // maximum number of flight options (default is 250)
+const includedAirlineCodes = "&includedAirlineCodes="; // multiple airlines allowed, separate with comma (no spaces). cannot be combined with excludedAirlineCodes
+const excludedAirlineCodes = "&excludedAirlineCodes="; // multiple airlines allowed, separate with comma (no spaces). cannot be combined with includedAirlineCodes
 
 /* ---------- declares variables for amadeus api urls ---------- */
 var oneWayFlightOffersSearchApiUrl;
 var roundTripFlightOffersSearchApiUrl;
 var apiUrl;
-
-/* ---------- declares variables for "ai-generated photos" amadeus api ---------- */
-// amadeus url variables
-var aiGeneratedPhotosPath = "/v2/media/files/generated-photos";
-var queryCategory = "?category=";
-// MUST BE UPPERCASE
-var category = "MOUNTAIN";
-
-// full "ai-generated photos" api url
-var aiGeneratedPhotosApiUrl =
-  baseUrl + aiGeneratedPhotosPath + queryCategory + category;
 /* -------------------- ENDS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES -------------------- */
 
 /* -------------------- BEGINS AMADEUS CREDENTIALS -------------------- */
 /* ---------- checks status of access token. expires every 30 minutes ---------- */
-// not part of program. used for testing only.
+/* not related to running of website application. used for testing only */
 var accessTokenStatus = function () {
   var fetchAccessToken = baseUrl + accessTokenPath + accessToken;
 
@@ -100,26 +92,6 @@ var accessTokenStatus = function () {
 /* -------------------- ENDS AMADEUS CREDENTIALS -------------------- */
 
 /* -------------------- BEGINS FETCH APIS -------------------- */
-/* ---------- gets "ai-generated photos" amadeus api ----------*/
-var getAiGeneratedPhotos = function () {
-  fetch(aiGeneratedPhotosApiUrl, {
-    method: "GET",
-    headers: {
-      Authorization: authorizationValue,
-    },
-  })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      console.log(data);
-    })
-    .catch(function (error) {
-      // replace this with error message in html
-      console.log("Catch-all error for ai-generated photos.");
-    });
-};
-
 /* ---------- gets "flight offers search" amadeus api ---------- */
 var getFlightOffersSearch = function () {
   fetch(apiUrl, {
@@ -142,8 +114,9 @@ var getFlightOffersSearch = function () {
 /* -------------------- ENDS FETCH -------------------- */
 
 /* -------------------- BEGINS METHODS -------------------- */
+/* ---------- saves api url depending on one-way or roundtrip ---------- */
 var saveUrl = function () {
-  // full "flight offers search" api url for one way
+  // full "flight offers search" api url for one-way
   oneWayFlightOffersSearchApiUrl =
     baseUrl +
     flightOffersSearchPath +
@@ -173,15 +146,15 @@ var saveUrl = function () {
 
 /* ---------- search form handler ---------- */
 var searchFormHandler = function () {
-  /* ---------- declares variables for user input for "flight offers search" amadeus api ---------- */
+  /* ---------- gets current values in search form ---------- */
   // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
   originCode = goingFromEl.value;
   // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
   destinationCode = goingToEl.value;
-  departureDate = dateDepartureEl.value; // Format: YYYY-MM-DD
-  returnDate = dateReturnEl.value; // Format: YYYY-MM-DD
+  departureDate = dateDepartureEl.value;
+  returnDate = dateReturnEl.value;
 
-  // HARDCODING. MUST BE CHANGED TO USER INPUT
+  // HARDCODED. MUST BE CHANGED TO USER INPUT
   // numberOfAdults = ???.value;
 
   saveUrl();
@@ -354,9 +327,7 @@ var writeData = function (data) {
 /* -------------------- BEGINS CALLING FUNCTIONS/METHODS -------------------- */
 // not part of program. used for testing purposes
 // accessTokenStatus();
-// poor images. not used on website.
-// getAiGeneratedPhotos();
-// main function of this app
 
+// search form submit event handler
 searchFormEl.addEventListener("submit", searchFormHandler);
 /* -------------------- ENDS CALLING FUNCTIONS/METHODS -------------------- */
