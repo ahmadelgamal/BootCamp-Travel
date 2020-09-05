@@ -4,11 +4,33 @@
 /* ------------------------ THIS FILE WAS DEVELOPED BY ------------------------ */
 /* ------------------------------ AHMAD EL GAMAL ------------------------------ */
 
-/* -------------------- BEGINS DECLARATIONS OF GLOBAL VARIABLES -------------------- */
-/* ---------- declares variables to point to html elements ---------- */
+/* -------------------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES -------------------- */
+/* ---------- declares constants to point to html elements ---------- */
 // var flightsListEl = document.getElementById("flights-list");
 // var flightCountEl = document.getElementById("flight-count");
-var flightsGridEl = document.getElementById("flights-grid");
+
+// constants that point to search form
+const searchFormEl = document.getElementById("form");
+const goingFromEl = document.getElementById("going-from");
+const goingToEl = document.getElementById("going-to");
+const dateDepartureEl = document.getElementById("date-departure");
+const dateReturnEl = document.getElementById("date-return");
+
+// constants that point to flights grid
+const flightsGridEl = document.getElementById("flights-grid");
+
+/* ---------- declares variables for user input for "flight offers search" amadeus api ---------- */
+// CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
+var originCode = goingFromEl.value;
+// CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
+var destinationCode = goingToEl.value;
+var departureDate = dateDepartureEl.value; // Format: YYYY-MM-DD
+var returnDate = dateReturnEl.value; // Format: YYYY-MM-DD
+
+// HARDCODING. MUST BE CHANGED TO USER INPUT
+var numberOfAdults = "1";
+// sets currency to USD in fetch request (default in amadeus is euro)
+const currencyCode = "USD";
 
 /* ---------- declares common variables of amadeus apis ---------- */
 // amadeus for developers testing baseUrl
@@ -16,7 +38,7 @@ var baseUrl = "https://test.api.amadeus.com";
 // url for requesting and checking on access token
 var accessTokenPath = "/v1/security/oauth2/token/";
 // access token must be renewed for 30 minutes at a time
-var accessToken = "1PtukAkZd18ejaWVAfJxOZedgEdf";
+var accessToken = "0OXA6rGFx8tcsvcnOWAKo4r8fs8U";
 // `value` of `headers` "Authorization" `key`
 var authorizationValue = "Bearer " + accessToken;
 
@@ -41,33 +63,10 @@ var max = "&max="; // maximum number of flight options (default is 250)
 var includedAirlineCodes = "&includedAirlineCodes="; // multiple airlines allowed, separate with comma (no spaces). cannot be combined with excludedAirlineCodes
 var excludedAirlineCodes = "&excludedAirlineCodes="; // multiple airlines allowed, separate with comma (no spaces). cannot be combined with includedAirlineCodes
 
-/* ---------- declares variables for user input for "flight offers search" amadeus api ---------- */
-// HARDCODING. MUST BE CHANGED TO USER INPUT
-var originCode = "CDG";
-var destinationCode = "LAX";
-var departureDate = "2020-10-10";
-var numberOfAdults = "1";
-var currencyCode = "USD";
-var returnDate = "2020-10-20";
-
-// full "flight offers search" api url
-var oneWayFlightOffersSearchApiUrl =
-  baseUrl +
-  flightOffersSearchPath +
-  queryOrigin +
-  originCode +
-  queryDestination +
-  destinationCode +
-  queryDepartureDate +
-  departureDate +
-  queryNumberOfAdults +
-  numberOfAdults +
-  queryCurrency +
-  currencyCode;
-
-// full "flight offers search" api url
-var roundTripFlightOffersSearchApiUrl =
-  oneWayFlightOffersSearchApiUrl + queryReturnDate + returnDate;
+/* ---------- declares variables for amadeus api urls ---------- */
+var oneWayFlightOffersSearchApiUrl;
+var roundTripFlightOffersSearchApiUrl;
+var apiUrl;
 
 /* ---------- declares variables for "ai-generated photos" amadeus api ---------- */
 // amadeus url variables
@@ -79,7 +78,7 @@ var category = "MOUNTAIN";
 // full "ai-generated photos" api url
 var aiGeneratedPhotosApiUrl =
   baseUrl + aiGeneratedPhotosPath + queryCategory + category;
-/* -------------------- ENDS DECLARATIONS OF GLOBAL VARIABLES -------------------- */
+/* -------------------- ENDS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES -------------------- */
 
 /* -------------------- BEGINS AMADEUS CREDENTIALS -------------------- */
 /* ---------- checks status of access token. expires every 30 minutes ---------- */
@@ -123,7 +122,7 @@ var getAiGeneratedPhotos = function () {
 
 /* ---------- gets "flight offers search" amadeus api ---------- */
 var getFlightOffersSearch = function () {
-  fetch(roundTripFlightOffersSearchApiUrl, {
+  fetch(apiUrl, {
     method: "GET",
     headers: {
       Authorization: authorizationValue,
@@ -143,6 +142,52 @@ var getFlightOffersSearch = function () {
 /* -------------------- ENDS FETCH -------------------- */
 
 /* -------------------- BEGINS METHODS -------------------- */
+var saveUrl = function () {
+  // full "flight offers search" api url for one way
+  oneWayFlightOffersSearchApiUrl =
+    baseUrl +
+    flightOffersSearchPath +
+    queryOrigin +
+    originCode +
+    queryDestination +
+    destinationCode +
+    queryDepartureDate +
+    departureDate +
+    queryNumberOfAdults +
+    numberOfAdults +
+    queryCurrency +
+    currencyCode;
+
+  // full "flight offers search" api url for roundtrip
+  roundTripFlightOffersSearchApiUrl =
+    oneWayFlightOffersSearchApiUrl + queryReturnDate + returnDate;
+
+  // one-way was selected
+  if (returnDate === "") {
+    apiUrl = oneWayFlightOffersSearchApiUrl;
+    // roundtrip was selected
+  } else if (returnDate !== "") {
+    apiUrl = roundTripFlightOffersSearchApiUrl;
+  }
+};
+
+/* ---------- search form handler ---------- */
+var searchFormHandler = function () {
+  /* ---------- declares variables for user input for "flight offers search" amadeus api ---------- */
+  // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
+  originCode = goingFromEl.value;
+  // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
+  destinationCode = goingToEl.value;
+  departureDate = dateDepartureEl.value; // Format: YYYY-MM-DD
+  returnDate = dateReturnEl.value; // Format: YYYY-MM-DD
+
+  // HARDCODING. MUST BE CHANGED TO USER INPUT
+  // numberOfAdults = ???.value;
+
+  saveUrl();
+  getFlightOffersSearch();
+};
+
 /* ---------- writes data from "flight offers search" amadeus api to html ---------- */
 var writeData = function (data) {
   // dictionary of codes
@@ -189,8 +234,8 @@ var writeData = function (data) {
       // creates a container for the segment
       var segmentListEl = document.createElement("div");
       itineraryItemEl.classList.add(
-      "uk-width-1-2",
-      "uk-padding-remove-horizontal"
+        "uk-width-1-2",
+        "uk-padding-remove-horizontal"
       );
       // number of segments for each flight. it is also "number of stops" for "trip"
       var segmentCount = data.data[i].itineraries[0].segments.length;
@@ -312,5 +357,6 @@ var writeData = function (data) {
 // poor images. not used on website.
 // getAiGeneratedPhotos();
 // main function of this app
-getFlightOffersSearch();
+
+searchFormEl.addEventListener("submit", searchFormHandler);
 /* -------------------- ENDS CALLING FUNCTIONS/METHODS -------------------- */
