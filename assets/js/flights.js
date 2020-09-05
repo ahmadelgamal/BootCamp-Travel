@@ -1,7 +1,14 @@
+/* ------------------------------ UCB EXTENSION ------------------------------- */
+/* --------- ONLINE BLENDED | FULL STACK WEB DEVELOPMENT CERTIFICATE ---------- */
+/* ------------------- PROJECT 1 GROUP 7 | BOOTCAMP TRAVEL -------------------- */
+/* ------------------------ THIS FILE WAS DEVELOPED BY ------------------------ */
+/* ------------------------------ AHMAD EL GAMAL ------------------------------ */
+
 /* -------------------- BEGINS DECLARATIONS OF GLOBAL VARIABLES -------------------- */
 /* ---------- declares variables to point to html elements ---------- */
-var flightsListEl = document.getElementById("flights-list");
-var flightCountEl = document.getElementById("flight-count");
+// var flightsListEl = document.getElementById("flights-list");
+// var flightCountEl = document.getElementById("flight-count");
+var flightsGridEl = document.getElementById("flights-grid");
 
 /* ---------- declares common variables of amadeus apis ---------- */
 // amadeus for developers testing baseUrl
@@ -9,7 +16,7 @@ var baseUrl = "https://test.api.amadeus.com";
 // url for requesting and checking on access token
 var accessTokenPath = "/v1/security/oauth2/token/";
 // access token must be renewed for 30 minutes at a time
-var accessToken = "U6L7iz6A54EKpuGTGAVBHyF2coMw";
+var accessToken = "1PtukAkZd18ejaWVAfJxOZedgEdf";
 // `value` of `headers` "Authorization" `key`
 var authorizationValue = "Bearer " + accessToken;
 
@@ -151,14 +158,40 @@ var writeData = function (data) {
 
   // each flight details
   for (var i = 0; i < flightCount; i++) {
-    var flightListItemEl = document.createElement("li");
-    var itineraryListEl = document.createElement("ol");
+    // var flightListItemEl = document.createElement("li");
+
+    // creates a "single flight" (trip) container in index.html
+    var tripContainerEl = document.createElement("div");
+    tripContainerEl.classList.add(
+      "uk-grid",
+      "uk-width-1-1",
+      "uk-background-default",
+      "uk-border-rounded",
+      "test-border",
+      "margin-zero"
+    );
+
+    /* creates one container for both itineraries (outbound and inbound) of the trip
+    this div is not in the structure of the html file yet */
+    var itineraryContainerEl = document.createElement("div");
+
+    // appends itinerary container to trip container
+    tripContainerEl.appendChild(itineraryContainerEl);
+    // appends trip container to flights grid
+    flightsGridEl.appendChild(tripContainerEl);
+
     var intineraryCount = data.data[i].itineraries.length;
 
     for (var y = 0; y < intineraryCount; y++) {
-      // html elements
-      var itineraryListItemEl = document.createElement("li");
-      var segmentListEl = document.createElement("ol");
+      /* creates a container for each of the two itineraries
+      this div is not in the structure of the html file yet */
+      var itineraryItemEl = document.createElement("div");
+      // creates a container for the segment
+      var segmentListEl = document.createElement("div");
+      itineraryItemEl.classList.add(
+      "uk-width-1-2",
+      "uk-padding-remove-horizontal"
+      );
       // number of segments for each flight. it is also "number of stops" for "trip"
       var segmentCount = data.data[i].itineraries[0].segments.length;
 
@@ -259,8 +292,8 @@ var writeData = function (data) {
           " " +
           currencyFull;
 
-        // creates a new listing for each segment
-        segmentListItemEl.innerHTML = segmentDetails;
+        var airlineFullEl = document.createElement("h4");
+
         segmentListEl.appendChild(segmentListItemEl);
       }
       itineraryListItemEl.appendChild(segmentListEl);
