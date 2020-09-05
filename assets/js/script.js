@@ -1,11 +1,7 @@
 var flightsBtn = document.querySelector("#flights-btn");
-
 var hotelsBtn = document.querySelector("#hotels-btn");
-
 var flightsContainer = document.querySelector("#flights-container");
-
 var hotelsContainer = document.querySelector("#hotels-container");
-
 var searchContainer = document.querySelector("#past-search-container");
 
 var showFlightsMenu = function () {
@@ -112,13 +108,11 @@ var showSearchHistory = function () {
 
 var flightsHandler = function (event) {
   showFlightsMenu();
-
   showFlights();
 };
 
 var hotelsHandler = function (event) {
   showHotelsMenu();
-
   showHotels();
 };
 
@@ -127,7 +121,6 @@ var init = function () {
 };
 
 // source https://www.w3schools.com/howto/howto_js_autocomplete.asp
-
 function autocomplete(inp, arr) {
   /*the autocomplete function takes two arguments,
     the text field element and an array of possible autocompleted values:*/
