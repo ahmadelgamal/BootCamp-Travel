@@ -43,7 +43,7 @@ const baseUrl = "https://test.api.amadeus.com";
 // url for requesting and checking on access token
 const accessTokenPath = "/v1/security/oauth2/token/";
 // access token must be renewed for 30 minutes at a time
-const accessToken = "0OXA6rGFx8tcsvcnOWAKo4r8fs8U";
+const accessToken = "3C9WTzSvkWeXx9zPC7IxDooGX3Me";
 // `value` of `headers` "Authorization" `key`
 const authorizationValue = "Bearer " + accessToken;
 
@@ -131,6 +131,9 @@ var saveUrl = function () {
 
 /* ---------- search form handler ---------- */
 var searchFormHandler = function () {
+  // prevents the initials submit from triggering a refresh of index.html
+  event.preventDefault();
+
   /* ---------- gets current values in search form ---------- */
   // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
   originCode = goingFromEl.value;
