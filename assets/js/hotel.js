@@ -230,3 +230,7 @@ $(document).on("click", ".reserve", function () {
     outcome = false;
 });
 
+
+//var ids = GetIdhotel("Chicago");
+// console.log(allImageUrl);
+
