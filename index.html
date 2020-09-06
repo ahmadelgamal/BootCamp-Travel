@@ -1,28 +1,45 @@
 <!DOCTYPE html>
 <html lang="en" class="uk-background-muted">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
-    <link rel="stylesheet" type="text/css"
-        href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/css/addons/uikit.gradient.addons.min.css">
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/css/addons/uikit.gradient.addons.min.css"
+    />
 
     <!-- UIkit CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.5.7/css/uikit.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/solid.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.5.7/css/uikit.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/solid.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap"
+      rel="stylesheet"
+    />
 
-    <link href="assets/css/style.css" rel="stylesheet">
-</head>
+    <link href="assets/css/style.css" rel="stylesheet" />
 
-<body>
+    <title>Bootcamp Travel</title>
+  </head>
+
+  <body>
     <header class="uk-flex uk-flex-center uk-flex-middle">
+
         <h3 class="uk-margin-small-top"> <span class="fa">&#xf19c;</span> Bootcamp Travel </h3>
+
     </header>
 
+    <!-- begins search form -->
     <div class="hero uk-flex uk-flex-center uk-flex-middle">
+
         <form autocomplete="off" id="form"
             class="uk-form-stacked uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s uk-background-default uk-border-rounded uk-box-shadow-large">
 
@@ -66,7 +83,31 @@
                         data-uk-datepicker="{minDate:1,format:'&#xf783; MM/DD/YYYY'}" id="check-out" type="text"
                         placeholder="&#xf783;  Check Out:">
                 </div>
+
             </div>
+            <!--ends container for one-way/roundtrip radio selectors-->
+          </div>
+          <!-- ends sub-container for "Departs:", "Returns:", and radio selectors for "Roundtrip" or "One-way" -->
+        </div>
+        <!-- ends container for "Departs:", "Returns:", and radio selectors for "Roundtrip" or "One-way" -->
+        <!-- ends flights search form (NO DIV ELEMENT) -->
+
+        <!-- begins hotels search form -->
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical hide"
+        >
+          <!-- check-in datepicker -->
+          <div class="uk-form-controls">
+            <input
+              class="uk-input uk-border-rounded fa"
+              readonly
+              data-uk-datepicker="{minDate:0,format:'&#xf783; MM/DD/YYYY'}"
+              id="check-in"
+              type="text"
+              placeholder="&#xf783;  Check-in:"
+            />
+          </div>
+        </div>
 
             <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical ">
                 <div class="uk-form-controls">
@@ -95,7 +136,6 @@
         
                                       
                     </div>
-
                    
             </div>
 
@@ -117,53 +157,80 @@
                 </div>
             </div>
         </form>
+
     </div>
-    <!-- past search container begins-->
+    <!-- ends search form -->
 
-    <div id="past-search-container" class="uk-container uk-container-center uk-padding-small width-maxed">
-        <h3>Your search history:</h3>
-        <!-- past search grid-->
-        <div id="past-search-grid"
-            class="uk-grid uk-width-1-1 uk-border-rounded uk-background-muted uk-padding-remove-horizontal margin-zero">
-            <!-- this is a single past search, should be created dynamically with JS-->
-            <div class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero">
-                <div class="uk-width-1-2 uk-padding-remove-horizontal">
-                    <p>Searched on 09.01.2020 </p>
-                    <h4><span class="fa">LAX &#xf072; SFO </span> </h4>
-                    </p>
-                    <p class="fa"> &#xf783; 10/08/2020 <br> &#xf783; 10/15/2020
-                    </p>
-                </div>
+    <!-- begins past search container -->
+    <div
+      id="past-search-container"
+      class="uk-container uk-container-center uk-padding-small width-maxed"
+    >
+      <h3>Your search history:</h3>
+      <!-- begins past search grid-->
+      <div
+        id="past-search-grid"
+        class="uk-grid uk-width-1-1 uk-border-rounded uk-background-muted uk-padding-remove-horizontal margin-zero"
+      >
+        <!-- begins single past flights search, should be created dynamically with JS -->
+        <div
+          class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero"
+        >
+          <div class="uk-width-1-2 uk-padding-remove-horizontal">
+            <p>Searched on 09.01.2020</p>
+            <h4><span class="fa">LAX &#xf072; SFO</span></h4>
+            <p class="fa">
+              &#xf783; 10/08/2020<br />
+              &#xf783; 10/15/2020
+            </p>
+          </div>
 
-                <div class="uk-border-rounded uk-width-1-2 uk-padding-small price">
-                    <h3 class="uk-margin-remove-vertical uk-text-center fa">
-                        &#xf072; <br> Round-Trip</h3>
-                    <button
-                        class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide">Select</button>
-                </div>
-            </div>
-            <!-- end of single past search-->
-
-            <div class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero">
-                <div class="uk-width-1-2 uk-padding-remove-horizontal">
-                    <p>Searched on 09.01.2020 </p>
-                    <h4><span class="fa">&#xf594; Los Angeles, California, USA </span> </h4>
-                    </p>
-                    <p class="fa"> &#xf783; 10/08/2020 <br> &#xf783; 10/15/2020
-                    </p>
-                </div>
-
-                <div class="uk-border-rounded uk-width-1-2 uk-padding-small price">
-                    <h3 class="uk-margin-remove-vertical uk-text-center fa">
-                        &#xf594; <br>
-                        Hotels</h3>
-                    <button
-                        class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide">Select</button>
-                </div>
-            </div>
+          <div class="uk-border-rounded uk-width-1-2 uk-padding-small price">
+            <h3 class="uk-margin-remove-vertical uk-text-center fa">
+              &#xf072;<br />
+              Round-Trip
+            </h3>
+            <button
+              class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide"
+            >
+              Select
+            </button>
+          </div>
         </div>
-        <!-- end of past search grid-->
+        <!-- ends single past flights search-->
+
+        <!-- begins single past hotels search, should be created dynamically with JS -->
+        <div
+          class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero"
+        >
+          <div class="uk-width-1-2 uk-padding-remove-horizontal">
+            <p>Searched on 09.01.2020</p>
+            <h4>
+              <span class="fa">&#xf594; Los Angeles, California, USA </span>
+            </h4>
+            <p class="fa">
+              &#xf783; 10/08/2020 <br />
+              &#xf783; 10/15/2020
+            </p>
+          </div>
+
+          <div class="uk-border-rounded uk-width-1-2 uk-padding-small price">
+            <h3 class="uk-margin-remove-vertical uk-text-center fa">
+              &#xf594; <br />
+              Hotels
+            </h3>
+            <button
+              class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide"
+            >
+              Select
+            </button>
+          </div>
+        </div>
+        <!-- ends single past hotels search-->
+      </div>
+      <!-- ends past search grid-->
     </div>
+
     <!-- end of past search container-->
 
     <!-- this div is the overall flights container -->
@@ -283,6 +350,24 @@
 
                 <!-- end of single flight container -->
         </div>
+        <!-- ends single flight container -->
+
+        <!-- begins price container -->
+        <div
+          class="uk-border-rounded uk-width-1-3@m uk-width-1-1@s uk-padding-small uk-margin-small-top price"
+        >
+          <span class="black-ops stronger uk-text-emphasis">Select</span>
+          <h2 class="uk-margin-remove-vertical black-ops">$96</h2>
+          <b class="uk-text-emphasis">Round trip</b>
+          <button
+            class="uk-button uk-button-large uk-button-primary uk-border-rounded uk-padding-remove-vertical xs-size-button hide"
+          >
+            Select
+          </button>
+        </div>
+        <!-- ends price container -->
+      </div>
+      <!-- ends flights grid (search results) container -->
     </div>
 
         <!-- end of all flights container grid -->
@@ -350,28 +435,34 @@
 
                 <!-- end of single hotel grid-->
 
+
             </div>
-            <!-- end of hotels grid -->
+          </div>
         </div>
+
+        <!-- ends single hotel grid -->
+      </div>
+      <!-- ends hotels container grid (search results) -->
     </div>
+    <!-- ends overall hotels container div-->
 
-        <!-- end of hotels container div-->
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 
-        <!-- UIkit JS -->
-        <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <!-- UIkit JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/js/addons/datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.5.7/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
 
-        <script type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/js/uikit.min.js"></script>
-        <script type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/js/addons/datepicker.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.5.7/js/uikit.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+    <!-- for autocomplete of cities in search form -->
+    <script src="assets/js/world-cities.js"></script>
 
-        <script src="assets/js/world-cities.js"></script>
-        <script src="assets/js/script.js"></script>
-        <script src="assets/js/hotel.js"></script>
-        <script src="./assets/js/flights.js"></script>
-
-</body>
-
+    <!-- developed by Marco Evangelista -->
+    <script src="assets/js/script.js"></script>
+    <!-- developed by Gautam Tankha for hotels search -->
+    <!-- <script src="assets/js/hotel.js"></script> -->
+    <!-- developed by Ahmad El Gamal for flights search -->
+    <script src="./assets/js/flights.js"></script>
+  </body>
 </html>
