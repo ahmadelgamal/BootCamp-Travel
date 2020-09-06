@@ -6,7 +6,7 @@ var checkout = ""; // Check-out date
 var id = 0;
 var urls = []; // URLs of the images
 var maxHistoryLength = 3; // History length
-var urlKey = "3b66244881msh6022e37d9964003p1a70a4jsn2f3d77454263"; // URL Key
+var urlKey = "8f0c28b4b3msh8821bf07d58b33ep177991jsn8c90db7e5dc0"; // URL Key
 var newHotellay1 = document.getElementById("hotels-grid"); // Get parent element of HTML document
 var pageNumber = 1; // # of pages to display
 var resultMax = 3; // # of hotels to show up in a single request
@@ -14,7 +14,7 @@ var adults = 1; // # of adults
 curr = "USD"; // Currency
 var sortOrd = "PRICE"; // Sort order
 var outcome = false;
-// Variables for local storage
+// Object for local storage
 var hotels = [
     {
         IdCity: "",
@@ -52,7 +52,6 @@ var displayPropertyInfo = function (identity, checkindate, checkoutdate, numbero
 
                 // Add DOM elements to display the property
                 var hotellayvar = "hotellay" + j.toString();
-                console.log("urrrl: " + urlTh);
                 $(newHotellay1).append('<div class = "uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal" id = "' + hotellayvar + '">');
                 var newHotellay2 = document.getElementById(hotellayvar);
 
@@ -85,7 +84,6 @@ var GetIdhotel = function (City, checkIn, checkOut) {
             if (response.ok) {
                 response.json().then(function (data) {
 
-                    console.log(data);
                     // Get property information based on city search
                     if (data.suggestions[0].entities.length !== 0) {
                         if ($(".temporary")) { $(".temporary").empty() };
@@ -124,7 +122,6 @@ var getProperties = function (idcity, currency, sortOrder, pgNumb, checkInDate, 
             // request was successful
             if (response.ok) {
                 response.json().then(function (data6) {
-                    console.log(data6);
 
                     $("#hotels-container").css('display', 'flex'); // Unhide the document class
 
@@ -158,13 +155,14 @@ var setInitial = function () {
 
     if (!(hotels == null)) {
         for (i = 0; i < hotels.length; i++) {
-            console.log("hotttttel:  " + hotels);
             displayPropertyInfo(hotels[i].IdCity, hotels[i].ChkInDate, hotels[i].ChkOutDate, hotels[i].NumAdults, hotels[i].Currcy, i, hotels[i].UrlThumbNl);
         }
     }
 }
 
-setInitial(); //  Pull local storage
+/* -------------------- PULL LOCAL STORAGE-------------------- */
+
+setInitial(); 
 
 /* -------------------- PROCESS REUQEST FOR HOTEL SEARCH-------------------- */
 $("#form").on("submit", function (event) {
@@ -212,27 +210,22 @@ $(document).on("click", ".reserve", function () {
         hotels[0].Currcy = curr;
         hotels[0].UrlThumbNl = urlTn;
         hotels[0].dateSearch = moment().format("YYYY-MM-DD");
-        console.log("null: " + hotels);
     }
 
     else {
         for (i = 0; i < hotels.length; i++) {
             if (hotels[i].IdCity === propval) { outcome = true; }
         };
-        console.log("AABABABA: " + outcome);
 
         if (outcome === false) {
             if (hotels.length == maxHistoryLength) {
                 hotels.shift();
             }
-            console.log("hotel length;  " + hotels.length + "hothhtl " + hotels);
             hotels.push({ IdCity: propval, ChkInDate: checkin, ChkOutDate: checkout, UrlThumbNl: urlTn, Currcy: curr, NumAdults: adults, dateSearch: moment().format("YYYY-MM-DD") });
-            console.log(hotels);
 
         }
     }
 
-    console.log("ASAS  " + hotels);
     localStorage.setItem("hotels", JSON.stringify(hotels));
     outcome = false;
 });
