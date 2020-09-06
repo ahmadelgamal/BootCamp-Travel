@@ -17,6 +17,8 @@ const goingToEl = document.getElementById("going-to");
 const dateDepartureEl = document.getElementById("date-departure");
 const dateReturnEl = document.getElementById("date-return");
 
+// constants that point to flights search history grid
+const flightsPastSearchGridEl = document.getElementById("past-search-grid");
 // constants that point to flights grid
 const flightsGridEl = document.getElementById("flights-grid");
 
@@ -43,7 +45,7 @@ const baseUrl = "https://test.api.amadeus.com";
 // url for requesting and checking on access token
 const accessTokenPath = "/v1/security/oauth2/token/";
 // access token must be renewed for 30 minutes at a time
-const accessToken = "Dg6aDWQcT33FcWLdoIfQ5HLUumpY";
+const accessToken = "9dOkN8GQBF4B1FHfaNIATyxZfzpc";
 // `value` of `headers` "Authorization" `key`
 const authorizationValue = "Bearer " + accessToken;
 
@@ -92,11 +94,150 @@ var getFlightOffersSearch = function () {
       writeData(data);
     })
     .catch(function (error) {
-      // replace this with error message in html
-      console.log("Catch-all error for get flight offers search.");
+      flightsGridEl.innerHTML =
+        "No flights were found. Please change the dates or cities.";
     });
 };
 /* -------------------- ENDS FETCH -------------------- */
+
+/* -------------------- BEGINS LOCALSTORAGE -------------------- */
+/* ---------- saves search-form user-input to localStorage ---------- */
+var saveFlightSearch = function () {
+  // get today's date (date of search)
+  var searchDate = new Date();
+  // converts it into ui design format
+  var dd = String(searchDate.getDate()).padStart(2, "0");
+  var mm = String(searchDate.getMonth() + 1).padStart(2, "0"); //January is 0!
+  var yyyy = searchDate.getFullYear();
+  searchDate = mm + "/" + dd + "/" + yyyy;
+
+  // declares array with object to hold current flight search
+  var currentFlightSearch = {
+    dateOfSearch: searchDate,
+    from: originCode,
+    to: destinationCode,
+    departs: departureDate,
+    returns: returnDate,
+  };
+
+  var flightSearchLS = [];
+  // get existing search history from localStorage if it exists
+  flightSearchLS = JSON.parse(localStorage.getItem("flightSearchHistory"));
+
+  // if there was no search history, then it is set to current flight search
+  if (flightSearchLS === null) {
+    flightSearchLS = [currentFlightSearch];
+    // otherwise, if there was a search history, then the current search is added on top of the list
+  } else {
+    flightSearchLS.unshift(currentFlightSearch);
+  }
+
+  // limits search history to five searches
+  if (flightSearchLS.length === 6) {
+    flightSearchLS.splice(5, 1);
+  }
+
+  localStorage.setItem("flightSearchHistory", JSON.stringify(flightSearchLS));
+};
+/* ---------- creates search history elements from data in localStorage ---------- */
+var loadFlightsSearchHistory = function () {
+  // get existing search history from localStorage if it exists
+  var flightSearchLS = JSON.parse(localStorage.getItem("flightSearchHistory"));
+
+  // if there was no search history, then nothing is displayed under search form
+  if (flightSearchLS === null) {
+    return;
+    // otherwise, if there was a search history, then the search history will write the following elements
+  } else {
+    for (let i = 0; i < flightSearchLS.length; i++) {
+      // Container element for each flight search item
+      var flightSearchHistoryContainerEl = document.createElement("div");
+      flightSearchHistoryContainerEl.classList.add(
+        "uk-grid",
+        "uk-width-1-1",
+        "uk-background-default",
+        "uk-border-rounded",
+        "test-border",
+        "margin-zero"
+      );
+      flightsPastSearchGridEl.appendChild(flightSearchHistoryContainerEl);
+
+      // container element for left column
+      var flightSearchHistoryEl = document.createElement("div");
+      flightSearchHistoryEl.classList.add(
+        "uk-width-1-2",
+        "uk-padding-remove-horizontal"
+      );
+      flightSearchHistoryContainerEl.appendChild(flightSearchHistoryEl);
+
+      var searchedOnEl = document.createElement("p");
+      searchedOnEl.innerHTML = "Searched on " + flightSearchLS[i].dateOfSearch;
+      flightSearchHistoryEl.appendChild(searchedOnEl);
+
+      var routeEl = document.createElement("h4");
+      routeEl.innerHTML =
+        "<span class='fa'>" +
+        flightSearchLS[i].from +
+        " &#xf072; " +
+        flightSearchLS[i].to +
+        "</span>";
+      flightSearchHistoryEl.appendChild(routeEl);
+
+      var tripDateEl = document.createElement("p");
+      tripDateEl.className = "fa";
+      if (flightSearchLS[i].returns === "") {
+        tripDateEl.innerHTML =
+          "&#xf783; " + flightSearchLS[i].departs + "<br />";
+      } else {
+        tripDateEl.innerHTML =
+          "&#xf783; " +
+          flightSearchLS[i].departs +
+          "<br />" +
+          "&#xf783; " +
+          flightSearchLS[i].returns;
+      }
+      flightSearchHistoryEl.appendChild(tripDateEl);
+
+      // container for right-column
+      var flightIconContainerEl = document.createElement("div");
+      flightIconContainerEl.classList.add(
+        "uk-border-rounded",
+        "uk-width-1-2",
+        "uk-padding-small",
+        "price"
+      );
+      flightSearchHistoryContainerEl.appendChild(flightIconContainerEl);
+
+      var flightIconEl = document.createElement("h3");
+      flightIconEl.classList.add(
+        "uk-margin-remove-vertical",
+        "uk-text-center",
+        "fa"
+      );
+      if (flightSearchLS[i].returns === "") {
+        flightIconEl.innerHTML = "&#xf072;<br />One-way";
+      } else {
+        flightIconEl.innerHTML = "&#xf072;<br />Roundtrip";
+      }
+      flightIconContainerEl.appendChild(flightIconEl);
+
+      // I PREFER TO MAKE THE WHOLE ROW SELECTABLE INSTEAD
+      // var flightHistorySelectBtn = document.createElement("button");
+      // flightHistorySelectBtn.classList.add(
+      //   "uk-button",
+      //   "uk-margin-large-top",
+      //   "uk-margin-remove-horizontal",
+      //   "uk-button-large",
+      //   "uk-button-primary",
+      //   "uk-border-rounded",
+      //   "hide"
+      // );
+      // flightHistorySelectBtn.innerHTML = "Select";
+      // flightIconContainerEl.appendChild(flightHistorySelectBtn);
+    }
+  }
+};
+/* -------------------- ENDS LOCALSTORAGE -------------------- */
 
 /* -------------------- BEGINS METHODS -------------------- */
 /* ---------- saves api url depending on one-way or roundtrip ---------- */
@@ -145,6 +286,10 @@ var searchFormHandler = function () {
   // HARDCODED. MUST BE CHANGED TO USER INPUT
   // numberOfAdults = ???.value;
 
+  // calls function in script.js
+  showFlights();
+  // clears data from previous search, and informs user that search is running
+  flightsGridEl.innerHTML = "Searching...";
   saveUrl();
   getFlightOffersSearch();
 };
@@ -156,24 +301,26 @@ var convertTime = function (timeToConvert) {
   convertedTime.splice(0, 11);
   convertedTime.splice(5, 3);
 
+  var timeDesignation;
+
   // then add am or pm and change the numbers accordingly (for example, 18 become 6pm)
   // if 0x:xx, it's am
-  if (convertedTime[0] == 0) {
-    var timeDesignation = "am";
+  if (convertedTime[0] === 0) {
+    timeDesignation = "am";
     // if 00:xx, it's 12:xxam
-    if (convertedTime[1] == 0) {
+    if (convertedTime[1] === 0) {
       convertedTime[0] = "1";
       convertedTime[1] = "2";
     }
     // if 10:xx or 11:xx, it's am
   } else if (convertedTime[0] == 1 && convertedTime[1] < 2) {
-    var timeDesignation = "am";
+    timeDesignation = "am";
     // if 12:xx, it's 12:xxpm
   } else if (convertedTime[0] == 1 && convertedTime[1] == 2) {
-    var timeDesignation = "pm";
+    timeDesignation = "pm";
     // if 1x:xx (other than 10, 11, or 12) or 2x:xx, it's pm
   } else {
-    var timeDesignation = "pm";
+    timeDesignation = "pm";
     if (
       convertedTime[0] == 1 ||
       (convertedTime[0] == 2 && convertedTime[1] > 1)
@@ -187,7 +334,7 @@ var convertTime = function (timeToConvert) {
     }
   }
 
-  if (convertedTime[0] == 0) {
+  if (convertedTime[0] === 0) {
     convertedTime.splice(0, 1);
   }
 
@@ -200,6 +347,9 @@ var convertTime = function (timeToConvert) {
 
 /* ---------- writes data from "flight offers search" amadeus api to html ---------- */
 var writeData = function (data) {
+  // if fetch was successful, then save search user input to localStorage
+  saveFlightSearch();
+
   // dictionary of codes
   var aircraftCodeList = data.dictionaries.aircraft;
   var carriersCodeList = data.dictionaries.carriers;
@@ -209,7 +359,7 @@ var writeData = function (data) {
   // number of flights available matching user input
   var flightCount = data.meta.count;
 
-  // clears data from previous search
+  // displays number of matching search results
   flightsGridEl.innerHTML =
     "There are " + flightCount + " flights available for your selected route!";
 
@@ -247,6 +397,7 @@ var writeData = function (data) {
       /* ----- allocates data from fetch into variables ----- */
       for (var x = 0; x < segmentCount; x++) {
         // essential details
+        var carrierCode = data.data[i].itineraries[0].segments[x].carrierCode;
         var carrierFull = carriersCodeList[carrierCode];
         var flightNumber = data.data[i].itineraries[0].segments[x].number;
         var departureCityCode =
@@ -259,10 +410,13 @@ var writeData = function (data) {
         var cabin =
           data.data[i].travelerPricings[0].fareDetailsBySegment[x].cabin;
         var grandTotalPrice = data.data[i].price.grandTotal;
-        var currencyCode = data.data[i].price.currency;
-        var oneWay = data.data[i].oneWay;
+        // var currencyCode = data.data[i].price.currency;
+        // var currencyFull = currenciesCodeList[currencyCode];
+        // var oneWay = data.data[i].oneWay;
 
         // more details
+        var aircraftCode =
+          data.data[i].itineraries[0].segments[x].aircraft.code;
         var aircraftFull = aircraftCodeList[aircraftCode];
         var departureTerminal =
           data.data[i].itineraries[0].segments[x].departure.terminal;
@@ -282,22 +436,16 @@ var writeData = function (data) {
         var basePrice = data.data[i].price.base;
         var totalPrice = data.data[i].price.total;
         // checks if there is data for operator, otherwise it does not look for it
-        if (
-          typeof data.data[i].itineraries[0].segments[x].operating !==
-          "undefined"
-        ) {
-          var operatorCode =
-            data.data[i].itineraries[0].segments[x].operating.carrierCode;
-          var operatorFull = carriersCodeList[operatorCode];
-        }
-
-        // hidden details
-        var currencyFull = currenciesCodeList[currencyCode];
-        var aircraftCode =
-          data.data[i].itineraries[0].segments[x].aircraft.code;
-        var carrierCode = data.data[i].itineraries[0].segments[x].carrierCode;
-        var numberOfStops =
-          data.data[i].itineraries[0].segments[x].numberOfStops;
+        // if (
+        //   typeof data.data[i].itineraries[0].segments[x].operating !==
+        //   "undefined"
+        // ) {
+        //   var operatorCode =
+        //     data.data[i].itineraries[0].segments[x].operating.carrierCode;
+        //   var operatorFull = carriersCodeList[operatorCode];
+        // }
+        // var numberOfStops =
+        //   data.data[i].itineraries[0].segments[x].numberOfStops;
 
         /* ----- writes segment data to index.html ----- */
         /* ----- carrier (ariline) name ----- */
@@ -319,12 +467,15 @@ var writeData = function (data) {
 
         /* ----- flight details ----- */
         var flightDetailsEl = document.createElement("p");
+        // append flight details to itinerary
+        itineraryContainerEl.appendChild(flightDetailsEl);
 
         // city data
         // NEED TO DECLARE departureCityFull & arrivalCityFulls
         var citySpanEl = document.createElement("span");
         // citySpanEl.innerHTML = departureCityFull + " to " + arrivalCityFull + "<br />";
-        citySpanEl.innerHTML = "Test City 1" + " to " + "Test City 2" + "<br />";
+        citySpanEl.innerHTML =
+          "Test City 1" + " to " + "Test City 2" + "<br />";
         flightDetailsEl.appendChild(citySpanEl);
 
         // airport data
@@ -344,16 +495,54 @@ var writeData = function (data) {
           "<br />";
         flightDetailsEl.appendChild(timeSpanEl);
 
-        // amenities
-        var amenitiesSpanEl = document.createElement("span");
-        amenitiesSpanEl.className = "fa";
-        amenitiesSpanEl.innerHTML = "&#xf152; &#xf1eb; &#xf5e7;";
-        flightDetailsEl.appendChild(amenitiesSpanEl);
-
-        // append flight details to itinerary
-        itineraryContainerEl.appendChild(flightDetailsEl);
+        /* ----- flight number ----- */
+        var flightNumberEl = document.createElement("span");
+        flightNumberEl.className = "black-ops";
+        flightNumberEl.innerHTML =
+          "<br /> Flight #: " + flightNumber + "<br />";
+        flightDetailsEl.appendChild(flightNumberEl);
       }
     }
+    /* ----- price container ----- */
+    // var priceContainerEl = document.createElement("div");
+    // priceContainerEl.classList.add(
+    //   "uk-border-rounded",
+    //   "uk-width-1-3@m",
+    //   "uk-width-1-1@s",
+    //   "uk-padding-small",
+    //   "uk-margin-small-top price"
+    // );
+    // tripContainerEl.appendChild(priceContainerEl);
+
+    // // more details
+    // var moreDetailsSpanEl = document.createElement("span");
+    // moreDetailsSpanEl.className = "fa";
+    // moreDetailsSpanEl.innerHTML =
+    //   cabin + "<br />" + numberOfBookableSeats + " seats available";
+    // priceContainerEl.appendChild(priceContainerEl);
+
+    // var saveEl = document.createElement("span");
+    // saveEl.classList.add("black-ops", "stronger", "uk-text-emphasis");
+    // saveEl.innerHTML = "Save";
+    // saveEl.appendChild(priceContainerEl);
+
+    // var priceEl = document.createElement("h2");
+    // priceEl.classList.add("uk-margin-remove-vertical", "black-ops");
+    // priceEl.innerHTML = "$" + grandTotalPrice;
+    // priceEl.appendChild(priceContainerEl);
+
+    // var saveBtn = document.createElement("button");
+    // saveBtn.classList.add(
+    //   "uk-button",
+    //   "uk-button-large",
+    //   "uk-button-primary",
+    //   "uk-border-rounded",
+    //   "uk-padding-remove-vertical",
+    //   "xs-size-button",
+    //   "hide"
+    // );
+    // saveBtn.innerHTML = "Select";
+    // saveBtn.appendChild(priceContainerEl);
   }
 };
 /* -------------------- ENDS METHODS -------------------- */
@@ -362,6 +551,10 @@ var writeData = function (data) {
 // search form submit event handler
 searchFormEl.addEventListener("submit", searchFormHandler);
 /* -------------------- ENDS EVENT HANDLERS -------------------- */
+
+/* -------------------- BEGINS LOAD EVENTS -------------------- */
+loadFlightsSearchHistory();
+/* -------------------- ENDS LOAD EVENTS -------------------- */
 
 /* --------------------------------------------------------------------------------- */
 /* ----- CODE BELOW IS NOT PART OF THE APP AND SHOULD BE DELETED BEFORE LAUNCH ----- */
