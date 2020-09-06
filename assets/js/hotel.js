@@ -70,7 +70,7 @@ var GetIdhotel = function (City, checkIn, checkOut) {
 
     console.log("cc " + City + "check  " + checkIn + "cehck ot" + checkOut);
 
-    fetch("https://hotels4.p.rapidapi.com/locations/search?locale=en_US&query=" + City, {
+    fetch("https://cors-anywhere.herokuapp.com/https://hotels4.p.rapidapi.com/locations/search?locale=en_US&query=" + City, {
         "method": "GET",
         "headers": {
             "x-rapidapi-host": "hotels4.p.rapidapi.com",
@@ -108,7 +108,7 @@ var GetIdhotel = function (City, checkIn, checkOut) {
 /* -------------------- PROPERTY INFORMATION BASED ON CITY ID -------------------- */
 var getProperties = function (idcity, currency, sortOrder, pgNumb, checkInDate, checkOutDate, pgSize, adultNumber) {
 
-    var url6 = "https://hotels4.p.rapidapi.com/properties/list?currency=" + currency + "&locale=en_US&sortOrder=" + sortOrder + "&destinationId=" + idcity + "&pageNumber=" + pgNumb + "&checkIn=" + checkInDate + "&checkOut=" + checkOutDate + "&pageSize=" + pgSize + "&adults=" + adultNumber
+    var url6 = "https://cors-anywhere.herokuapp.com/https://hotels4.p.rapidapi.com/properties/list?currency=" + currency + "&locale=en_US&sortOrder=" + sortOrder + "&destinationId=" + idcity + "&pageNumber=" + pgNumb + "&checkIn=" + checkInDate + "&checkOut=" + checkOutDate + "&pageSize=" + pgSize + "&adults=" + adultNumber
 
     fetch(url6, {
         "method": "GET",
