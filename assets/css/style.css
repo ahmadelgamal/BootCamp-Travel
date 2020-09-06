@@ -97,16 +97,22 @@ header {
 }
 
 .xs-size-button {
-    padding: 5px;
-    max-width: 30%;
+    padding: 5px 12px 5px 12px;
+    max-width: 25%;
 }
 
 .width-maxed {
     max-width: 1000px;
 }
 
-.padding-left-small {
-    padding: 0 0 0 6px;
+.uk-width-3-10{
+
+    width: 30%;
+    max-width: 30%;
+}
+
+.padding-none {
+    padding: 0 0 0 0;
 }
 
 @media screen and (min-width: 960px) {

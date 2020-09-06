@@ -3,6 +3,8 @@ var flightsBtn = document.querySelector("#flights-btn");
 
 var hotelsBtn = document.querySelector("#hotels-btn");
 
+var tripSelector = document.querySelector("#trip");
+
 var flightsContainer = document.querySelector("#flights-container");
 
 var hotelsContainer = document.querySelector("#hotels-container");
@@ -17,15 +19,24 @@ var showFlightsMenu = function () {
     var goingFrom = document.querySelector("#going-from").parentElement.parentElement;
     goingFrom.setAttribute("class", "uk-margin-small uk-padding-small uk-padding-remove-vertical");
 
-    var trip = document.querySelector("#trip");
-    trip.setAttribute("class", "uk-margin-small uk-padding-small uk-padding-remove-vertical");
-
-
     var checkIn = document.querySelector("#check-in").parentElement.parentElement;
     checkIn.setAttribute("class", "uk-margin-small uk-padding-small uk-padding-remove-vertical hide");
 
     var checkOut = document.querySelector("#check-out").parentElement.parentElement;
     checkOut.setAttribute("class", "uk-margin-small uk-padding-small uk-padding-remove-vertical hide");
+
+    var cabinClass = document.querySelector("#cabin-class");
+    cabinClass.style.display = "";
+
+    var trip = document.querySelector("#trip");
+    trip.style.display = "";
+
+    var hotelsBtn = document.querySelector("#hotels-search");
+    hotelsBtn.style.display = "none";
+
+    var flightsBtn = document.querySelector("#flights-search");
+    flightsBtn.style.display = "";
+
 
     var dDeparture = document.querySelector("#date-departure").parentElement.parentElement;
     dDeparture.setAttribute("class", "uk-margin-small uk-padding-small uk-padding-remove-vertical");
@@ -44,8 +55,6 @@ var showHotelsMenu = function () {
     var goingFrom = document.querySelector("#going-from").parentElement.parentElement;
     goingFrom.setAttribute("class", "uk-margin-small uk-padding-small uk-padding-remove-vertical hide");
 
-    var trip = document.querySelector("#trip");
-    trip.setAttribute("class", "uk-margin-small uk-padding-small uk-padding-remove-vertical hide");
 
 
     var checkIn = document.querySelector("#check-in").parentElement.parentElement;
@@ -53,6 +62,18 @@ var showHotelsMenu = function () {
 
     var checkOut = document.querySelector("#check-out").parentElement.parentElement;
     checkOut.setAttribute("class", "uk-margin-small uk-padding-small uk-padding-remove-vertical");
+
+    var cabinClass = document.querySelector("#cabin-class");
+    cabinClass.style.display = "none";
+
+    var trip = document.querySelector("#trip");
+    trip.style.display = "none";
+
+    var hotelsBtn = document.querySelector("#hotels-search");
+    hotelsBtn.style.display = "";
+
+    var flightsBtn = document.querySelector("#flights-search");
+    flightsBtn.style.display = "none";
 
 
     var dDeparture = document.querySelector("#date-departure").parentElement.parentElement;
@@ -116,11 +137,21 @@ var hotelsHandler = function (event) {
 
 }
 
+var toggleTripHandler = function (event){
+
+    console.log(this.options[0].selected);
+    if (this.options[0].selected) document.querySelector("#date-departure").style.display = "none";
+
+    if (this.options[1].selected) document.querySelector("#date-departure").style.display = "";
+
+}
+
 var init = function () {
 
 
 
     showSearchHistory();
+    showFlightsMenu();
 }
 
 
@@ -202,5 +233,6 @@ autocomplete(document.getElementById("going-to"), mainCities);
 
 flightsBtn.addEventListener("click", flightsHandler);
 hotelsBtn.addEventListener("click", hotelsHandler);
+tripSelector.addEventListener("change",toggleTripHandler)
 
 init();

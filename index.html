@@ -24,7 +24,7 @@
 
     <div class="hero uk-flex uk-flex-center uk-flex-middle">
         <form autocomplete="off" id="form"
-            class="uk-form-stacked uk-width-1-4@l uk-width-1-2@s uk-background-default uk-border-rounded uk-box-shadow-large">
+            class="uk-form-stacked uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s uk-background-default uk-border-rounded uk-box-shadow-large">
 
             <div class="uk-margin-small-top">
                 <ul class="uk-flex-center" uk-tab>
@@ -49,29 +49,6 @@
                 </div>
             </div>
 
-            <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical">
-                <div class="uk-form-controls">
-
-                    <!--departure datepicker-->
-                    <input class="uk-input uk-border-rounded uk-width-2-5 fa" readonly
-                        data-uk-datepicker="{minDate:1,format:'&#xf783; MM/DD/YY'}" id="date-departure" type="text"
-                        placeholder="&#xf783;  Departs:">
-
-                    <input class="uk-input uk-border-rounded uk-width-2-5 fa" readonly
-                        data-uk-datepicker="{minDate:1,format:'&#xf783; MM/DD/YY'}" id="date-arrival" type="text"
-                        placeholder="&#xf783;  Arrives:">
-
-                    <div id="trip" class="uk-margin-small-top">
-
-                        <!--radio buttons one way/round trip-->
-                        <label class="uk-align-right margin-zero"><input class="uk-radio" type="radio" name="radio1">
-                            One-way</label>
-                        <label class="uk-align-right uk-margin-small-right "><input class="uk-radio" type="radio"
-                                name="radio1">Roundtrip</label>
-                    </div>
-                </div>
-            </div>
-
             <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical hide">
                 <!-- check-in datepicker -->
                 <div class="uk-form-controls">
@@ -80,6 +57,7 @@
                         placeholder="&#xf783;  Check In:">
                 </div>
             </div>
+
 
             <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical hide">
                 <div class="uk-form-controls">
@@ -92,26 +70,51 @@
 
             <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical ">
                 <div class="uk-form-controls">
-                    <button
-                        class="uk-button uk-button-small uk-button-primary uk-border-rounded uk-margin-remove-vertical xs-size-button">Search</button>
-                        <div class="uk-form-controls uk-width-1-3 uk-align-right uk-flex uk-flex-center hide">
-                            <label class="uk-form-label uk-margin-small-top uk-margin-small-right" for="guests-select">Guests</label>
-                            <select class="uk-select uk-border-rounded" id="guests-select">
-                                <option>1</option>
-                                <option>2</option>
+            
+                        <select class="uk-select uk-width-3-10 uk-border-rounded" id="trip">
+                            <option>One Way</option>
+                            <option selected>Roundtrip</option>
+                        </select>
+
+                        <select class="uk-select uk-border-rounded uk-width-3-10 fa" id="cabin-class">
+                            <option class="hide" value="" disabled selected>&#xf53a; Cabin</option>
+                                <option>Economy</option>
+                                <option>Premium</option>
+                                <option>Business</option>
+                                <option>First-Class</option>
                             </select>
-                        </div>
 
+                     
+                           <select class="uk-select uk-width-3-10  uk-border-rounded" id="guests-select">
+                                <option>1 Adult</option>
+                                <option>2 Adults</option>
+                            </select>
 
-                   <!-- <select class="uk-select uk-border-rounded uk-width-1-3 fa uk-align-right" id="cabin-class">
-                        <option class="hide" value="" disabled selected>&#xf53a; Cabin Class</option>
-                            <option>Economy</option>
-                            <option>Premium Economy</option>
-                            <option>Business</option>
-                            <option>First-Class</option>
-                        </select> -->
-                
+                            <button id="hotels-search"
+                            class="uk-button uk-button-small uk-align-right uk-width-1-6 uk-button-primary uk-border-rounded uk-margin-remove-vertical xs-size-button fa">&#xf002;</button>
+        
+                                      
                     </div>
+
+                   
+            </div>
+
+            <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical">
+                <div class="uk-form-controls">
+
+                    <!--departure datepicker-->
+                    <input class="uk-input uk-border-rounded uk-width-2-5 fa" readonly
+                        data-uk-datepicker="{minDate:1,format:'&#xf783; MM/DD/YY'}" id="date-departure" type="text"
+                        placeholder="&#xf783;  Departs:">
+
+                    <input class="uk-input uk-border-rounded uk-width-2-5 fa" readonly
+                        data-uk-datepicker="{minDate:1,format:'&#xf783; MM/DD/YY'}" id="date-arrival" type="text"
+                        placeholder="&#xf783;  Arrives:">
+
+                        <button id="flights-search"
+                        class="uk-button uk-button-small uk-width-1-6 uk-button-primary uk-border-rounded uk-margin-remove-vertical xs-size-button fa">&#xf002;</button>
+
+                </div>
             </div>
         </form>
     </div>
@@ -223,16 +226,6 @@
                         </p>
                         <p>
                         </p>
-
-<!--
-                        <h4 class="black-ops">1b - Flydubai </h4>
-                        <img width="70px" height="70px" class="frame"
-                            src="https://upload.wikimedia.org/wikipedia/commons/7/79/Fly_Dubai_logo_2010_03.svg">
-                        <p> Dubai to Alexandria
-                        <br> <span class="fa stronger">DBX &#xf072; HBE </span>
-                        <br>6:05am to 7:37am 
-                        <br><span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
-                        </p> -->
                     </div>
 
                     <div class="uk-width-1-2 uk-padding-remove-horizontal">
@@ -244,22 +237,7 @@
                         <br>6:05am to 7:37am 
                         <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
                         </p>
-
-                        
-                        <!--
-                        <h4 class="black-ops">2b - Fly Emirates </h4>
-                        <img width="70px" height="70px" class="frame"
-                            src="https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/AS_sq.svg">
-                        <p>  Dubai to Los Angeles
-                        <br> <span class="fa stronger">DBX &#xf072; HBE </span>
-                        <br>6:05am to 7:37am 
-                        <br><span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
-                        </p>    -->
                     </div>
-
-
-
-               
                 </div>
 
                 <div class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded margin-zero uk-margin-small-top">
@@ -345,7 +323,7 @@
                 <div
                     class="uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal margin-zero test-border">
                     <div
-                        class="uk-border-rounded uk-width-1-3@m uk-width1-1@s  uk-background-default padding-left-small  uk-flex uk-flex-middle margin-zero">
+                        class="uk-border-rounded uk-width-1-3@m uk-width1-1@s  uk-background-default padding-none  uk-flex uk-flex-middle margin-zero">
                         <img class="uk-border-rounded"
                             src="https://images.trvl-media.com/hotels/1000000/30000/20900/20835/88bc9393.jpg">
                     </div>
