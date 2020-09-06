@@ -6,29 +6,31 @@ var checkout = ""; // Check-out date
 var id = 0;
 var urls = []; // URLs of the images
 var maxHistoryLength = 3; // History length
-var urlKey = "3b66244881msh6022e37d9964003p1a70a4jsn2f3d77454263"; // URL Key
+var urlKey = "8f0c28b4b3msh8821bf07d58b33ep177991jsn8c90db7e5dc0"; // URL Key
 var newHotellay1 = document.getElementById("hotels-grid"); // Get parent element of HTML document
 var pageNumber = 1; // # of pages to display
-var resultMax = 1; // # of hotels to show up in a single request
+var resultMax = 3; // # of hotels to show up in a single request
 var adults = 1; // # of adults
 curr = "USD"; // Currency
 var sortOrd = "PRICE"; // Sort order
-// Variables for local storage
-var hotels = {
-    IdCity: [],
-    ChkInDate: [],
-    ChkOutDate: [],
-    NumAdults: [],
-    Currcy: [],
-    UrlThumbNl: [],
-    dateSearch: []
-}
+var outcome = false;
+// Object for local storage
+var hotels = [
+    {
+        IdCity: "",
+        ChkInDate: "",
+        ChkOutDate: "",
+        NumAdults: "",
+        Currcy: "",
+        UrlThumbNl: "",
+        dateSearch: ""
+    }];
 
 /* -------------------- DISPLAYS PROPERTY INFORMATION BASED ON THE PROPERTIES IDs RETURNED WITHIN A CITY -------------------- */
 
 var displayPropertyInfo = function (identity, checkindate, checkoutdate, numberofadults, currency, j, urlTh) {
 
-    formurl = "https://hotels4.p.rapidapi.com/properties/get-details?locale=en_US&currency=" + currency + "&checkOut=" + checkoutdate + "&adults1=" + numberofadults + "&checkIn=" + checkindate + "&id=" + identity;
+    formurl = "https://cors-anywhere.herokuapp.com/https://hotels4.p.rapidapi.com/properties/get-details?locale=en_US&currency=" + currency + "&checkOut=" + checkoutdate + "&adults1=" + numberofadults + "&checkIn=" + checkindate + "&id=" + identity;
     fetch(formurl, {
         "method": "GET",
         "headers": {
@@ -50,7 +52,6 @@ var displayPropertyInfo = function (identity, checkindate, checkoutdate, numbero
 
                 // Add DOM elements to display the property
                 var hotellayvar = "hotellay" + j.toString();
-                console.log("urrrl: " + urlTh);
                 $(newHotellay1).append('<div class = "uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal" id = "' + hotellayvar + '">');
                 var newHotellay2 = document.getElementById(hotellayvar);
 
@@ -83,7 +84,6 @@ var GetIdhotel = function (City, checkIn, checkOut) {
             if (response.ok) {
                 response.json().then(function (data) {
 
-                    console.log(data);
                     // Get property information based on city search
                     if (data.suggestions[0].entities.length !== 0) {
                         if ($(".temporary")) { $(".temporary").empty() };
@@ -122,7 +122,6 @@ var getProperties = function (idcity, currency, sortOrder, pgNumb, checkInDate, 
             // request was successful
             if (response.ok) {
                 response.json().then(function (data6) {
-                    console.log(data6);
 
                     $("#hotels-container").css('display', 'flex'); // Unhide the document class
 
@@ -130,7 +129,7 @@ var getProperties = function (idcity, currency, sortOrder, pgNumb, checkInDate, 
                     propId = data6.data.body.searchResults.results;
 
                     for (i = 0; i < propId.length; i++) {
-                        for (k = 0; k < 1000000000; k++) { }; // Meant to throttle API call to maintain less that 5 calls in a second
+                        // for (k = 0; k < 1000000000; k++) { }; // Meant to throttle API call to maintain less that 5 calls in a second
                         var propIde = [];
                         propIde[i] = data6.data.body.searchResults.results[i].id;
                         var urlThumb = data6.data.body.searchResults.results[i].thumbnailUrl;
@@ -151,21 +150,19 @@ var getProperties = function (idcity, currency, sortOrder, pgNumb, checkInDate, 
 /* -------------------- PULL LOCAL STORAGE DATA AND HOTELS -------------------- */
 var setInitial = function () {
 
-    hotels.IdCity = JSON.parse(localStorage.getItem("cityId"));
-    hotels.ChkInDate = JSON.parse(localStorage.getItem("checkInDate"));
-    hotels.ChkOutDate = JSON.parse(localStorage.getItem("checkOutDate"));
-    hotels.NumAdults = JSON.parse(localStorage.getItem("numberAdults"));
-    hotels.UrlThumbNl = JSON.parse(localStorage.getItem("urlThumbNail"));
-    hotels.dateSearch = JSON.parse(localStorage.getItem("dateSearch"));
-    hotels.Currcy = JSON.parse(localStorage.getItem("currency"));
 
-    for (i = 0; i < hotels.IdCity.length; i++) {
+    hotels = JSON.parse(localStorage.getItem("hotels"));
 
-        displayPropertyInfo(hotels.IdCity[i], hotels.ChkInDate[i], hotels.ChkOutDate[i], hotels.NumAdults[i], hotels.Currcy[i], i, hotels.UrlThumbNl[i]);
+    if (!(hotels == null)) {
+        for (i = 0; i < hotels.length; i++) {
+            displayPropertyInfo(hotels[i].IdCity, hotels[i].ChkInDate, hotels[i].ChkOutDate, hotels[i].NumAdults, hotels[i].Currcy, i, hotels[i].UrlThumbNl);
+        }
     }
 }
 
-setInitial(); //  Pull local storage
+/* -------------------- PULL LOCAL STORAGE-------------------- */
+
+setInitial(); 
 
 /* -------------------- PROCESS REUQEST FOR HOTEL SEARCH-------------------- */
 $("#form").on("submit", function (event) {
@@ -193,47 +190,43 @@ $(document).on("click", ".reserve", function () {
     var imageUrlElement = $(this).parent().parent().parent().children().children("img");
     var urlTn = imageUrlElement[0].currentSrc
 
-    if ((hotels.IdCity == "")) {
-        hotels.IdCity[0] = propval;
-        hotels.ChkInDate[0] = checkin;
-        hotels.ChkOutDate[0] = checkout;
-        hotels.NumAdults[0] = adults;
-        hotels.Currcy[0] = curr;
-        hotels.UrlThumbNl[0] = urlTn;
-        hotels.dateSearch[0] = moment().format("YYYY-MM-DD");
-        console.log(hotels);
+    hotels = JSON.parse(localStorage.getItem("hotels"));
+
+    if ((hotels == null)) {
+        var hotels = [
+            {
+                IdCity: "",
+                ChkInDate: "",
+                ChkOutDate: "",
+                NumAdults: "",
+                Currcy: "",
+                UrlThumbNl: "",
+                dateSearch: ""
+            }];
+        hotels[0].IdCity = propval;
+        hotels[0].ChkInDate = checkin;
+        hotels[0].ChkOutDate = checkout;
+        hotels[0].NumAdults = adults;
+        hotels[0].Currcy = curr;
+        hotels[0].UrlThumbNl = urlTn;
+        hotels[0].dateSearch = moment().format("YYYY-MM-DD");
     }
 
-    else if (!(hotels.IdCity.includes(propval))) {
+    else {
+        for (i = 0; i < hotels.length; i++) {
+            if (hotels[i].IdCity === propval) { outcome = true; }
+        };
 
-        console.log("hotelcity:  " + hotels.IdCity);
-        if (hotels.IdCity.length == maxHistoryLength) {
-            hotels.IdCity.shift();
-            hotels.ChkInDate.shift();
-            hotels.ChkOutDate.shift();
-            hotels.UrlThumbNl.shift();
-            hotels.Currcy.shift();
-            hotels.NumAdults.shift();
-            hotels.dateSearch.shift();
+        if (outcome === false) {
+            if (hotels.length == maxHistoryLength) {
+                hotels.shift();
+            }
+            hotels.push({ IdCity: propval, ChkInDate: checkin, ChkOutDate: checkout, UrlThumbNl: urlTn, Currcy: curr, NumAdults: adults, dateSearch: moment().format("YYYY-MM-DD") });
+
         }
-
-        hotels.IdCity.push(propval);
-        hotels.ChkInDate.push(checkin);
-        hotels.ChkOutDate.push(checkout);
-        hotels.UrlThumbNl.push(urlTn);
-        hotels.Currcy.push(curr);
-        hotels.NumAdults.push(adults);
-        hotels.dateSearch.push(moment().format("YYYY-MM-DD"));
-        console.log(hotels);
-
     }
 
-    localStorage.setItem("cityId", JSON.stringify(hotels.IdCity));
-    localStorage.setItem("checkInDate", JSON.stringify(hotels.ChkInDate));
-    localStorage.setItem("checkOutDate", JSON.stringify(hotels.ChkOutDate));
-    localStorage.setItem("numberAdults", JSON.stringify(hotels.NumAdults));
-    localStorage.setItem("urlThumbNail", JSON.stringify(hotels.UrlThumbNl));
-    localStorage.setItem("dateSearch", JSON.stringify(hotels.dateSearch));
-    localStorage.setItem("currency", JSON.stringify(hotels.Currcy));
+    localStorage.setItem("hotels", JSON.stringify(hotels));
+    outcome = false;
 });
 
