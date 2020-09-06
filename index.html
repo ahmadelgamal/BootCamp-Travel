@@ -20,7 +20,6 @@
 <body>
     <header class="uk-flex uk-flex-center uk-flex-middle">
         <h3 class="uk-margin-small-top"> <span class="fa">&#xf19c;</span> Bootcamp Travel </h3>
-        <!--<h3 class="uk-margin-small-top"> <span class="fa">&#xf07a;</span></h3>-->
     </header>
 
     <div class="hero uk-flex uk-flex-center uk-flex-middle">
@@ -54,11 +53,11 @@
                 <div class="uk-form-controls">
 
                     <!--departure datepicker-->
-                    <input class="uk-input uk-border-rounded uk-width-1-3 fa" readonly
+                    <input class="uk-input uk-border-rounded uk-width-2-5 fa" readonly
                         data-uk-datepicker="{minDate:1,format:'&#xf783; MM/DD/YY'}" id="date-departure" type="text"
                         placeholder="&#xf783;  Departs:">
 
-                    <input class="uk-input uk-border-rounded uk-width-1-3 fa" readonly
+                    <input class="uk-input uk-border-rounded uk-width-2-5 fa" readonly
                         data-uk-datepicker="{minDate:1,format:'&#xf783; MM/DD/YY'}" id="date-arrival" type="text"
                         placeholder="&#xf783;  Arrives:">
 
@@ -67,9 +66,8 @@
                         <!--radio buttons one way/round trip-->
                         <label class="uk-align-right margin-zero"><input class="uk-radio" type="radio" name="radio1">
                             One-way</label>
-
                         <label class="uk-align-right uk-margin-small-right "><input class="uk-radio" type="radio"
-                                name="radio1"> Round trip</label>
+                                name="radio1">Roundtrip</label>
                     </div>
                 </div>
             </div>
@@ -96,7 +94,24 @@
                 <div class="uk-form-controls">
                     <button
                         class="uk-button uk-button-small uk-button-primary uk-border-rounded uk-margin-remove-vertical xs-size-button">Search</button>
-                </div>
+                        <div class="uk-form-controls uk-width-1-3 uk-align-right uk-flex uk-flex-center hide">
+                            <label class="uk-form-label uk-margin-small-top uk-margin-small-right" for="guests-select">Guests</label>
+                            <select class="uk-select uk-border-rounded" id="guests-select">
+                                <option>1</option>
+                                <option>2</option>
+                            </select>
+                        </div>
+
+
+                   <!-- <select class="uk-select uk-border-rounded uk-width-1-3 fa uk-align-right" id="cabin-class">
+                        <option class="hide" value="" disabled selected>&#xf53a; Cabin Class</option>
+                            <option>Economy</option>
+                            <option>Premium Economy</option>
+                            <option>Business</option>
+                            <option>First-Class</option>
+                        </select> -->
+                
+                    </div>
             </div>
         </form>
     </div>
@@ -152,9 +167,8 @@
 
     <div id="flights-container" class="uk-container uk-container-center uk-padding-small width-maxed">
         <!-- this div contains the flight menu / dropdowns -->
-        <div id="flights-sub-menu" class="uk-grid uk-border-rounded uk-padding-remove-horizontal margin-zero">
-            <div class="uk-border-rounded uk-width1-1 uk-padding-remove-horizontal uk-margin-small-bottom ">
-                <button class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button"
+        <div id="flights-sub-menu" class="uk-flex uk-flex-center uk-padding-remove-horizontal margin-zero">
+            <button class="uk-button uk-button-small uk-margin-small-right uk-button-default uk-border-rounded dropdown xs-size-button"
                     type="button">Price</button>
                 <div uk-dropdown>
                     <ul id="sort-flight-price" class="uk-nav uk-dropdown-nav stronger">
@@ -175,7 +189,7 @@
                     </ul>
                 </div>
 
-                <button class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button"
+                <button class="uk-button uk-button-small uk-margin-small-left uk-button-default uk-border-rounded dropdown xs-size-button"
                     type="button">Departure</button>
                 <div uk-dropdown>
                     <ul id="sort-flight-departure" class="uk-nav uk-dropdown-nav stronger">
@@ -189,7 +203,7 @@
 
                 <!-- end of flights menu container -->
 
-            </div>
+            
         </div>
             <!-- this grid contains all flights-->
 
@@ -197,21 +211,20 @@
                 class="uk-grid uk-width-1-1 uk-border-rounded uk-padding-remove-horizontal margin-zero">
 
                 <!-- this grid contains a single flight, must be generated dymanically with JS and then appended to the div above (id="flights-grid")-->
-                <div class="uk-grid uk-width-1-1@s uk-width-2-3@m uk-background-default uk-border-rounded margin-zero uk-margin-small-top">
+                <div class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded margin-zero uk-margin-small-top">
                     <div class="uk-width-1-2 uk-padding-remove-horizontal">
-                        <h4 class="black-ops">1a - Delta Airlines </h4>
+                        <h4 class="black-ops">Delta Airlines </h4>
                         <img width="70px" height="70px" class="frame"
                             src="https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/DL_sq.svg">
                         <p> Los Angeles to Dubai
-                        <br> <span class="fa stronger">LAX &#xf072; DBX </span>
+                       <span class="fa stronger"> LAX &#xf072; DBX </span>
                         <br>6:55am to 8:17pm
-                        <br> <span class="fa">  &#xf152; &#xf1eb; &#xf5e7; </span>
+                         <span class="fa">  &#xf152; &#xf1eb; &#xf5e7; </span>
                         </p>
                         <p>
-                        <span class="fa stronger uk-text-muted">&#xf358;&#xf358;&#xf358;&#xf358;&#xf358;</span>
                         </p>
 
-
+<!--
                         <h4 class="black-ops">1b - Flydubai </h4>
                         <img width="70px" height="70px" class="frame"
                             src="https://upload.wikimedia.org/wikipedia/commons/7/79/Fly_Dubai_logo_2010_03.svg">
@@ -219,22 +232,21 @@
                         <br> <span class="fa stronger">DBX &#xf072; HBE </span>
                         <br>6:05am to 7:37am 
                         <br><span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
-                        </p>
+                        </p> -->
                     </div>
 
-                    <div class="uk-width-1-2 uk-padding-remove-horizontal partition-left">
-                        <h4 class="black-ops">2a - Fly Emirates </h4>
+                    <div class="uk-width-1-2 uk-padding-remove-horizontal">
+                        <h4 class="black-ops">Fly Emirates </h4>
                         <img width="70px" height="70px" class="frame"
                             src="https://cdn.freebiesupply.com/logos/large/2x/fly-emirates-logo-svg-vector.svg">
                         <p> Alexandria to Dubai
-                        <br> <span class="fa stronger">DBX &#xf072; HBE </span>
+                        <span class="fa stronger margin-small-left">DBX &#xf072; HBE </span>
                         <br>6:05am to 7:37am 
-                        <br><span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
+                        <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
                         </p>
 
-                        <p><span class="fa stronger uk-text-muted">&#xf358;&#xf358;&#xf358;&#xf358;&#xf358;</span>
-                         </p>
                         
+                        <!--
                         <h4 class="black-ops">2b - Fly Emirates </h4>
                         <img width="70px" height="70px" class="frame"
                             src="https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/AS_sq.svg">
@@ -242,6 +254,37 @@
                         <br> <span class="fa stronger">DBX &#xf072; HBE </span>
                         <br>6:05am to 7:37am 
                         <br><span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
+                        </p>    -->
+                    </div>
+
+
+
+               
+                </div>
+
+                <div class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded margin-zero uk-margin-small-top">
+                    
+
+                    <div class="uk-width-1-2 uk-padding-remove-horizontal">
+                        <h4 class="black-ops">Flydubai </h4>
+                        <img width="70px" height="70px" class="frame"
+                            src="https://upload.wikimedia.org/wikipedia/commons/7/79/Fly_Dubai_logo_2010_03.svg">
+                        <p> Dubai to Alexandria
+                        <span class="fa stronger">DBX &#xf072; HBE </span>
+                        <br>6:05am to 7:37am 
+                        <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
+                        </p> 
+                    </div>
+
+                    <div class="uk-width-1-2 uk-padding-remove-horizontal">
+                        
+                        <h4 class="black-ops">Air Alaska </h4>
+                        <img width="70px" height="70px" class="frame"
+                            src="https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/AS_sq.svg">
+                        <p>  Dubai to Los Angeles
+                         <span class="fa stronger">DBX &#xf072; HBE </span>
+                        <br>6:05am to 7:37am 
+                        <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
                         </p>    
                     </div>
 
@@ -250,7 +293,7 @@
                
                 </div>
 
-                <div class="uk-border-rounded uk-width-1-3@m uk-width-1-1@s uk-padding-small uk-margin-small-top price">
+                <div class="uk-border-rounded uk-width-1-1 uk-padding-small uk-margin-small-top price-flights">
                     <span class="black-ops stronger uk-text-emphasis">Select</span>
                     <h2 class="uk-margin-remove-vertical black-ops">$96</h2>
                     <b class="uk-text-emphasis">Round trip</b>
@@ -270,9 +313,9 @@
 
     <div id="hotels-container" class="uk-container uk-padding-small width-maxed">
 
-        <div id="hotels-sub-menu" class="uk-grid uk-border-rounded uk-padding-remove-horizontal margin-zero">
-            <div class="uk-border-rounded uk-width1-1 uk-padding-remove-horizontal uk-margin-small-bottom ">
-                <button class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button"
+        <div id="hotels-sub-menu" class="uk-flex uk-flex-center uk-padding-remove-horizontal margin-zero">
+          
+                <button class="uk-button uk-button-small uk-margin-small-right uk-button-default uk-border-rounded dropdown xs-size-button"
                     type="button">Price</button>
                 <div uk-dropdown>
                     <ul id="sort-hotel-price" class="uk-nav uk-dropdown-nav stronger">
@@ -281,35 +324,22 @@
                     </ul>
                 </div>
 
-                <button class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button"
+                <button class="uk-button uk-button-small uk-margin-small-left uk-button-default uk-border-rounded dropdown xs-size-button"
                     type="button">Rating</button>
                 <div uk-dropdown>
                     <ul id="sort-hotel-rating" class="uk-nav uk-dropdown-nav stronger">
-                        <li>Any</li>
-                        <li class="active">Wonderful (4.5+)</li>
-                        <li>Very Good (4+)</li>
-                        <li>Good (3.5+)</li>
+                        <li>Ascending</li>
+                        <li class="active">Descending</li>
                     </ul>
                 </div>
-
-                <button class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button"
-                    type="button">Type</button>
-                <div uk-dropdown>
-                    <ul id="sort-hotel-type" class="uk-nav uk-dropdown-nav stronger">
-                        <li class="active">Hotel</li>
-                        <li>Motel</li>
-                        <li>Vacation Townhouse</li>
-                        <li>Condo</li>
-                        <li>All</li>
-                    </ul>
-                </div>
+            </div>
 
                 <!-- end of hotels menu container -->
 
-            </div>
+          
 
             <!-- this is the hotels container grid. All single hotel offers should be appended here with JS -->
-            <div id="hotels-grid" class="uk-grid uk-width-1-1 uk-padding-remove-horizontal margin-zero">
+            <div id="hotels-grid" class="uk-grid uk-width-1-1 uk-padding-remove-horizontal margin-zero uk-margin-top">
 
                 <!--this is a single hotel. this grid must be generated dynamically through JS and appended to the div above (id="hotels-container")-->
                 <div

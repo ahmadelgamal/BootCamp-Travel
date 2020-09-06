@@ -41,6 +41,15 @@ header {
     background-color: #ffffff;
 }
 
+.price-flights {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top:0;
+    background-color: #1e87f0;
+
+}
+
 .test-border {
     border: 1px solid #000000;
 }
@@ -100,14 +109,6 @@ header {
     padding: 0 0 0 6px;
 }
 
-.partition-left{
-padding-left:6px;
-border-left:2px dotted #cccccc;
-
-}
-
-
-
 @media screen and (min-width: 960px) {
     .dropdown {
         width: 230px;
@@ -121,10 +122,5 @@ border-left:2px dotted #cccccc;
     .test-border {
         border: 0px;
     }
-    .price {
-        align-items: center;
-        margin-top:0;
-        background-color: #1e87f0;
-    
-    }
+ 
 }

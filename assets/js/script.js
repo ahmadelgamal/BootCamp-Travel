@@ -158,7 +158,7 @@ function autocomplete(inp, arr) {
                 b = document.createElement("DIV");
                 /*make the matching letters bold:*/
                 b.innerHTML = "<strong>" + arr[i].name.substr(0, val.length) + "</strong>";
-                b.innerHTML += arr[i].name.substr(val.length) + ", " + arr[i].country;
+                b.innerHTML += arr[i].name.substr(val.length) + ", " + arr[i].subcountry + ", " + arr[i].country;
 
                 if (this.id == "going-from") icon = "&#xf5b0; ";
                 if (this.id == "going-to") icon = "&#xf5af; ";
