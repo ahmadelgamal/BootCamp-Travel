@@ -15,7 +15,11 @@ const searchFormEl = document.getElementById("form");
 const goingFromEl = document.getElementById("going-from");
 const goingToEl = document.getElementById("going-to");
 const dateDepartureEl = document.getElementById("date-departure");
-const dateReturnEl = document.getElementById("date-return");
+const dateReturnEl = document.getElementById("date-arrival");
+const tripSelectEl = document.getElementById("trip"); // One-way or Roundtrip
+const travelClassEl = document.getElementById("travel-class"); // ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
+const numberOfAdultsEl = document.getElementById("guests-select");
+// const searchBtnEl = document.getElementById("flights-search");
 
 // constants that point to flights search history grid
 const flightsPastSearchGridEl = document.getElementById("past-search-grid");
@@ -33,9 +37,9 @@ var originCode = goingFromEl.value;
 var destinationCode = goingToEl.value;
 var departureDate = dateDepartureEl.value; // Format: YYYY-MM-DD
 var returnDate = dateReturnEl.value; // Format: YYYY-MM-DD
+var numberOfAdults = numberOfAdultsEl.value.charAt(0);
+var travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
 
-// HARDCODING. MUST BE CHANGED TO USER INPUT
-var numberOfAdults = "1";
 // sets currency to USD in fetch request (default in amadeus is euro)
 const currencyCode = "USD";
 
@@ -45,7 +49,7 @@ const baseUrl = "https://test.api.amadeus.com";
 // url for requesting and checking on access token
 const accessTokenPath = "/v1/security/oauth2/token/";
 // access token must be renewed for 30 minutes at a time
-const accessToken = "9dOkN8GQBF4B1FHfaNIATyxZfzpc";
+const accessToken = "v3APD2ZEA60u5SET0sZgAPCuNGU3";
 // `value` of `headers` "Authorization" `key`
 const authorizationValue = "Bearer " + accessToken;
 
@@ -60,7 +64,7 @@ const queryNumberOfAdults = "&adults=";
 
 /* ---------- declares important query variables for "flight offers search" amadeus api ---------- */
 const queryReturnDate = "&returnDate="; // required for roundtrip flights
-const travelClass = "&travelClass="; // ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
+const queryTravelClass = "&travelClass="; // ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
 const queryCurrency = "&currencyCode="; // default is EUR, so needed for USD
 
 /* ---------- declares optional query variables for "flight offers search" amadeus api ---------- */
@@ -254,6 +258,8 @@ var saveUrl = function () {
     departureDate +
     queryNumberOfAdults +
     numberOfAdults +
+    queryTravelClass +
+    travelClass +
     queryCurrency +
     currencyCode;
 
@@ -282,9 +288,11 @@ var searchFormHandler = function () {
   destinationCode = goingToEl.value;
   departureDate = dateDepartureEl.value;
   returnDate = dateReturnEl.value;
-
-  // HARDCODED. MUST BE CHANGED TO USER INPUT
-  // numberOfAdults = ???.value;
+  numberOfAdults = numberOfAdultsEl.value.charAt(0);
+  travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
+  if (travelClass === "") {
+    travelClass = "ECONOMY";
+  }
 
   // calls function in script.js
   showFlights();

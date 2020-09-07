@@ -1,385 +1,543 @@
 <!DOCTYPE html>
 <html lang="en" class="uk-background-muted">
-
-<head>
-    <title>Bootcamp Travel</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
-    <link rel="stylesheet" type="text/css"
-        href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/css/addons/uikit.gradient.addons.min.css">
-    <!--<link rel="stylesheet" type="text/css"
-        href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/css/uikit.gradient.min.css">-->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
     <!-- UIkit CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.5.7/css/uikit.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/solid.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.5.7/css/uikit.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/css/addons/uikit.gradient.addons.min.css"
+    />
+    <!--<link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/css/uikit.gradient.min.css">-->
+    <!-- Font Awesome CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/solid.min.css"
+    />
+    <!-- Google Fonts CSS -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Custom CSS -->
+    <link href="assets/css/style.css" rel="stylesheet" />
+    <title>Bootcamp Travel</title>
+  </head>
 
-    <link href="assets/css/style.css" rel="stylesheet">
-</head>
-
-<body>
-
+  <body>
     <nav class="uk-navbar-container" uk-navbar>
-        <div class="uk-navbar-center">
-            <h3> <span class="fa">&#xf19c;</span> Bootcamp Travel </h3>
-        </div>
-        <div class="uk-navbar-right uk-margin-small-right"><span
-                class="fa uk-margin-small-left uk-text-primary">&#xf0c7;</span> </div>
+      <div class="uk-navbar-center">
+        <h3><span class="fa">&#xf19c;</span> Bootcamp Travel</h3>
+      </div>
+      <div class="uk-navbar-right uk-margin-small-right">
+        <span class="fa uk-margin-small-left uk-text-primary">&#xf0c7;</span>
+      </div>
     </nav>
 
-
     <div class="hero uk-flex uk-flex-center uk-flex-middle">
-        <form autocomplete="off" id="form"
-            class="uk-form-stacked uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s uk-background-default uk-border-rounded uk-box-shadow-large">
-
-            <div class="uk-margin-small-top">
-                <ul class="uk-flex-center" uk-tab>
-                    <li class="uk-active"><a id="flights-btn" href="#"><span class="fa">&#xf072; </span>Flights</a></li>
-                    <li><a id="hotels-btn" href="#"><span class="fa">&#xf594; </span>Hotels</a></li>
-                </ul>
-            </div>
-
-            <div class="uk-margin-small uk-padding-small  uk-padding-remove-vertical">
-                <!--departure input with custom autocomplete (default is turned off) -->
-                <div class="uk-form-controls relative">
-                    <input autocomplete="off" class="uk-input uk-border-rounded fa" id="going-from" type="text"
-                        placeholder="&#xf5b0;  From:">
-                </div>
-            </div>
-
-            <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical">
-                <!--arrival input with custom autocomplete (default browser autocomplete is turned off) -->
-                <div class="uk-form-controls relative">
-                    <input autocomplete="off" class="uk-input uk-border-rounded fa" id="going-to" type="text"
-                        placeholder="&#xf5af;  To:">
-                </div>
-            </div>
-
-            <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical hide">
-                <!-- check-in datepicker -->
-                <div class="uk-form-controls">
-                    <input class="uk-input uk-border-rounded fa" readonly
-                        data-uk-datepicker="{minDate:0,format:'&#xf783; MM/DD/YYYY'}" id="check-in" type="text"
-                        placeholder="&#xf783;  Check In:">
-                </div>
-            </div>
-
-
-            <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical hide">
-                <div class="uk-form-controls">
-                    <!--check out datepicker-->
-                    <input class="uk-input uk-border-rounded fa" readonly
-                        data-uk-datepicker="{minDate:1,format:'&#xf783; MM/DD/YYYY'}" id="check-out" type="text"
-                        placeholder="&#xf783;  Check Out:">
-                </div>
-            </div>
-
-            <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical ">
-                <div class="uk-form-controls">
-
-                    <select class="uk-select uk-width-3-10 uk-border-rounded" id="trip">
-                        <option>One Way</option>
-                        <option selected>Roundtrip</option>
-                    </select>
-
-                    <select class="uk-select uk-border-rounded uk-width-3-10 fa" id="cabin-class">
-                        <option class="hide" value="" disabled selected>&#xf53a; Cabin</option>
-                        <option>Economy</option>
-                        <option>Premium</option>
-                        <option>Business</option>
-                        <option>First-Class</option>
-                    </select>
-
-
-                    <select class="uk-select uk-width-3-10  uk-border-rounded" id="guests-select">
-                        <option>1 Adult</option>
-                        <option>2 Adults</option>
-                    </select>
-
-                    <button id="hotels-search"
-                        class="uk-button uk-button-small uk-align-right uk-width-1-6 uk-button-primary uk-border-rounded uk-margin-remove-vertical xs-size-button fa">&#xf002;</button>
-
-
-                </div>
-
-
-            </div>
-
-            <div class="uk-margin-small uk-padding-small uk-padding-remove-vertical">
-                <div class="uk-form-controls">
-
-                    <!--departure datepicker-->
-                    <input class="uk-input uk-border-rounded uk-width-2-5 fa" readonly
-                        data-uk-datepicker="{minDate:1,format:'&#xf783; MM/DD/YY'}" id="date-departure" type="text"
-                        placeholder="&#xf783;  Departs:">
-
-                    <input class="uk-input uk-border-rounded uk-width-2-5 fa" readonly
-                        data-uk-datepicker="{minDate:1,format:'&#xf783; MM/DD/YY'}" id="date-arrival" type="text"
-                        placeholder="&#xf783;  Arrives:">
-
-                    <button id="flights-search"
-                        class="uk-button uk-button-small uk-width-1-6 uk-button-primary uk-border-rounded uk-margin-remove-vertical xs-size-button fa">&#xf002;</button>
-
-                </div>
-            </div>
-        </form>
-    </div>
-    <!-- past search container begins-->
-
-    <div id="past-search-container" class="uk-container uk-container-center uk-padding-small width-maxed">
-        <h3>Your search history:</h3>
-        <!-- past search grid-->
-        <div id="past-search-grid"
-            class="uk-grid uk-width-1-1 uk-border-rounded uk-background-muted uk-padding-remove-horizontal margin-zero">
-            <!-- this is a single past search, should be created dynamically with JS-->
-            <div class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero">
-                <div class="uk-width-1-2 uk-padding-remove-horizontal">
-                    <p>Searched on 09.01.2020 </p>
-                    <h4><span class="fa">LAX &#xf072; SFO </span> </h4>
-                    <p class="fa"> &#xf783; 10/08/2020 <br> &#xf783; 10/15/2020
-                    </p>
-                </div>
-
-                <div class="uk-border-rounded uk-width-1-2 uk-padding-small price">
-                    <h3 class="uk-margin-remove-vertical uk-text-center fa">
-                        &#xf072; <br> Round-Trip</h3>
-                    <button
-                        class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide">Select</button>
-                </div>
-            </div>
-            <!-- end of single past search-->
-
-            <div class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero">
-                <div class="uk-width-1-2 uk-padding-remove-horizontal">
-                    <p>Searched on 09.01.2020 </p>
-                    <h4><span class="fa">&#xf594; Los Angeles, California, USA </span> </h4>
-                    <p class="fa"> &#xf783; 10/08/2020 <br> &#xf783; 10/15/2020
-                    </p>
-                </div>
-
-                <div class="uk-border-rounded uk-width-1-2 uk-padding-small price">
-                    <h3 class="uk-margin-remove-vertical uk-text-center fa">
-                        &#xf594; <br>
-                        Hotels</h3>
-                    <button
-                        class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide">Select</button>
-                </div>
-            </div>
+      <form
+        autocomplete="off"
+        id="form"
+        class="uk-form-stacked uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s uk-background-default uk-border-rounded uk-box-shadow-large"
+      >
+        <div class="uk-margin-small-top">
+          <ul class="uk-flex-center" uk-tab>
+            <li class="uk-active">
+              <a id="flights-btn" href="#"
+                ><span class="fa">&#xf072; </span>Flights</a
+              >
+            </li>
+            <li>
+              <a id="hotels-btn" href="#"
+                ><span class="fa">&#xf594; </span>Hotels</a
+              >
+            </li>
+          </ul>
         </div>
-        <!-- end of past search grid-->
+
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical"
+        >
+          <!--departure input with custom autocomplete (default is turned off) -->
+          <div class="uk-form-controls relative">
+            <input
+              autocomplete="off"
+              class="uk-input uk-border-rounded fa"
+              id="going-from"
+              type="text"
+              placeholder="&#xf5b0;  From:"
+            />
+          </div>
+        </div>
+
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical"
+        >
+          <!--arrival input with custom autocomplete (default browser autocomplete is turned off) -->
+          <div class="uk-form-controls relative">
+            <input
+              autocomplete="off"
+              class="uk-input uk-border-rounded fa"
+              id="going-to"
+              type="text"
+              placeholder="&#xf5af;  To:"
+            />
+          </div>
+        </div>
+
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical hide"
+        >
+          <!-- check-in datepicker -->
+          <div class="uk-form-controls">
+            <input
+              class="uk-input uk-border-rounded fa"
+              readonly
+              data-uk-datepicker="{minDate:0,format:'&#xf783; MM/DD/YYYY'}"
+              id="check-in"
+              type="text"
+              placeholder="&#xf783;  Check In:"
+            />
+          </div>
+        </div>
+
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical hide"
+        >
+          <div class="uk-form-controls">
+            <!--check out datepicker-->
+            <input
+              class="uk-input uk-border-rounded fa"
+              readonly
+              data-uk-datepicker="{minDate:1,format:'&#xf783; MM/DD/YYYY'}"
+              id="check-out"
+              type="text"
+              placeholder="&#xf783;  Check Out:"
+            />
+          </div>
+        </div>
+
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical"
+        >
+          <div class="uk-form-controls">
+            <select class="uk-select uk-width-3-10 uk-border-rounded" id="trip">
+              <option selected>Roundtrip</option>
+              <option>One-way</option>
+            </select>
+
+            <select
+              class="uk-select uk-border-rounded uk-width-3-10 fa"
+              id="travel-class"
+            >
+              <option class="hide" value="" disabled selected
+                >&#xf53a; Class</option
+              >
+              <option value="ECONOMY">Economy</option>
+              <option value="PREMIUM_ECONOMY">Premium Economy</option>
+              <option value="BUSINESS">Business</option>
+              <option value="FIRST">First</option>
+            </select>
+
+            <select
+              class="uk-select uk-width-3-10 uk-border-rounded"
+              id="guests-select"
+            >
+              <option>1 Adult</option>
+              <option>2 Adults</option>
+              <option>3 Adults</option>
+              <option>4 Adults</option>
+              <option>5 Adults</option>
+              <option>6 Adults</option>
+              <option>7 Adults</option>
+            </select>
+
+            <button
+              id="hotels-search"
+              class="uk-button uk-button-small uk-align-right uk-width-1-6 uk-button-primary uk-border-rounded uk-margin-remove-vertical xs-size-button fa"
+            >
+              &#xf002;
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical"
+        >
+          <div class="uk-form-controls">
+            <!--departure datepicker-->
+            <input
+              class="uk-input uk-border-rounded uk-width-2-5 fa"
+              readonly
+              data-uk-datepicker="{minDate:1,format:'YYYY-MM-DD'}"
+              id="date-departure"
+              type="text"
+              placeholder="&#xf783;  Departs:"
+            />
+
+            <input
+              class="uk-input uk-border-rounded uk-width-2-5 fa"
+              readonly
+              data-uk-datepicker="{minDate:1,format:'YYYY-MM-DD'}"
+              id="date-arrival"
+              type="text"
+              placeholder="&#xf783;  Returns:"
+            />
+
+            <button
+              id="flights-search"
+              class="uk-button uk-button-small uk-width-1-6 uk-button-primary uk-border-rounded uk-margin-remove-vertical xs-size-button fa"
+            >
+              &#xf002;
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- past search container begins-->
+    <div
+      id="past-search-container"
+      class="uk-container uk-container-center uk-padding-small width-maxed"
+    >
+      <h3>Your search history:</h3>
+      <!-- past search grid-->
+      <div
+        id="past-search-grid"
+        class="uk-grid uk-width-1-1 uk-border-rounded uk-background-muted uk-padding-remove-horizontal margin-zero"
+      >
+        <!-- this is a single past search, should be created dynamically with JS-->
+        <!-- <div
+          class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero"
+        >
+          <div class="uk-width-1-2 uk-padding-remove-horizontal">
+            <p>Searched on 09.01.2020</p>
+            <h4><span class="fa">LAX &#xf072; SFO </span></h4>
+            <p class="fa">
+              &#xf783; 10/08/2020 <br />
+              &#xf783; 10/15/2020
+            </p>
+          </div>
+
+          <div class="uk-border-rounded uk-width-1-2 uk-padding-small price">
+            <h3 class="uk-margin-remove-vertical uk-text-center fa">
+              &#xf072; <br />
+              Round-Trip
+            </h3>
+            <button
+              class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide"
+            >
+              Select
+            </button>
+          </div>
+        </div> -->
+        <!-- end of single past search-->
+
+        <div
+          class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero"
+        >
+          <div class="uk-width-1-2 uk-padding-remove-horizontal">
+            <p>Searched on 09.01.2020</p>
+            <h4>
+              <span class="fa">&#xf594; Los Angeles, California, USA </span>
+            </h4>
+            <p class="fa">
+              &#xf783; 10/08/2020 <br />
+              &#xf783; 10/15/2020
+            </p>
+          </div>
+
+          <div class="uk-border-rounded uk-width-1-2 uk-padding-small price">
+            <h3 class="uk-margin-remove-vertical uk-text-center fa">
+              &#xf594; <br />
+              Hotels
+            </h3>
+            <button
+              class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide"
+            >
+              Select
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- end of past search grid-->
     </div>
     <!-- end of past search container-->
 
     <!-- this div is the overall flights container -->
 
-    <div id="flights-container" class="uk-container uk-container-center uk-padding-small width-maxed">
-        <!-- this div contains the flight menu / dropdowns -->
-        <div id="flights-sub-menu" class="uk-flex uk-flex-center uk-padding-remove-horizontal margin-zero">
-            <button
-                class="uk-button uk-button-small uk-margin-small-right uk-button-default uk-border-rounded dropdown xs-size-button"
-                type="button">Price</button>
-            <div uk-dropdown>
-                <ul id="sort-flight-price" class="uk-nav uk-dropdown-nav stronger">
-                    <li class="active">Lowest</li>
-                    <li>Highest</li>
-                </ul>
-            </div>
-
-            <button class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button"
-                type="button">Arrival</button>
-            <div uk-dropdown>
-                <ul id="sort-flight-arrival" class="uk-nav uk-dropdown-nav stronger">
-                    <li>Early Morning <input checked type="checkbox"></li>
-                    <li>Morning <input checked type="checkbox"></li>
-                    <li>Afternoon <input checked type="checkbox"></li>
-                    <li>Evening <input checked type="checkbox"></li>
-
-                </ul>
-            </div>
-
-            <button
-                class="uk-button uk-button-small uk-margin-small-left uk-button-default uk-border-rounded dropdown xs-size-button"
-                type="button">Departure</button>
-            <div uk-dropdown>
-                <ul id="sort-flight-departure" class="uk-nav uk-dropdown-nav stronger">
-                    <li>Early Morning <input checked type="checkbox"></li>
-                    <li>Morning <input checked type="checkbox"></li>
-                    <li>Afternoon <input checked type="checkbox"></li>
-                    <li>Evening <input checked type="checkbox"></li>
-
-                </ul>
-            </div>
-
-            <!-- end of flights menu container -->
-
-
+    <div
+      id="flights-container"
+      class="uk-container uk-container-center uk-padding-small width-maxed"
+    >
+      <!-- this div contains the flight menu / dropdowns -->
+      <div
+        id="flights-sub-menu"
+        class="uk-flex uk-flex-center uk-padding-remove-horizontal margin-zero"
+      >
+        <button
+          class="uk-button uk-button-small uk-margin-small-right uk-button-default uk-border-rounded dropdown xs-size-button"
+          type="button"
+        >
+          Price
+        </button>
+        <div uk-dropdown>
+          <ul id="sort-flight-price" class="uk-nav uk-dropdown-nav stronger">
+            <li class="active">Lowest</li>
+            <li>Highest</li>
+          </ul>
         </div>
-        <!-- this grid contains all flights-->
 
-        <div id="flights-grid" class="uk-grid uk-width-1-1 uk-border-rounded uk-padding-remove-horizontal margin-zero">
-
-            <!-- this grid contains a single flight, must be generated dymanically with JS and then appended to the div above (id="flights-grid")-->
-            <div class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded margin-zero uk-margin-small-top">
-                <div class="uk-width-1-2 uk-padding-remove-horizontal">
-                    <h4 class="black-ops">Delta Airlines </h4>
-                    <img width="70" height="70" class="frame"
-                        src="https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/DL_sq.svg">
-                    <p> Los Angeles to Dubai
-                        <span class="fa stronger"> LAX &#xf072; DBX </span>
-                        <br>6:55am to 8:17pm
-                        <span class="fa"> &#xf152; &#xf1eb; &#xf5e7; </span>
-                    </p>
-                    <p>
-                    </p>
-                </div>
-
-                <div class="uk-width-1-2 uk-padding-remove-horizontal">
-                    <h4 class="black-ops">Fly Emirates </h4>
-                    <img width="70" height="70" class="frame"
-                        src="https://cdn.freebiesupply.com/logos/large/2x/fly-emirates-logo-svg-vector.svg">
-                    <p> Alexandria to Dubai
-                        <span class="fa stronger margin-small-left">DBX &#xf072; HBE </span>
-                        <br>6:05am to 7:37am
-                        <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
-                    </p>
-                </div>
-            </div>
-
-            <div class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded margin-zero uk-margin-small-top">
-
-
-                <div class="uk-width-1-2 uk-padding-remove-horizontal">
-                    <h4 class="black-ops">Flydubai </h4>
-                    <img width="70" height="70" class="frame"
-                        src="https://upload.wikimedia.org/wikipedia/commons/7/79/Fly_Dubai_logo_2010_03.svg">
-                    <p> Dubai to Alexandria
-                        <span class="fa stronger">DBX &#xf072; HBE </span>
-                        <br>6:05am to 7:37am
-                        <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
-                    </p>
-                </div>
-
-                <div class="uk-width-1-2 uk-padding-remove-horizontal">
-
-                    <h4 class="black-ops">Air Alaska </h4>
-                    <img width="70" height="70" class="frame"
-                        src="https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/AS_sq.svg">
-                    <p> Dubai to Los Angeles
-                        <span class="fa stronger">DBX &#xf072; HBE </span>
-                        <br>6:05am to 7:37am
-                        <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
-                    </p>
-                </div>
-
-
-
-
-            </div>
-
-            <div class="uk-border-rounded uk-width-1-1 uk-padding-small uk-margin-small-top price-flights">
-                <span class="black-ops stronger uk-text-emphasis">Select</span>
-                <h2 class="uk-margin-remove-vertical black-ops">$96</h2>
-                <b class="uk-text-emphasis">Round trip</b>
-                <button
-                    class="uk-button uk-button-large uk-button-primary uk-border-rounded uk-padding-remove-vertical xs-size-button hide">Select</button>
-            </div>
-
-
-
-            <!-- end of single flight container -->
+        <button
+          class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button"
+          type="button"
+        >
+          Arrival
+        </button>
+        <div uk-dropdown>
+          <ul id="sort-flight-arrival" class="uk-nav uk-dropdown-nav stronger">
+            <li>Early Morning <input checked type="checkbox" /></li>
+            <li>Morning <input checked type="checkbox" /></li>
+            <li>Afternoon <input checked type="checkbox" /></li>
+            <li>Evening <input checked type="checkbox" /></li>
+          </ul>
         </div>
+
+        <button
+          class="uk-button uk-button-small uk-margin-small-left uk-button-default uk-border-rounded dropdown xs-size-button"
+          type="button"
+        >
+          Departure
+        </button>
+        <div uk-dropdown>
+          <ul
+            id="sort-flight-departure"
+            class="uk-nav uk-dropdown-nav stronger"
+          >
+            <li>Early Morning <input checked type="checkbox" /></li>
+            <li>Morning <input checked type="checkbox" /></li>
+            <li>Afternoon <input checked type="checkbox" /></li>
+            <li>Evening <input checked type="checkbox" /></li>
+          </ul>
+        </div>
+
+        <!-- end of flights menu container -->
+      </div>
+      <!-- this grid contains all flights-->
+
+      <div
+        id="flights-grid"
+        class="uk-grid uk-width-1-1 uk-border-rounded uk-padding-remove-horizontal margin-zero"
+      >
+        <!-- this grid contains a single flight, must be generated dymanically with JS and then appended to the div above (id="flights-grid")-->
+        <div
+          class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded margin-zero uk-margin-small-top"
+        >
+          <div class="uk-width-1-2 uk-padding-remove-horizontal">
+            <h4 class="black-ops">Delta Airlines</h4>
+            <img
+              width="70"
+              height="70"
+              class="frame"
+              src="https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/DL_sq.svg"
+            />
+            <p>
+              Los Angeles to Dubai
+              <span class="fa stronger"> LAX &#xf072; DBX </span>
+              <br />6:55am to 8:17pm
+              <span class="fa"> &#xf152; &#xf1eb; &#xf5e7; </span>
+            </p>
+            <p></p>
+          </div>
+
+          <div class="uk-width-1-2 uk-padding-remove-horizontal">
+            <h4 class="black-ops">Fly Emirates</h4>
+            <img
+              width="70"
+              height="70"
+              class="frame"
+              src="https://cdn.freebiesupply.com/logos/large/2x/fly-emirates-logo-svg-vector.svg"
+            />
+            <p>
+              Alexandria to Dubai
+              <span class="fa stronger margin-small-left"
+                >DBX &#xf072; HBE
+              </span>
+              <br />6:05am to 7:37am
+              <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded margin-zero uk-margin-small-top"
+        >
+          <div class="uk-width-1-2 uk-padding-remove-horizontal">
+            <h4 class="black-ops">Flydubai</h4>
+            <img
+              width="70"
+              height="70"
+              class="frame"
+              src="https://upload.wikimedia.org/wikipedia/commons/7/79/Fly_Dubai_logo_2010_03.svg"
+            />
+            <p>
+              Dubai to Alexandria
+              <span class="fa stronger">DBX &#xf072; HBE </span>
+              <br />6:05am to 7:37am
+              <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
+            </p>
+          </div>
+
+          <div class="uk-width-1-2 uk-padding-remove-horizontal">
+            <h4 class="black-ops">Air Alaska</h4>
+            <img
+              width="70"
+              height="70"
+              class="frame"
+              src="https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/AS_sq.svg"
+            />
+            <p>
+              Dubai to Los Angeles
+              <span class="fa stronger">DBX &#xf072; HBE </span>
+              <br />6:05am to 7:37am
+              <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="uk-border-rounded uk-width-1-1 uk-padding-small uk-margin-small-top price-flights"
+        >
+          <span class="black-ops stronger uk-text-emphasis">Select</span>
+          <h2 class="uk-margin-remove-vertical black-ops">$96</h2>
+          <b class="uk-text-emphasis">Round trip</b>
+          <button
+            class="uk-button uk-button-large uk-button-primary uk-border-rounded uk-padding-remove-vertical xs-size-button hide"
+          >
+            Select
+          </button>
+        </div>
+
+        <!-- end of single flight container -->
+      </div>
     </div>
 
     <!-- end of all flights container grid -->
 
     <!-- this is the overall hotels container div-->
 
-    <div id="hotels-container" class="uk-container uk-padding-small width-maxed">
-
-        <div id="hotels-sub-menu" class="uk-flex uk-flex-center uk-padding-remove-horizontal margin-zero">
-
-            <button
-                class="uk-button uk-button-small uk-margin-small-right uk-button-default uk-border-rounded dropdown xs-size-button"
-                type="button">Price</button>
-            <div uk-dropdown>
-                <ul id="sort-hotel-price" class="uk-nav uk-dropdown-nav stronger">
-                    <li class="active">Lowest</li>
-                    <li>Highest</li>
-                </ul>
-            </div>
-
-            <button
-                class="uk-button uk-button-small uk-margin-small-left uk-button-default uk-border-rounded dropdown xs-size-button"
-                type="button">Rating</button>
-            <div uk-dropdown>
-                <ul id="sort-hotel-rating" class="uk-nav uk-dropdown-nav stronger">
-                    <li>Ascending</li>
-                    <li class="active">Descending</li>
-                </ul>
-            </div>
+    <div
+      id="hotels-container"
+      class="uk-container uk-padding-small width-maxed"
+    >
+      <div
+        id="hotels-sub-menu"
+        class="uk-flex uk-flex-center uk-padding-remove-horizontal margin-zero"
+      >
+        <button
+          class="uk-button uk-button-small uk-margin-small-right uk-button-default uk-border-rounded dropdown xs-size-button"
+          type="button"
+        >
+          Price
+        </button>
+        <div uk-dropdown>
+          <ul id="sort-hotel-price" class="uk-nav uk-dropdown-nav stronger">
+            <li class="active">Lowest</li>
+            <li>Highest</li>
+          </ul>
         </div>
 
-        <!-- end of hotels menu container -->
+        <button
+          class="uk-button uk-button-small uk-margin-small-left uk-button-default uk-border-rounded dropdown xs-size-button"
+          type="button"
+        >
+          Rating
+        </button>
+        <div uk-dropdown>
+          <ul id="sort-hotel-rating" class="uk-nav uk-dropdown-nav stronger">
+            <li>Ascending</li>
+            <li class="active">Descending</li>
+          </ul>
+        </div>
+      </div>
 
+      <!-- end of hotels menu container -->
 
+      <!-- this is the hotels container grid. All single hotel offers should be appended here with JS -->
+      <div
+        id="hotels-grid"
+        class="uk-grid uk-width-1-1 uk-padding-remove-horizontal margin-zero uk-margin-top"
+      >
+        <!--this is a single hotel. this grid must be generated dynamically through JS and appended to the div above (id="hotels-container")-->
+        <div
+          class="uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal margin-zero test-border"
+        >
+          <div
+            class="uk-border-rounded uk-width-1-3@m uk-width1-1@s uk-background-default padding-none uk-flex uk-flex-middle margin-zero"
+          >
+            <img
+              class="uk-border-rounded"
+              src="https://images.trvl-media.com/hotels/1000000/30000/20900/20835/88bc9393.jpg"
+            />
+          </div>
 
-        <!-- this is the hotels container grid. All single hotel offers should be appended here with JS -->
-        <div id="hotels-grid" class="uk-grid uk-width-1-1 uk-padding-remove-horizontal margin-zero uk-margin-top">
+          <div class="uk-grid uk-width-2-3@m uk-width-1-1@s">
+            <div class="uk-width-1-2 uk-margin-medium">
+              <h4>Travelodge by Wyndham, Santa Clarita/Valencia</h4>
+              <p>
+                Canyon Country <br />
+                <span class="uk-text-success">Reserve Now, Pay Later</span
+                ><br />
+                <span class="uk-text-success">Free Cancellation</span>
+                <span class="uk-position-bottom uk-position-relative"
+                  >3.3/5 Rating (1000 Reviews)</span
+                >
+              </p>
+            </div>
 
-            <!--this is a single hotel. this grid must be generated dynamically through JS and appended to the div above (id="hotels-container")-->
             <div
-                class="uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal margin-zero test-border">
-                <div
-                    class="uk-border-rounded uk-width-1-3@m uk-width1-1@s  uk-background-default padding-none  uk-flex uk-flex-middle margin-zero">
-                    <img class="uk-border-rounded"
-                        src="https://images.trvl-media.com/hotels/1000000/30000/20900/20835/88bc9393.jpg">
-                </div>
-
-                <div class="uk-grid uk-width-2-3@m uk-width-1-1@s">
-                    <div class="uk-width-1-2 uk-margin-medium">
-                        <h4>Travelodge by Wyndham, Santa Clarita/Valencia </h4>
-                        <p>Canyon Country <br>
-                            <span class="uk-text-success">Reserve Now, Pay Later</span><br>
-                            <span class="uk-text-success">Free Cancellation</span>
-                            <span class="uk-position-bottom uk-position-relative">3.3/5 Rating (1000 Reviews)</span>
-                        </p>
-                    </div>
-
-                    <div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price">
-                        <h2 class="uk-margin-remove-vertical">
-                            $109</h2>
-                        <b>per Night</b>
-                        <button
-                            class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide">Reserve</button>
-                    </div>
-                </div>
+              class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price"
+            >
+              <h2 class="uk-margin-remove-vertical">
+                $109
+              </h2>
+              <b>per Night</b>
+              <button
+                class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide"
+              >
+                Reserve
+              </button>
             </div>
-
-            <!-- end of single hotel grid-->
-
+          </div>
         </div>
-        <!-- end of hotels grid -->
-    </div>
 
+        <!-- end of single hotel grid-->
+      </div>
+      <!-- end of hotels grid -->
+    </div>
 
     <!-- end of hotels container div-->
 
-    <!-- UIkit JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 
+    <!-- UIkit JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/js/uikit.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/js/addons/datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.5.7/js/uikit.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
 
     <script src="assets/js/world-cities.js"></script>
     <script src="assets/js/script.js"></script>
-    <script src="assets/js/hotel.js"></script>
+    <!-- <script src="assets/js/hotel.js"></script> -->
     <script src="./assets/js/flights.js"></script>
-
-</body>
-
+  </body>
 </html>
