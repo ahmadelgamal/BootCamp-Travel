@@ -47,7 +47,7 @@ var showFlightsMenu = function () {
     "uk-margin-small uk-padding-small uk-padding-remove-vertical"
   );
 
-  var dArrival = document.querySelector("#date-arrival").parentElement
+  var dArrival = document.querySelector("#date-return").parentElement
     .parentElement;
   dArrival.setAttribute(
     "class",
@@ -95,7 +95,7 @@ var showHotelsMenu = function () {
     "uk-margin-small uk-padding-small uk-padding-remove-vertical hide"
   );
 
-  var dArrival = document.querySelector("#date-arrival").parentElement
+  var dArrival = document.querySelector("#date-return").parentElement
     .parentElement;
   dArrival.setAttribute(
     "class",
@@ -133,11 +133,11 @@ var hotelsHandler = function (event) {
 
 var toggleTripHandler = function (event) {
   if (this.options[0].selected) {
-    document.querySelector("#date-arrival").style.display = "";
+    document.querySelector("#date-return").style.display = "";
   }
 
   if (this.options[1].selected) {
-    document.querySelector("#date-arrival").style.display = "none";
+    document.querySelector("#date-return").style.display = "none";
   }
 };
 

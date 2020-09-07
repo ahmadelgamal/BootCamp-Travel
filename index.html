@@ -33,6 +33,7 @@
   </head>
 
   <body>
+    <!-- begins navbar / topbar -->
     <nav class="uk-navbar-container" uk-navbar>
       <div class="uk-navbar-center">
         <h3><span class="fa">&#xf19c;</span> Bootcamp Travel</h3>
@@ -41,8 +42,11 @@
         <span class="fa uk-margin-small-left uk-text-primary">&#xf0c7;</span>
       </div>
     </nav>
+    <!-- ends navbar / topbar -->
 
+    <!-- begins search form container -->
     <div class="hero uk-flex uk-flex-center uk-flex-middle">
+      <!-- begins search form -->
       <form
         autocomplete="off"
         id="form"
@@ -187,7 +191,7 @@
               class="uk-input uk-border-rounded uk-width-2-5 fa"
               readonly
               data-uk-datepicker="{minDate:1,format:'YYYY-MM-DD'}"
-              id="date-arrival"
+              id="date-return"
               type="text"
               placeholder="&#xf783;  Returns:"
             />
@@ -201,20 +205,23 @@
           </div>
         </div>
       </form>
+      <!-- ends search form -->
     </div>
+    <!-- ends search form container -->
 
-    <!-- past search container begins-->
+    <!-- begins past search container-->
     <div
       id="past-search-container"
       class="uk-container uk-container-center uk-padding-small width-maxed"
     >
       <h3>Your search history:</h3>
-      <!-- past search grid-->
+
+      <!-- begins past search grid-->
       <div
         id="past-search-grid"
         class="uk-grid uk-width-1-1 uk-border-rounded uk-background-muted uk-padding-remove-horizontal margin-zero"
       >
-        <!-- this is a single past search, should be created dynamically with JS-->
+        <!-- begins single past flights search, should be created dynamically with JS-->
         <!-- <div
           class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero"
         >
@@ -239,8 +246,9 @@
             </button>
           </div>
         </div> -->
-        <!-- end of single past search-->
+        <!-- ends single past flights search-->
 
+        <!-- begins single past hotels search -->
         <div
           class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero"
         >
@@ -267,18 +275,18 @@
             </button>
           </div>
         </div>
+        <!-- ends single past hotels search -->
       </div>
-      <!-- end of past search grid-->
+      <!-- ends past search grid-->
     </div>
-    <!-- end of past search container-->
+    <!-- ends past search container-->
 
-    <!-- this div is the overall flights container -->
-
+    <!-- begins overall flights container -->
     <div
       id="flights-container"
       class="uk-container uk-container-center uk-padding-small width-maxed"
     >
-      <!-- this div contains the flight menu / dropdowns -->
+      <!-- begins flights sorting menu / dropdowns -->
       <div
         id="flights-sub-menu"
         class="uk-flex uk-flex-center uk-padding-remove-horizontal margin-zero"
@@ -331,109 +339,121 @@
 
         <!-- end of flights menu container -->
       </div>
-      <!-- this grid contains all flights-->
+      <!-- ends flights sorting menu / dropdowns -->
 
+      <!-- begins flights grid -->
       <div
         id="flights-grid"
         class="uk-grid uk-width-1-1 uk-border-rounded uk-padding-remove-horizontal margin-zero"
       >
-        <!-- this grid contains a single flight, must be generated dymanically with JS and then appended to the div above (id="flights-grid")-->
-        <div
-          class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded margin-zero uk-margin-small-top"
-        >
-          <div class="uk-width-1-2 uk-padding-remove-horizontal">
-            <h4 class="black-ops">Delta Airlines</h4>
-            <img
-              width="70"
-              height="70"
-              class="frame"
-              src="https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/DL_sq.svg"
-            />
-            <p>
-              Los Angeles to Dubai
-              <span class="fa stronger"> LAX &#xf072; DBX </span>
-              <br />6:55am to 8:17pm
-              <span class="fa"> &#xf152; &#xf1eb; &#xf5e7; </span>
-            </p>
-            <p></p>
-          </div>
-
-          <div class="uk-width-1-2 uk-padding-remove-horizontal">
-            <h4 class="black-ops">Fly Emirates</h4>
-            <img
-              width="70"
-              height="70"
-              class="frame"
-              src="https://cdn.freebiesupply.com/logos/large/2x/fly-emirates-logo-svg-vector.svg"
-            />
-            <p>
-              Alexandria to Dubai
-              <span class="fa stronger margin-small-left"
-                >DBX &#xf072; HBE
-              </span>
-              <br />6:05am to 7:37am
-              <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
-            </p>
-          </div>
-        </div>
-
-        <div
-          class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded margin-zero uk-margin-small-top"
-        >
-          <div class="uk-width-1-2 uk-padding-remove-horizontal">
-            <h4 class="black-ops">Flydubai</h4>
-            <img
-              width="70"
-              height="70"
-              class="frame"
-              src="https://upload.wikimedia.org/wikipedia/commons/7/79/Fly_Dubai_logo_2010_03.svg"
-            />
-            <p>
-              Dubai to Alexandria
-              <span class="fa stronger">DBX &#xf072; HBE </span>
-              <br />6:05am to 7:37am
-              <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
-            </p>
-          </div>
-
-          <div class="uk-width-1-2 uk-padding-remove-horizontal">
-            <h4 class="black-ops">Air Alaska</h4>
-            <img
-              width="70"
-              height="70"
-              class="frame"
-              src="https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/AS_sq.svg"
-            />
-            <p>
-              Dubai to Los Angeles
-              <span class="fa stronger">DBX &#xf072; HBE </span>
-              <br />6:05am to 7:37am
-              <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
-            </p>
-          </div>
-        </div>
-
-        <div
-          class="uk-border-rounded uk-width-1-1 uk-padding-small uk-margin-small-top price-flights"
-        >
-          <span class="black-ops stronger uk-text-emphasis">Select</span>
-          <h2 class="uk-margin-remove-vertical black-ops">$96</h2>
-          <b class="uk-text-emphasis">Round trip</b>
-          <button
-            class="uk-button uk-button-large uk-button-primary uk-border-rounded uk-padding-remove-vertical xs-size-button hide"
+        <!-- begins single flight (trip) container, must be generated dymanically with JS and then appended to the div above (id="flights-grid")-->
+        <!-- AHMAD ADDED THIS DIV TO SEPARATE TRIPS -->
+        <div>
+          <!-- begins outbound itinerary -->
+          <div
+            class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded margin-zero uk-margin-small-top"
           >
-            Select
-          </button>
-        </div>
+            <!-- begins segment -->
+            <div class="uk-width-1-2 uk-padding-remove-horizontal">
+              <h4 class="black-ops">Delta Airlines</h4>
+              <img
+                width="70"
+                height="70"
+                class="frame"
+                src="https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/DL_sq.svg"
+              />
+              <p>
+                Los Angeles to Dubai
+                <span class="fa stronger"> LAX &#xf072; DBX </span>
+                <br />6:55am to 8:17pm
+                <span class="fa"> &#xf152; &#xf1eb; &#xf5e7; </span>
+              </p>
+              <p></p>
+            </div>
+            <!-- ends segment -->
 
-        <!-- end of single flight container -->
+            <!-- begins segment -->
+            <div class="uk-width-1-2 uk-padding-remove-horizontal">
+              <h4 class="black-ops">Fly Emirates</h4>
+              <img
+                width="70"
+                height="70"
+                class="frame"
+                src="https://cdn.freebiesupply.com/logos/large/2x/fly-emirates-logo-svg-vector.svg"
+              />
+              <p>
+                Alexandria to Dubai
+                <span class="fa stronger margin-small-left"
+                  >DBX &#xf072; HBE
+                </span>
+                <br />6:05am to 7:37am
+                <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
+              </p>
+            </div>
+            <!-- ends segment -->
+          </div>
+          <!-- ends outbound itinerary -->
+
+          <!-- begins inbound itinerary -->
+          <div
+            class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded margin-zero uk-margin-small-top"
+          >
+            <div class="uk-width-1-2 uk-padding-remove-horizontal">
+              <h4 class="black-ops">Flydubai</h4>
+              <img
+                width="70"
+                height="70"
+                class="frame"
+                src="https://upload.wikimedia.org/wikipedia/commons/7/79/Fly_Dubai_logo_2010_03.svg"
+              />
+              <p>
+                Dubai to Alexandria
+                <span class="fa stronger">DBX &#xf072; HBE </span>
+                <br />6:05am to 7:37am
+                <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
+              </p>
+            </div>
+
+            <div class="uk-width-1-2 uk-padding-remove-horizontal">
+              <h4 class="black-ops">Air Alaska</h4>
+              <img
+                width="70"
+                height="70"
+                class="frame"
+                src="https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/AS_sq.svg"
+              />
+              <p>
+                Dubai to Los Angeles
+                <span class="fa stronger">DBX &#xf072; HBE </span>
+                <br />6:05am to 7:37am
+                <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
+              </p>
+            </div>
+          </div>
+          <!-- ends inbound itinerary -->
+
+          <!-- begins price container -->
+          <div
+            class="uk-border-rounded uk-width-1-1 uk-padding-small uk-margin-small-top price-flights"
+          >
+            <span class="black-ops stronger uk-text-emphasis">Reserve</span>
+            <h2 class="uk-margin-remove-vertical black-ops">$96</h2>
+            <b class="uk-text-emphasis">Round trip</b>
+            <button
+              class="uk-button uk-button-large uk-button-primary uk-border-rounded uk-padding-remove-vertical xs-size-button hide"
+            >
+              Select
+            </button>
+          </div>
+          <!-- ends price container -->
+        </div> 
+        <!-- ends single flight (trip) container -->
       </div>
+      <!-- ends flights grid -->
     </div>
+    <!-- ends overall flights container -->
 
-    <!-- end of all flights container grid -->
-
-    <!-- this is the overall hotels container div-->
-
+    <!-- begins overall hotels container -->
     <div
       id="hotels-container"
       class="uk-container uk-padding-small width-maxed"
@@ -523,8 +543,7 @@
       </div>
       <!-- end of hotels grid -->
     </div>
-
-    <!-- end of hotels container div-->
+    <!-- ends overall hotels container -->
 
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 

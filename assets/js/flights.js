@@ -15,20 +15,15 @@ const searchFormEl = document.getElementById("form");
 const goingFromEl = document.getElementById("going-from");
 const goingToEl = document.getElementById("going-to");
 const dateDepartureEl = document.getElementById("date-departure");
-const dateReturnEl = document.getElementById("date-arrival");
+const dateReturnEl = document.getElementById("date-return");
 const tripSelectEl = document.getElementById("trip"); // One-way or Roundtrip
 const travelClassEl = document.getElementById("travel-class"); // ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
 const numberOfAdultsEl = document.getElementById("guests-select");
-// const searchBtnEl = document.getElementById("flights-search");
 
 // constants that point to flights search history grid
 const flightsPastSearchGridEl = document.getElementById("past-search-grid");
 // constants that point to flights grid
 const flightsGridEl = document.getElementById("flights-grid");
-
-/* OLD. WAS USED FOR TESTING. REMOVE WHEN READY */
-// var flightsListEl = document.getElementById("flights-list");
-// var flightCountEl = document.getElementById("flight-count");
 
 /* ----- declares variables for user input for "flight offers search" amadeus api ----- */
 // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
@@ -49,7 +44,7 @@ const baseUrl = "https://test.api.amadeus.com";
 // url for requesting and checking on access token
 const accessTokenPath = "/v1/security/oauth2/token/";
 // access token must be renewed for 30 minutes at a time
-const accessToken = "v3APD2ZEA60u5SET0sZgAPCuNGU3";
+const accessToken = "I7v1o6xlZwggNJLNxIoGO06hBvCM";
 // `value` of `headers` "Authorization" `key`
 const authorizationValue = "Bearer " + accessToken;
 
@@ -225,7 +220,7 @@ var loadFlightsSearchHistory = function () {
       }
       flightIconContainerEl.appendChild(flightIconEl);
 
-      // I PREFER TO MAKE THE WHOLE ROW SELECTABLE INSTEAD
+      // // adds button for event listener to make search history items clickable
       // var flightHistorySelectBtn = document.createElement("button");
       // flightHistorySelectBtn.classList.add(
       //   "uk-button",
@@ -238,6 +233,9 @@ var loadFlightsSearchHistory = function () {
       // );
       // flightHistorySelectBtn.innerHTML = "Select";
       // flightIconContainerEl.appendChild(flightHistorySelectBtn);
+
+      // adds event listener to flightSearchHistoryContainerEl
+      // flightSearchHistoryContainerEl.onclick = console.log("clicked");
     }
   }
 };
@@ -377,8 +375,7 @@ var writeData = function (data) {
     var tripContainerEl = document.createElement("div");
     tripContainerEl.classList.add(
       "uk-grid",
-      "uk-width-1-1@s",
-      "uk-width-2-3@m",
+      "uk-width-1-1",
       "uk-background-default",
       "uk-border-rounded",
       "margin-zero",
@@ -512,45 +509,45 @@ var writeData = function (data) {
       }
     }
     /* ----- price container ----- */
-    // var priceContainerEl = document.createElement("div");
-    // priceContainerEl.classList.add(
-    //   "uk-border-rounded",
-    //   "uk-width-1-3@m",
-    //   "uk-width-1-1@s",
-    //   "uk-padding-small",
-    //   "uk-margin-small-top price"
-    // );
-    // tripContainerEl.appendChild(priceContainerEl);
+    var priceContainerEl = document.createElement("div");
+    priceContainerEl.classList.add(
+      "uk-border-rounded",
+      "uk-width-1-1",
+      "uk-padding-small",
+      "uk-margin-small-top",
+      "price-flights"
+    );
+    tripContainerEl.appendChild(priceContainerEl);
 
-    // // more details
-    // var moreDetailsSpanEl = document.createElement("span");
-    // moreDetailsSpanEl.className = "fa";
-    // moreDetailsSpanEl.innerHTML =
-    //   cabin + "<br />" + numberOfBookableSeats + " seats available";
-    // priceContainerEl.appendChild(priceContainerEl);
+    // more details
+    var moreDetailsSpanEl = document.createElement("span");
+    moreDetailsSpanEl.className = "fa";
+    moreDetailsSpanEl.innerHTML =
+      cabin + "<br />" + numberOfBookableSeats + " seats available";
+    priceContainerEl.appendChild(moreDetailsSpanEl);
 
-    // var saveEl = document.createElement("span");
-    // saveEl.classList.add("black-ops", "stronger", "uk-text-emphasis");
-    // saveEl.innerHTML = "Save";
-    // saveEl.appendChild(priceContainerEl);
+    var saveEl = document.createElement("span");
+    saveEl.classList.add("black-ops", "stronger", "uk-text-emphasis");
+    saveEl.innerHTML = "Reserve";
+    priceContainerEl.appendChild(saveEl);
 
-    // var priceEl = document.createElement("h2");
-    // priceEl.classList.add("uk-margin-remove-vertical", "black-ops");
-    // priceEl.innerHTML = "$" + grandTotalPrice;
-    // priceEl.appendChild(priceContainerEl);
+    var priceEl = document.createElement("h2");
+    priceEl.classList.add("uk-margin-remove-vertical", "black-ops");
+    priceEl.innerHTML = "$" + grandTotalPrice;
+    priceContainerEl.appendChild(priceEl);
 
-    // var saveBtn = document.createElement("button");
-    // saveBtn.classList.add(
-    //   "uk-button",
-    //   "uk-button-large",
-    //   "uk-button-primary",
-    //   "uk-border-rounded",
-    //   "uk-padding-remove-vertical",
-    //   "xs-size-button",
-    //   "hide"
-    // );
-    // saveBtn.innerHTML = "Select";
-    // saveBtn.appendChild(priceContainerEl);
+    var saveBtn = document.createElement("button");
+    saveBtn.classList.add(
+      "uk-button",
+      "uk-button-large",
+      "uk-button-primary",
+      "uk-border-rounded",
+      "uk-padding-remove-vertical",
+      "xs-size-button",
+      "hide"
+    );
+    saveBtn.innerHTML = "Select";
+    priceContainerEl.appendChild(saveBtn);
   }
 };
 /* -------------------- ENDS METHODS -------------------- */
@@ -558,6 +555,7 @@ var writeData = function (data) {
 /* -------------------- BEGINS EVENT HANDLERS -------------------- */
 // search form submit event handler
 searchFormEl.addEventListener("submit", searchFormHandler);
+
 /* -------------------- ENDS EVENT HANDLERS -------------------- */
 
 /* -------------------- BEGINS LOAD EVENTS -------------------- */
