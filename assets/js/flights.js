@@ -285,11 +285,13 @@ var searchFormHandler = function () {
   // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
   destinationCode = goingToEl.value;
   departureDate = dateDepartureEl.value;
-  if (tripSelectEl.options[tripSelectEl.selectedIndex].value === "Rountrip") {
+  console.log(tripSelectEl.options[tripSelectEl.selectedIndex].value)
+  if (tripSelectEl.options[tripSelectEl.selectedIndex].value === "Roundtrip") {
     returnDate = dateReturnEl.value;
   } else {
     returnDate = "";
   }
+  console.log(returnDate);
   numberOfAdults = numberOfAdultsEl.value.charAt(0);
   travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
   if (travelClass === "") {
@@ -376,8 +378,8 @@ var writeData = function (data) {
   // each flight details
   for (var i = 0; i < flightCount; i++) {
     /* ----- creates a "single flight" (trip) container, in index.html, for each trip ----- */
-    var tripContainerEl = document.createElement("div");
-    flightsGridEl.appendChild(tripContainerEl);
+    // var tripContainerEl = document.createElement("div");
+    // flightsGridEl.appendChild(tripContainerEl);
 
     /* ----- creates a container element for each itinerary ----- */
     // gets number of itineraries
@@ -394,7 +396,7 @@ var writeData = function (data) {
         "margin-zero",
         "uk-margin-small-top"
       );
-      tripContainerEl.appendChild(itineraryContainerEl);
+      flightsGridEl.appendChild(itineraryContainerEl);
 
       // number of segments for each flight. it is also "number of stops" for "trip"
       var segmentCount = data.data[i].itineraries[0].segments.length;
@@ -524,7 +526,7 @@ var writeData = function (data) {
       "uk-margin-small-top",
       "price-flights"
     );
-    tripContainerEl.appendChild(priceContainerEl);
+    flightsGridEl.appendChild(priceContainerEl);
 
     // more details
     var moreDetailsSpanEl = document.createElement("span");
