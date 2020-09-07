@@ -12,15 +12,21 @@ input.empty {
     /* <-- add this */
 }
 
-header h3 {
+nav h3 {
     font-family: 'Black Ops One', cursive;
-    color: white;
+    color:#1e87f0;
+    margin:10px 0;
 }
 
-header {
+nav {
     max-height: 40px;
-    background-color: rgb(95, 121, 160);
+    
 }
+
+.uk-nav li{
+
+    border-bottom:1px solid #cccccc;
+ }
 
 .hotel {
     border: 1px solid #cccccc;
