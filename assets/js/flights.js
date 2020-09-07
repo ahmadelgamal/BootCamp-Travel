@@ -44,7 +44,7 @@ const baseUrl = "https://test.api.amadeus.com";
 // url for requesting and checking on access token
 const accessTokenPath = "/v1/security/oauth2/token/";
 // access token must be renewed for 30 minutes at a time
-const accessToken = "I7v1o6xlZwggNJLNxIoGO06hBvCM";
+const accessToken = "4JOfmTQKWRQDVYhiGjKICjuEHKSL";
 // `value` of `headers` "Authorization" `key`
 const authorizationValue = "Bearer " + accessToken;
 
@@ -285,7 +285,11 @@ var searchFormHandler = function () {
   // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
   destinationCode = goingToEl.value;
   departureDate = dateDepartureEl.value;
-  returnDate = dateReturnEl.value;
+  if (tripSelectEl.options[tripSelectEl.selectedIndex].value === "Rountrip") {
+    returnDate = dateReturnEl.value;
+  } else {
+    returnDate = "";
+  }
   numberOfAdults = numberOfAdultsEl.value.charAt(0);
   travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
   if (travelClass === "") {
@@ -373,14 +377,6 @@ var writeData = function (data) {
   for (var i = 0; i < flightCount; i++) {
     /* ----- creates a "single flight" (trip) container, in index.html, for each trip ----- */
     var tripContainerEl = document.createElement("div");
-    tripContainerEl.classList.add(
-      "uk-grid",
-      "uk-width-1-1",
-      "uk-background-default",
-      "uk-border-rounded",
-      "margin-zero",
-      "uk-margin-small-top"
-    );
     flightsGridEl.appendChild(tripContainerEl);
 
     /* ----- creates a container element for each itinerary ----- */
@@ -391,8 +387,12 @@ var writeData = function (data) {
     for (var y = 0; y < intineraryCount; y++) {
       var itineraryContainerEl = document.createElement("div");
       itineraryContainerEl.classList.add(
-        "uk-width-1-2",
-        "uk-padding-remove-horizontal"
+        "uk-grid",
+        "uk-width-1-1",
+        "uk-background-default",
+        "uk-border-rounded",
+        "margin-zero",
+        "uk-margin-small-top"
       );
       tripContainerEl.appendChild(itineraryContainerEl);
 
@@ -453,11 +453,18 @@ var writeData = function (data) {
         //   data.data[i].itineraries[0].segments[x].numberOfStops;
 
         /* ----- writes segment data to index.html ----- */
+        var segmentContainerEl = document.createElement("div");
+        segmentContainerEl.classList.add(
+          "uk-width-1-2",
+          "uk-padding-remove-horizontal"
+        );
+        itineraryContainerEl.appendChild(segmentContainerEl);
+
         /* ----- carrier (ariline) name ----- */
         var carrierFullEl = document.createElement("h4");
         carrierFullEl.className = "black-ops";
         carrierFullEl.textContent = carrierFull;
-        itineraryContainerEl.appendChild(carrierFullEl);
+        segmentContainerEl.appendChild(carrierFullEl);
 
         /* ----- carrier (ariline) logo ----- */
         var carrierLogoEl = document.createElement("img");
@@ -468,12 +475,12 @@ var writeData = function (data) {
         // HARDCODED. NEED TO CHANGE TO GET CORRESPONDING LOGO
         carrierLogoEl.src =
           "https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/DL_sq.svg";
-        itineraryContainerEl.appendChild(carrierLogoEl);
+        segmentContainerEl.appendChild(carrierLogoEl);
 
         /* ----- flight details ----- */
         var flightDetailsEl = document.createElement("p");
         // append flight details to itinerary
-        itineraryContainerEl.appendChild(flightDetailsEl);
+        segmentContainerEl.appendChild(flightDetailsEl);
 
         // city data
         // NEED TO DECLARE departureCityFull & arrivalCityFulls
@@ -481,14 +488,14 @@ var writeData = function (data) {
         // citySpanEl.innerHTML = departureCityFull + " to " + arrivalCityFull + "<br />";
         citySpanEl.innerHTML =
           "Test City 1" + " to " + "Test City 2" + "<br />";
-        flightDetailsEl.appendChild(citySpanEl);
+        segmentContainerEl.appendChild(citySpanEl);
 
         // airport data
         var airportSpanEl = document.createElement("span");
-        airportSpanEl.classList.add("fa", "stronger");
+        airportSpanEl.classList.add("fa", "stronger", "margin-small-left");
         airportSpanEl.innerHTML =
           departureCityCode + " &#xf072; " + arrivalCityCode;
-        flightDetailsEl.appendChild(airportSpanEl);
+        segmentContainerEl.appendChild(airportSpanEl);
 
         // departure and arrival times
         var timeSpanEl = document.createElement("span");
@@ -498,14 +505,14 @@ var writeData = function (data) {
           " to " +
           convertTime(arrivalTime) +
           "<br />";
-        flightDetailsEl.appendChild(timeSpanEl);
+        segmentContainerEl.appendChild(timeSpanEl);
 
         /* ----- flight number ----- */
         var flightNumberEl = document.createElement("span");
         flightNumberEl.className = "black-ops";
         flightNumberEl.innerHTML =
           "<br /> Flight #: " + flightNumber + "<br />";
-        flightDetailsEl.appendChild(flightNumberEl);
+        segmentContainerEl.appendChild(flightNumberEl);
       }
     }
     /* ----- price container ----- */
