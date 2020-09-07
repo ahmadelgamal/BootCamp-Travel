@@ -1,19 +1,16 @@
-
 var flightsBtn = document.querySelector("#flights-btn");
-
 var hotelsBtn = document.querySelector("#hotels-btn");
+
 
 var tripSelector = document.querySelector("#trip");
 
+
 var flightsContainer = document.querySelector("#flights-container");
-
 var hotelsContainer = document.querySelector("#hotels-container");
-
 var searchContainer = document.querySelector("#past-search-container");
 
-
-
 var showFlightsMenu = function () {
+
 
 
     var goingFrom = document.querySelector("#going-from").parentElement.parentElement;
@@ -87,55 +84,34 @@ var showHotelsMenu = function () {
 }
 
 
+
 var showFlights = function () {
-
-    searchContainer.style.display = "none";
-    hotelsContainer.style.display = "none";
-    flightsContainer.style.display = "";
-
-}
+  searchContainer.style.display = "none";
+  hotelsContainer.style.display = "none";
+  flightsContainer.style.display = "";
+};
 
 var showHotels = function () {
+  hotelsContainer.style.display = "";
+  flightsContainer.style.display = "none";
+  searchContainer.style.display = "none";
+};
 
-
-    hotelsContainer.style.display = "";
-    flightsContainer.style.display = "none";
-    searchContainer.style.display = "none";
-
-}
-
-
-var showSearchHistory = function (){
-
-    hotelsContainer.style.display = "none";
-    flightsContainer.style.display = "none";
-    searchContainer.style.display = "";
-
-}
-
-
+var showSearchHistory = function () {
+  hotelsContainer.style.display = "none";
+  flightsContainer.style.display = "none";
+  searchContainer.style.display = "";
+};
 
 var flightsHandler = function (event) {
-
-
-
-    showFlightsMenu();
-
-    showFlights();
-}
-
+  showFlightsMenu();
+  showFlights();
+};
 
 var hotelsHandler = function (event) {
-
-
-
-    showHotelsMenu();
-
-    showHotels();
-
-
-
-}
+  showHotelsMenu();
+  showHotels();
+};
 
 var toggleTripHandler = function (event){
 
@@ -150,6 +126,7 @@ var init = function () {
 
 
 
+
     showSearchHistory();
     showFlightsMenu();
 }
@@ -157,11 +134,12 @@ var init = function () {
 
 
 
-// source https://www.w3schools.com/howto/howto_js_autocomplete.asp
 
+// source https://www.w3schools.com/howto/howto_js_autocomplete.asp
 function autocomplete(inp, arr) {
-    /*the autocomplete function takes two arguments,
+  /*the autocomplete function takes two arguments,
     the text field element and an array of possible autocompleted values:*/
+
     var currentFocus;
     /*execute a function when someone writes in the text field:*/
     inp.addEventListener("input", function (e) {
@@ -200,36 +178,34 @@ function autocomplete(inp, arr) {
                     /*insert the value for the autocomplete text field:*/
                     console.log(this.parentNode);
                     inp.value = this.getElementsByTagName("input")[0].value;
-                    /*close the list of autocompleted values,
+                    /*close the list of autocompleted values
                     (or any other open lists of autocompleted values:*/
-                    closeAllLists();
-                });
-                a.appendChild(b);
-            }
-        }
-    });
-
-    function closeAllLists(elmnt) {
-        /*close all autocomplete lists in the document,
-        except the one passed as an argument:*/
-        var x = document.getElementsByClassName("autocomplete-items");
-        for (var i = 0; i < x.length; i++) {
-            if (elmnt != x[i] && elmnt != inp) {
-                x[i].parentNode.removeChild(x[i]);
-            }
-        }
+          closeAllLists();
+        });
+        a.appendChild(b);
+      }
     }
-    /*execute a function when someone clicks in the document:*/
-    document.addEventListener("click", function (e) {
-        closeAllLists(e.target);
-    });
-}
+  });
 
+  function closeAllLists(elmnt) {
+    /*close all autocomplete lists in the document,
+        except the one passed as an argument:*/
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) {
+        x[i].parentNode.removeChild(x[i]);
+      }
+    }
+  }
+  /*execute a function when someone clicks in the document:*/
+  document.addEventListener("click", function (e) {
+    closeAllLists(e.target);
+  });
+}
 
 /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
 autocomplete(document.getElementById("going-from"), mainCities);
 autocomplete(document.getElementById("going-to"), mainCities);
-
 
 flightsBtn.addEventListener("click", flightsHandler);
 hotelsBtn.addEventListener("click", hotelsHandler);
