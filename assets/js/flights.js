@@ -44,7 +44,7 @@ const baseUrl = "https://test.api.amadeus.com";
 // url for requesting and checking on access token
 const accessTokenPath = "/v1/security/oauth2/token/";
 // access token must be renewed for 30 minutes at a time
-const accessToken = "4JOfmTQKWRQDVYhiGjKICjuEHKSL";
+const accessToken = "93AAGG9Bc8dy7gxMhcTbWzU4aFg8";
 // `value` of `headers` "Authorization" `key`
 const authorizationValue = "Bearer " + accessToken;
 
@@ -285,13 +285,11 @@ var searchFormHandler = function () {
   // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
   destinationCode = goingToEl.value;
   departureDate = dateDepartureEl.value;
-  console.log(tripSelectEl.options[tripSelectEl.selectedIndex].value)
   if (tripSelectEl.options[tripSelectEl.selectedIndex].value === "Roundtrip") {
     returnDate = dateReturnEl.value;
   } else {
     returnDate = "";
   }
-  console.log(returnDate);
   numberOfAdults = numberOfAdultsEl.value.charAt(0);
   travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
   if (travelClass === "") {
@@ -399,23 +397,28 @@ var writeData = function (data) {
       flightsGridEl.appendChild(itineraryContainerEl);
 
       // number of segments for each flight. it is also "number of stops" for "trip"
-      var segmentCount = data.data[i].itineraries[0].segments.length;
+      var segmentCount = data.data[i].itineraries[y].segments.length;
 
       /* ----- allocates data from fetch into variables ----- */
       for (var x = 0; x < segmentCount; x++) {
         // essential details
-        var carrierCode = data.data[i].itineraries[0].segments[x].carrierCode;
+        var carrierCode = data.data[i].itineraries[y].segments[x].carrierCode;
         var carrierFull = carriersCodeList[carrierCode];
-        var flightNumber = data.data[i].itineraries[0].segments[x].number;
+        var flightNumber = data.data[i].itineraries[y].segments[x].number;
         var departureCityCode =
-          data.data[i].itineraries[0].segments[x].departure.iataCode;
+          data.data[i].itineraries[y].segments[x].departure.iataCode;
         var arrivalCityCode =
-          data.data[i].itineraries[0].segments[x].arrival.iataCode;
+          data.data[i].itineraries[y].segments[x].arrival.iataCode;
         var departureTime =
-          data.data[i].itineraries[0].segments[x].departure.at;
-        var arrivalTime = data.data[i].itineraries[0].segments[x].arrival.at;
-        var cabin =
-          data.data[i].travelerPricings[0].fareDetailsBySegment[x].cabin;
+          data.data[i].itineraries[y].segments[x].departure.at;
+        var arrivalTime = data.data[i].itineraries[y].segments[x].arrival.at;
+        var travelerPricingsCount = data.data[i].travelerPricings.length;
+        var cabin = [];
+        for (var z = 0; z < travelerPricingsCount; z++) {
+          cabin.push(
+            data.data[i].travelerPricings[z].fareDetailsBySegment[x].cabin
+          );
+        }
         var grandTotalPrice = data.data[i].price.grandTotal;
         // var currencyCode = data.data[i].price.currency;
         // var currencyFull = currenciesCodeList[currencyCode];
@@ -423,15 +426,19 @@ var writeData = function (data) {
 
         // more details
         var aircraftCode =
-          data.data[i].itineraries[0].segments[x].aircraft.code;
+          data.data[i].itineraries[y].segments[x].aircraft.code;
         var aircraftFull = aircraftCodeList[aircraftCode];
         var departureTerminal =
-          data.data[i].itineraries[0].segments[x].departure.terminal;
+          data.data[i].itineraries[y].segments[x].departure.terminal;
         var arrivalTerminal =
-          data.data[i].itineraries[0].segments[x].arrival.terminal;
-        var flightDuration = data.data[i].itineraries[0].segments[x].duration;
-        var airClass =
-          data.data[i].travelerPricings[0].fareDetailsBySegment[x].class;
+          data.data[i].itineraries[y].segments[x].arrival.terminal;
+        var flightDuration = data.data[i].itineraries[y].segments[x].duration;
+        var airClass = [];
+        for (var z = 0; z < travelerPricingsCount; z++) {
+          airClass.push(
+            data.data[i].travelerPricings[z].fareDetailsBySegment[x].class
+          );
+        }
         var numberOfBookableSeats = data.data[i].numberOfBookableSeats;
         var lastTicketingDate = data.data[i].lastTicketingDate;
 
@@ -444,15 +451,15 @@ var writeData = function (data) {
         var totalPrice = data.data[i].price.total;
         // checks if there is data for operator, otherwise it does not look for it
         // if (
-        //   typeof data.data[i].itineraries[0].segments[x].operating !==
+        //   typeof data.data[i].itineraries[y].segments[x].operating !==
         //   "undefined"
         // ) {
         //   var operatorCode =
-        //     data.data[i].itineraries[0].segments[x].operating.carrierCode;
+        //     data.data[i].itineraries[y].segments[x].operating.carrierCode;
         //   var operatorFull = carriersCodeList[operatorCode];
         // }
         // var numberOfStops =
-        //   data.data[i].itineraries[0].segments[x].numberOfStops;
+        //   data.data[i].itineraries[y].segments[x].numberOfStops;
 
         /* ----- writes segment data to index.html ----- */
         var segmentContainerEl = document.createElement("div");
@@ -532,7 +539,7 @@ var writeData = function (data) {
     var moreDetailsSpanEl = document.createElement("span");
     moreDetailsSpanEl.className = "fa";
     moreDetailsSpanEl.innerHTML =
-      cabin + "<br />" + numberOfBookableSeats + " seats available";
+      cabin.join(" + ") + "<br />" + numberOfBookableSeats + " seats available";
     priceContainerEl.appendChild(moreDetailsSpanEl);
 
     var saveEl = document.createElement("span");
