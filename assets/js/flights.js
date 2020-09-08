@@ -11,6 +11,7 @@
 /* ----------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ----------- */
 /* --------------- declares constants to point to html elements -------------- */
 // constants that point to search form
+const flightsTabEl = document.getElementById("flights-tab");
 const searchFormEl = document.getElementById("form");
 const goingFromEl = document.getElementById("going-from");
 const goingToEl = document.getElementById("going-to");
@@ -44,7 +45,7 @@ const baseUrl = "https://test.api.amadeus.com";
 // url for requesting and checking on access token
 const accessTokenPath = "/v1/security/oauth2/token/";
 // access token must be renewed for 30 minutes at a time
-const accessToken = "u48VjmzOZGaNAbuZr9JbovOPpF1j";
+const accessToken = "AVpqizcIGIbTqhxWgh9QFSTv2joS";
 // `value` of `headers` "Authorization" `key`
 const authorizationValue = "Bearer " + accessToken;
 
@@ -276,32 +277,36 @@ var saveUrl = function () {
 
 /* ---------- search form handler ---------- */
 var searchFormHandler = function () {
-  // prevents the initials submit from triggering a refresh of index.html
-  event.preventDefault();
+  if (flightsTabEl.className === "uk-active") {
+    // prevents the initials submit from triggering a refresh of index.html
+    event.preventDefault();
 
-  /* ---------- gets current values in search form ---------- */
-  // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
-  originCode = goingFromEl.value;
-  // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
-  destinationCode = goingToEl.value;
-  departureDate = dateDepartureEl.value;
-  if (tripSelectEl.options[tripSelectEl.selectedIndex].value === "Roundtrip") {
-    returnDate = dateReturnEl.value;
-  } else {
-    returnDate = "";
-  }
-  numberOfAdults = numberOfAdultsEl.value.charAt(0);
-  travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
-  if (travelClass === "") {
-    travelClass = "ECONOMY";
-  }
+    /* ---------- gets current values in search form ---------- */
+    // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
+    originCode = goingFromEl.value;
+    // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
+    destinationCode = goingToEl.value;
+    departureDate = dateDepartureEl.value;
+    if (
+      tripSelectEl.options[tripSelectEl.selectedIndex].value === "Roundtrip"
+    ) {
+      returnDate = dateReturnEl.value;
+    } else {
+      returnDate = "";
+    }
+    numberOfAdults = numberOfAdultsEl.value.charAt(0);
+    travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
+    if (travelClass === "") {
+      travelClass = "ECONOMY";
+    }
 
-  // calls function in script.js
-  showFlights();
-  // clears data from previous search, and informs user that search is running
-  flightsGridEl.innerHTML = "Searching...";
-  saveUrl();
-  getFlightOffersSearch();
+    // calls function in script.js
+    showFlights();
+    // clears data from previous search, and informs user that search is running
+    flightsGridEl.innerHTML = "Searching...";
+    saveUrl();
+    getFlightOffersSearch();
+  }
 };
 
 /* ---------- converts time from fetch to ui time format ---------- */
@@ -482,7 +487,10 @@ var writeData = function (data) {
         carrierLogoEl.style.width = "70";
         carrierLogoEl.style.height = "70";
         // HARDCODED. NEED TO CHANGE TO GET CORRESPONDING LOGO
-        carrierLogoEl.src = "https://content.airhex.com/content/logos/airlines_" + carrierCode + "_70_70_s.png";
+        carrierLogoEl.src =
+          "https://content.airhex.com/content/logos/airlines_" +
+          carrierCode +
+          "_70_70_s.png";
         segmentContainerEl.appendChild(carrierLogoEl);
 
         /* ----- flight details ----- */
@@ -569,6 +577,7 @@ var writeData = function (data) {
 
 /* -------------------- BEGINS EVENT HANDLERS -------------------- */
 // search form submit event handler
+
 searchFormEl.addEventListener("submit", searchFormHandler);
 
 /* -------------------- ENDS EVENT HANDLERS -------------------- */

@@ -207,7 +207,6 @@ function autocomplete(inp, arr) {
         /*execute a function when someone clicks on the item value (DIV element):*/
         b.addEventListener("click", function (e) {
           /*insert the value for the autocomplete text field:*/
-          console.log(this.parentNode);
           inp.value = this.getElementsByTagName("input")[0].value;
           /*close the list of autocompleted values
                     (or any other open lists of autocompleted values:*/
