@@ -44,7 +44,7 @@ const baseUrl = "https://test.api.amadeus.com";
 // url for requesting and checking on access token
 const accessTokenPath = "/v1/security/oauth2/token/";
 // access token must be renewed for 30 minutes at a time
-const accessToken = "93AAGG9Bc8dy7gxMhcTbWzU4aFg8";
+const accessToken = "u48VjmzOZGaNAbuZr9JbovOPpF1j";
 // `value` of `headers` "Authorization" `key`
 const authorizationValue = "Bearer " + accessToken;
 
@@ -482,8 +482,7 @@ var writeData = function (data) {
         carrierLogoEl.style.width = "70";
         carrierLogoEl.style.height = "70";
         // HARDCODED. NEED TO CHANGE TO GET CORRESPONDING LOGO
-        carrierLogoEl.src =
-          "https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/DL_sq.svg";
+        carrierLogoEl.src = "https://content.airhex.com/content/logos/airlines_" + carrierCode + "_70_70_s.png";
         segmentContainerEl.appendChild(carrierLogoEl);
 
         /* ----- flight details ----- */
