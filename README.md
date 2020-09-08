@@ -15,6 +15,7 @@
 ###  getProperties: Gets property ID information based on ID of city, # of adults, check-in date, check-out date, # of entries and pages to display and sorting order (rating or price)
 ### displayPropertyInfo. Gets detailed property information based on the ID information from getProperties. Hotel information includes the hotel name, locality, taglines, price, ratings etc..
 ### setInitial: Used for initial setup. Sets and displays hotel history results
+### sortOrderFunction: Assigns the sort order and display based on user choices
 
 ### Main functions of flights.js are as follows:
 

@@ -6,7 +6,7 @@ var checkout = ""; // Check-out date
 var id = 0;
 var urls = []; // URLs of the images
 var maxHistoryLength = 3; // History length
-var urlKey = "fbf2bcca01msh96f98897bbe4148p10c013jsn08cc1c5d7acd"; // URL Key
+var urlKey = "82aa230269msh2cf9909e3ed2b47p118c19jsn0f399e353b6d"; // URL Key
 var newHotellay1 = document.getElementById("hotels-grid"); // Get parent element of HTML document
 var pageNumber = 1; // # of pages to display
 var resultMax = 1; // # of hotels to show up in a single request
@@ -44,7 +44,7 @@ var displayPropertyInfo = function (identity, checkindate, checkoutdate, numbero
 
             response.json().then(function (data3) {
 
-                var guestRv = data3.data.body.guestReviews; 
+                var guestRv = data3.data.body.guestReviews;
                 if (guestRv.brands !== undefined) {
 
                     // var reviewRating = data3.data.body.guestReviews.brands.rating; // Rating information
@@ -54,8 +54,6 @@ var displayPropertyInfo = function (identity, checkindate, checkoutdate, numbero
 
                     // var reviewRating = "Insufficient Information ";
                     var totalReviews = "Insufficient Information To Show ";
-
-
 
                 }
 
@@ -162,6 +160,7 @@ var getProperties = function (idcity, currency, sortOrder, pgNumb, checkInDate, 
                             propIde[i] = data6.data.body.searchResults.results[i].id;
                             var urlThumb = data6.data.body.searchResults.results[i].thumbnailUrl;
                             var starRating = data6.data.body.searchResults.results[i].starRating;
+                            if (starRating == "undefined" || starRating == undefined) { starRating = "No ratings availabe" };
                             var url3 = urlThumb.split('_');
                             var url4 = url3[0] + "_y.jpg"; // URL for property image
 
@@ -191,7 +190,7 @@ var setInitial = function () {
 
 
     hotels = JSON.parse(localStorage.getItem("hotels"));
-
+    $("#hotels-grid").empty(); // Empties previous display
 
     if (!(hotels == null)) {
         for (i = 0; i < hotels.length; i++) {
@@ -199,8 +198,53 @@ var setInitial = function () {
             displayPropertyInfo(hotels[i].IdCity, hotels[i].ChkInDate, hotels[i].ChkOutDate, hotels[i].NumAdults, hotels[i].Currcy, i, hotels[i].UrlThumbNl);
             var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
             if (tempHotel !== null) { localStorage.removeItem("tempHotel") };
-
         }
+    }
+}
+
+/* -------------------- SET SORTING ORDER AND DISPLAY -------------------- */
+var SortOrderFunction = function (sortSelect) {
+
+    var ele = $(sortSelect);
+    if (sortSelect == "#sort-hotel-price") {
+        var sortPrice = ele[0].innerText;
+        var splitPrice = sortPrice.split(" ");
+        if (splitPrice[1] == "↓" || splitPrice[1] == undefined) {
+            sortOrd = "PRICE";
+            var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
+            $("#hotels-grid").empty();
+            getProperties(tempHotel.cityid, curr, sortOrd, pageNumber, tempHotel.checkin, tempHotel.checkout, resultMax, adults);
+            $("#sort-hotel-price").html("<b>PRICE ↑</b>");// changes display based ascending or descending order
+            $("#sort-hotel-rating").html("RATING");
+        } else if (splitPrice[1] == "↑") {
+            sortOrd = "PRICE_HIGHEST_FIRST";
+            var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
+            $("#hotels-grid").empty();
+            getProperties(tempHotel.cityid, curr, sortOrd, pageNumber, tempHotel.checkin, tempHotel.checkout, resultMax, adults);
+            $("#sort-hotel-price").html("<b>PRICE ↓</b>");// changes display based ascending or descending order
+            $("#sort-hotel-rating").html("RATING");
+        }
+    }
+    else if (sortSelect == "#sort-hotel-rating") {
+        var sortRating = ele[0].innerText;
+        var splitRating = sortRating.split(" ");
+        if (splitRating[1] == "↓" || splitRating[1] == undefined) {
+            sortOrd = "STAR_RATING_LOWEST_FIRST";
+            var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
+            $("#hotels-grid").empty();
+            getProperties(tempHotel.cityid, curr, sortOrd, pageNumber, tempHotel.checkin, tempHotel.checkout, resultMax, adults);
+            $("#sort-hotel-price").html("PRICE");// changes display based ascending or descending order
+            $("#sort-hotel-rating").html("<b> RATING ↑</b>");
+        } else if (splitRating[1] == "↑") {
+            sortOrd = "STAR_RATING_HIGHEST_FIRST";
+            var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
+            $("#hotels-grid").empty();
+            getProperties(tempHotel.cityid, curr, sortOrd, pageNumber, tempHotel.checkin, tempHotel.checkout, resultMax, adults);
+            $("#sort-hotel-price").html("<b>PRICE</b>");// changes display based ascending or descending order
+            $("#sort-hotel-rating").html("<b>RATING ↓</b>");
+        }
+
+
     }
 }
 
@@ -225,9 +269,26 @@ $("#form").on("submit", function (event) {
     checkout = moment(checkout, "MM-DD-YYYY");
     checkout = moment(checkout).format("YYYY-MM-DD");
     adults = $("#guests-select").val();
+
     $("#hotels-grid").empty(); // Empties previous display
-    $("#sort-hotel-price").html("<b> PRICE ↑ </b>"); // Shows sorting order
-    $("#sort-hotel-rating").html("RATING");
+
+    if (sortOrd == "PRICE") {
+        $("#sort-hotel-price").html("<b>PRICE ↑</b>");// changes display based ascending or descending order
+        $("#sort-hotel-rating").html("RATING");
+    };
+    if (sortOrd == "PRICE_HIGHEST_FIRST") {
+        $("#sort-hotel-price").html("<b>PRICE ↓</b>");// changes display based ascending or descending order
+        $("#sort-hotel-rating").html("RATING");
+    };
+    if (sortOrd == "STAR_RATING_LOWEST_FIRST") {
+        $("#sort-hotel-price").html("PRICE");// changes display based ascending or descending order
+        $("#sort-hotel-rating").html("<b>RATING ↑</b>");
+    };
+    if (sortOrd == "STAR_RATING_HIGHEST_FIRST") {
+        $("#sort-hotel-price").html("PRICE");// changes display based ascending or descending order
+        $("#sort-hotel-rating").html("<b>RATING ↓</b>");
+    };
+
     GetIdhotel(city, checkin, checkout);
 });
 
@@ -284,54 +345,16 @@ $(document).on("click", ".reserve", function () {
 
 
 
-/* -------------------- PROCESS REQUEST FOR SORTING BY PRICE OR RATINGS------------------ */
-
 /* -------------------- PROCESS REQUEST FOR SORTING BY PRICE ------------------ */
 $(document).on("click", "#sort-hotel-price", function () {
 
-    var ele = $(this);
-    var sortPrice = ele[0].innerText;
-    var splitPrice = sortPrice.split(" ");
-    if (splitPrice[1] == "↓" || splitPrice[1] == undefined) {
-        sortOrd = "PRICE";
-        var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
-        $("#hotels-grid").empty();
-        getProperties(tempHotel.cityid, curr, sortOrd, pageNumber, tempHotel.checkin, tempHotel.checkout, resultMax, adults);
-        $("#sort-hotel-price").html("<b>PRICE ↑</b>");// changes display based ascending or descending order
-        $("#sort-hotel-rating").html("RATING");
-    } else if (splitPrice[1] == "↑") {
-        sortOrd = "PRICE_HIGHEST_FIRST";
-        var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
-        $("#hotels-grid").empty();
-        getProperties(tempHotel.cityid, curr, sortOrd, pageNumber, tempHotel.checkin, tempHotel.checkout, resultMax, adults);
-        $("#sort-hotel-price").html("<b>PRICE ↓</b>");// changes display based ascending or descending order
-        $("#sort-hotel-rating").html("RATING");
-    }
+    SortOrderFunction("#sort-hotel-price");
 
 });
 
 /* -------------------- PROCESS REQUEST FOR SORTING BY RATINGS------------------ */
 $(document).on("click", "#sort-hotel-rating", function () {
 
+    SortOrderFunction("#sort-hotel-rating");
 
-    var ele = $(this);
-    var sortRating = ele[0].innerText;
-    var splitPrice2 = sortRating.split(" ");
-
-    if (splitPrice2[1] == "↓" || splitPrice2[1] == undefined) {
-        sortOrd = "STAR_RATING_LOWEST_FIRST";
-        var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
-        $("#hotels-grid").empty();
-        getProperties(tempHotel.cityid, curr, sortOrd, pageNumber, tempHotel.checkin, tempHotel.checkout, resultMax, adults);
-        $("#sort-hotel-rating").html("<b>RATING ↑</b>"); // changes display based ascending or descending order
-        $("#sort-hotel-price").html("PRICE");
-
-    } else if (splitPrice2[1] == "↑") {
-        sortOrd = "STAR_RATING_HIGHEST_FIRST";
-        var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
-        $("#hotels-grid").empty();
-        getProperties(tempHotel.cityid, curr, sortOrd, pageNumber, tempHotel.checkin, tempHotel.checkout, resultMax, adults);
-        $("#sort-hotel-rating").html("<b>RATING ↓</b>");// changes display based ascending or descending order
-        $("#sort-hotel-price").html("PRICE");
-    };
 });
