@@ -275,7 +275,7 @@ var getProperties = function (
 var setInitial = function () {
   hotels = JSON.parse(localStorage.getItem("hotels"));
   $("#hotels-grid").empty(); // Empties previous display
-
+  $("#hotels-sub-menu").hide();
   if (!(hotels == null)) {
     for (i = 0; i < hotels.length; i++) {
       sortOrd = "PRICE";
@@ -417,6 +417,7 @@ $("#form").on("submit", function (event) {
     }
 
     GetIdhotel(city, checkin, checkout);
+    $("#hotels-sub-menu").show();
   }
 });
 
