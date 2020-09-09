@@ -1,5 +1,8 @@
 var flightsBtn = document.querySelector("#flights-btn");
 var hotelsBtn = document.querySelector("#hotels-btn");
+
+var tripSelector = document.querySelector("#trip");
+
 var flightsContainer = document.querySelector("#flights-container");
 var hotelsContainer = document.querySelector("#hotels-container");
 var searchContainer = document.querySelector("#past-search-container");
@@ -8,12 +11,6 @@ var showFlightsMenu = function () {
   var goingFrom = document.querySelector("#going-from").parentElement
     .parentElement;
   goingFrom.setAttribute(
-    "class",
-    "uk-margin-small uk-padding-small uk-padding-remove-vertical"
-  );
-
-  var trip = document.querySelector("#trip");
-  trip.setAttribute(
     "class",
     "uk-margin-small uk-padding-small uk-padding-remove-vertical"
   );
@@ -30,6 +27,18 @@ var showFlightsMenu = function () {
     "class",
     "uk-margin-small uk-padding-small uk-padding-remove-vertical hide"
   );
+
+  var travelClass = document.querySelector("#travel-class");
+  travelClass.style.display = "";
+
+  var trip = document.querySelector("#trip");
+  trip.style.display = "";
+
+  var hotelsBtn = document.querySelector("#hotels-search");
+  hotelsBtn.style.display = "none";
+
+  var flightsBtn = document.querySelector("#flights-search");
+  flightsBtn.style.display = "";
 
   var dDeparture = document.querySelector("#date-departure").parentElement
     .parentElement;
@@ -54,12 +63,6 @@ var showHotelsMenu = function () {
     "uk-margin-small uk-padding-small uk-padding-remove-vertical hide"
   );
 
-  var trip = document.querySelector("#trip");
-  trip.setAttribute(
-    "class",
-    "uk-margin-small uk-padding-small uk-padding-remove-vertical hide"
-  );
-
   var checkIn = document.querySelector("#check-in").parentElement.parentElement;
   checkIn.setAttribute(
     "class",
@@ -72,6 +75,18 @@ var showHotelsMenu = function () {
     "class",
     "uk-margin-small uk-padding-small uk-padding-remove-vertical"
   );
+
+  var travelClass = document.querySelector("#travel-class");
+  travelClass.style.display = "none";
+
+  var trip = document.querySelector("#trip");
+  trip.style.display = "none";
+
+  var hotelsBtn = document.querySelector("#hotels-search");
+  hotelsBtn.style.display = "";
+
+  var flightsBtn = document.querySelector("#flights-search");
+  flightsBtn.style.display = "none";
 
   var dDeparture = document.querySelector("#date-departure").parentElement
     .parentElement;
@@ -116,14 +131,26 @@ var hotelsHandler = function (event) {
   showHotels();
 };
 
+var toggleTripHandler = function (event) {
+  if (this.options[0].selected) {
+    document.querySelector("#date-return").style.display = "";
+  }
+
+  if (this.options[1].selected) {
+    document.querySelector("#date-return").style.display = "none";
+  }
+};
+
 var init = function () {
   showSearchHistory();
+  showFlightsMenu();
 };
 
 // source https://www.w3schools.com/howto/howto_js_autocomplete.asp
 function autocomplete(inp, arr) {
   /*the autocomplete function takes two arguments,
     the text field element and an array of possible autocompleted values:*/
+
   var currentFocus;
   /*execute a function when someone writes in the text field:*/
   inp.addEventListener("input", function (e) {
@@ -158,7 +185,12 @@ function autocomplete(inp, arr) {
         /*make the matching letters bold:*/
         b.innerHTML =
           "<strong>" + arr[i].name.substr(0, val.length) + "</strong>";
-        b.innerHTML += arr[i].name.substr(val.length) + ", " + arr[i].country;
+        b.innerHTML +=
+          arr[i].name.substr(val.length) +
+          ", " +
+          arr[i].subcountry +
+          ", " +
+          arr[i].country;
 
         if (this.id == "going-from") icon = "&#xf5b0; ";
         if (this.id == "going-to") icon = "&#xf5af; ";
@@ -175,9 +207,8 @@ function autocomplete(inp, arr) {
         /*execute a function when someone clicks on the item value (DIV element):*/
         b.addEventListener("click", function (e) {
           /*insert the value for the autocomplete text field:*/
-          console.log(this.parentNode);
           inp.value = this.getElementsByTagName("input")[0].value;
-          /*close the list of autocompleted values,
+          /*close the list of autocompleted values
                     (or any other open lists of autocompleted values:*/
           closeAllLists();
         });
@@ -208,5 +239,6 @@ autocomplete(document.getElementById("going-to"), mainCities);
 
 flightsBtn.addEventListener("click", flightsHandler);
 hotelsBtn.addEventListener("click", hotelsHandler);
+tripSelector.addEventListener("change", toggleTripHandler);
 
 init();
