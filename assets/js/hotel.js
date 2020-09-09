@@ -8,7 +8,7 @@ var maxHistoryLength = 3; // History length
 var urlKey = "82aa230269msh2cf9909e3ed2b47p118c19jsn0f399e353b6d"; // URL Key
 var newHotellay1 = document.getElementById("hotels-grid"); // Get parent element of HTML document
 var pageNumber = 1; // # of pages to display
-var resultMax = 4; // # of hotels to show up in a single request
+var resultMax = 20; // # of hotels to show up in a single request
 var adults = 1; // # of adults
 curr = "USD"; // Currency
 var sortOrd = "PRICE"; // Sort order
@@ -17,18 +17,6 @@ var symbol = "↑";
 
 var hotelsTabEl = document.getElementById("hotels-tab");
 
-// Object for local storage
-var hotels = [
-  {
-    IdCity: "",
-    ChkInDate: "",
-    ChkOutDate: "",
-    NumAdults: "",
-    Currcy: "",
-    UrlThumbNl: "",
-    dateSearch: "",
-  },
-];
 
 /* -------------------- DISPLAYS PROPERTY INFORMATION BASED ON THE PROPERTIES IDs RETURNED WITHIN A CITY -------------------- */
 
@@ -40,85 +28,47 @@ var displayPropertyInfo = function (
   currency,
   j,
   urlTh,
-  reviewRating
+  reviewRating,
+  propertyName,
+  address,
+  totalGuestReviews,
+  neighbourhoodName,
+  pricee
 ) {
-  formurl =
-    "https://cors-anywhere.herokuapp.com/https://hotels4.p.rapidapi.com/properties/get-details?locale=en_US&currency=" +
-    currency +
-    "&checkOut=" +
-    checkoutdate +
-    "&adults1=" +
-    numberofadults +
-    "&checkIn=" +
-    checkindate +
-    "&id=" +
-    identity;
-  fetch(formurl, {
-    method: "GET",
-    headers: {
-      "x-rapidapi-host": "hotels4.p.rapidapi.com",
-      "x-rapidapi-key": urlKey,
-    },
-  })
-    .then(function (response) {
-      response.json().then(function (data3) {
-        var guestRv = data3.data.body.guestReviews;
-        console.log(guestRv.brands);
-        if (guestRv.brands !== undefined) {
-          // var reviewRating = data3.data.body.guestReviews.brands.rating; // Rating information
-          var totalReviews = data3.data.body.guestReviews.brands.total; // Total reviews
-        } else {
-          // var reviewRating = "Insufficient Information ";
-          var totalReviews = "Insufficient Information To Show ";
-        }
 
-        var propertyName = data3.data.body.propertyDescription.name; // Hotel name
-        //  var cityName = data3.data.body.propertyDescription.address.cityName;
-        var price = data3.data.body.propertyDescription.featuredPrice.currentPrice.formatted; // Hotel price
-        var tagline = data3.data.body.propertyDescription.tagline; // Tagline describing hotel
-        var neighborhood = data3.neighborhood.neighborhoodName; // Hotel's neighborhood
+  // Add DOM elements to display the property
+  var hotellayvar = "hotellay" + j.toString();
+  $(newHotellay1).append(
+    '<div class = "uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal" id = "' +
+    hotellayvar +
+    '">'
+  );
+  var newHotellay2 = document.getElementById(hotellayvar);
 
-        // Add DOM elements to display the property
-        var hotellayvar = "hotellay" + j.toString();
-        $(newHotellay1).append(
-          '<div class = "uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal" id = "' +
-          hotellayvar +
-          '">'
-        );
-        var newHotellay2 = document.getElementById(hotellayvar);
+  $(newHotellay2).append(
+    '<div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s uk-background-muted"> <img class="uk-border-rounded" src=' +
+    urlTh +
+    "> </div>"
+  );
 
-        $(newHotellay2).append(
-          '<div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s uk-background-muted"> <img class="uk-border-rounded" src=' +
-          urlTh +
-          "> </div>"
-        );
-
-        $(newHotellay2).append(
-          '<div class="uk-grid uk-width-2-3@m uk-width-1-1@s"> <div class="uk-width-1-2 uk-margin-medium"> <h4>' +
-          propertyName +
-          "<br>" +
-          tagline +
-          " </h4>  <p>" +
-          neighborhood +
-          ' <br> <span class="uk-text-success">Reserve Now, Pay Later</span><br> <span class="uk-text-success">Free Cancellation</span> </p>  <span class="uk-position-bottom uk-position-relative">' +
-          reviewRating +
-          "/5 Rating (" +
-          totalReviews +
-          ' Reviews)</span></div> <div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price"> <h2 class="uk-margin-remove-vertical">' +
-          price +
-          '</h2> <b>per Night</b> <button class="reserve uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded" id="' +
-          identity +
-          '">Reserve</button> </div> </div>'
-        );
-      });
-    })
-    .catch((err) => {
-      $("body").append(
-        '<div class = "temporary"> Sorry, there was an error loading the results. Please try again </div'
-      ); // Message incase there is no property information or city is not found
-      console.log(err);
-    });
-};
+  $(newHotellay2).append(
+    '<div class="uk-grid uk-width-2-3@m uk-width-1-1@s"> <div class="uk-width-1-2 uk-margin-small"> <h4>' +
+    propertyName +
+    "<br> </h4> <h6>" +
+    address +
+    ' </h6>  <p> <span id="neighborhoodName">' +
+    neighbourhoodName +
+    '</span> <br>  </p>  <span id = "reviewRating" class="uk-position-bottom uk-position-relative">' +
+    reviewRating + '</span>' +
+    '<span> /5 Rating ( </span>' + '<span id = "totalGuestReviews">' +
+    totalGuestReviews + '</span>' +
+    '<span> Reviews)</span></div> <div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price"> <h2 class="uk-margin-remove-vertical">' +
+    pricee +
+    '</h2> <b>per Night</b> <button class="reserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded" id="' +
+    identity +
+    '">Reserve</button> <div> <span class="uk-text-success">Reserve Now, Pay Later</span><br> <span class="uk-text-success">Free Cancellation</span> </div> </div>  </div>'
+  );
+}
 
 /* -------------------- OBTAIN ID FOR CITY REQUIRED FOR PROPERTY SEARCH-------------------- */
 
@@ -221,7 +171,7 @@ var getProperties = function (
 
       if (response.ok) {
         response.json().then(function (data6) {
-          $("#hotels-container").css("display", "flex"); // Unhide the document class
+          $("#hotels-container").css("display", ""); // Unhide the document class
 
           if (data6.data.body.searchResults.results.length !== 0) {
             var propId = [];
@@ -238,10 +188,16 @@ var getProperties = function (
               var starRating =
                 data6.data.body.searchResults.results[i].starRating;
               if (starRating == "undefined" || starRating == undefined) {
-                starRating = "No ratings availabe";
+                starRating = "No ratings available";
               }
               var url3 = urlThumb.split("_");
               var url4 = url3[0] + "_y.jpg"; // URL for property image
+              var propertyName =
+                data6.data.body.searchResults.results[i].name;
+              var address = data6.data.body.searchResults.results[i].address.streetAddress + "<br>" + data6.data.body.searchResults.results[i].address.locality + ", " + data6.data.body.searchResults.results[i].address.region + " " + data6.data.body.searchResults.results[i].address.postalCode + "<br>" + data6.data.body.searchResults.results[i].address.countryName
+              var totalGuestReviews = data6.data.body.searchResults.results[i].guestReviews.total;
+              var neighbourhoodName = data6.data.body.searchResults.results[i].neighbourhood;
+              var price = data6.data.body.searchResults.results[i].ratePlan.price.current;
 
               displayPropertyInfo(
                 propIde[i],
@@ -251,7 +207,12 @@ var getProperties = function (
                 currency,
                 i,
                 url4,
-                starRating
+                starRating,
+                propertyName,
+                address,
+                totalGuestReviews,
+                neighbourhoodName,
+                price
               );
             }
           } else {
@@ -285,7 +246,13 @@ var setInitial = function () {
         hotels[i].NumAdults,
         hotels[i].Currcy,
         i,
-        hotels[i].UrlThumbNl
+        hotels[i].UrlThumbNl,
+        hotels[i].rating,
+        hotels[i].hotelName,
+        hotels[i].address,
+        hotels[i].guestReviews,
+        hotels[i].neighborhood,
+        hotels[i].price
       );
       var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
       if (tempHotel !== null) {
@@ -431,6 +398,37 @@ $(document).on("click", ".reserve", function () {
     .children()
     .children("img");
   var urlTn = imageUrlElement[0].currentSrc;
+  var prcEl = $(this)
+    .parent()
+    .children("h2");
+  var prc = prcEl[0].innerHTML;
+  console.log("ppprice  :" + prc);
+  var neighborEl = $(this)
+    .parent()
+    .parent()
+    .find("#neighborhoodName");
+  var neighbor = neighborEl.text();
+  var ratingEl = $(this)
+    .parent()
+    .parent()
+    .find("#reviewRating");
+  var rating = ratingEl.text();
+  var guestReviewEl = $(this)
+    .parent()
+    .parent()
+    .find("#totalGuestReviews");
+  guestReviews = guestReviewEl.text();
+  var hotelNameEl = $(this)
+    .parent()
+    .parent()
+    .find("h4");
+  var hotelName = hotelNameEl[0].innerText;
+  var addressEl = $(this)
+    .parent()
+    .parent()
+    .find("h6");
+  var address = addressEl[0].innerText;
+
 
   hotels = JSON.parse(localStorage.getItem("hotels"));
 
@@ -439,6 +437,7 @@ $(document).on("click", ".reserve", function () {
   if (hotels == null) {
     var hotels = [
       {
+        // Object for local storage
         IdCity: "",
         ChkInDate: "",
         ChkOutDate: "",
@@ -446,6 +445,12 @@ $(document).on("click", ".reserve", function () {
         Currcy: "",
         UrlThumbNl: "",
         dateSearch: "",
+        price: "",
+        neighborhood: "",
+        rating: "",
+        guestReviews: "",
+        hotelName: "",
+        address: ""
       },
     ];
     hotels[0].IdCity = propval;
@@ -455,6 +460,12 @@ $(document).on("click", ".reserve", function () {
     hotels[0].Currcy = curr;
     hotels[0].UrlThumbNl = urlTn;
     hotels[0].dateSearch = moment().format("YYYY-MM-DD");
+    hotels[0].price = prc;
+    hotels[0].neighborhood = neighbor;
+    hotels[0].rating = rating;
+    hotels[0].guestReviews = guestReviews;
+    hotels[0].hotelName = hotelName;
+    hotels[0].address = address;
   }
   // first in last out depending on required size of history
   else {
@@ -477,6 +488,12 @@ $(document).on("click", ".reserve", function () {
         Currcy: curr,
         NumAdults: adults,
         dateSearch: moment().format("YYYY-MM-DD"),
+        price: prc,
+        neighborhood: neighbor,
+        rating: rating,
+        guestReviews: guestReviews,
+        hotelName: hotelName,
+        address: address
       });
     }
   }
