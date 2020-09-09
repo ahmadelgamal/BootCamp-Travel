@@ -45,7 +45,7 @@ const baseUrl = "https://test.api.amadeus.com";
 // url for requesting and checking on access token
 const accessTokenPath = "/v1/security/oauth2/token/";
 // access token must be renewed for 30 minutes at a time
-const accessToken = "AVpqizcIGIbTqhxWgh9QFSTv2joS";
+const accessToken = "OLDFZzD9UAHRDOAqAO7tzUDfq6Us";
 // `value` of `headers` "Authorization" `key`
 const authorizationValue = "Bearer " + accessToken;
 
@@ -274,11 +274,12 @@ var saveUrl = function () {
     apiUrl = roundTripFlightOffersSearchApiUrl;
   }
 };
+/* ---------- gets user input from search form ---------- */
 
 /* ---------- search form handler ---------- */
 var searchFormHandler = function () {
   if (flightsTabEl.className === "uk-active") {
-    // prevents the initials submit from triggering a refresh of index.html
+    // prevents the search-form submit from triggering a refresh of index.html
     event.preventDefault();
 
     /* ---------- gets current values in search form ---------- */
@@ -287,6 +288,7 @@ var searchFormHandler = function () {
     // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
     destinationCode = goingToEl.value;
     departureDate = dateDepartureEl.value;
+    // checks if user selects roundtrip or one-way
     if (
       tripSelectEl.options[tripSelectEl.selectedIndex].value === "Roundtrip"
     ) {
@@ -295,12 +297,13 @@ var searchFormHandler = function () {
       returnDate = "";
     }
     numberOfAdults = numberOfAdultsEl.value.charAt(0);
+    // if no class is selected, then "economy" is selected as default
     travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
     if (travelClass === "") {
       travelClass = "ECONOMY";
     }
 
-    // calls function in script.js
+    // calls function in script.js to display id=flights-container (overall flights container)
     showFlights();
     // clears data from previous search, and informs user that search is running
     flightsGridEl.innerHTML = "Searching...";
