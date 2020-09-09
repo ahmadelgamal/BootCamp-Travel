@@ -12,7 +12,7 @@
 /* ----------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ---------- */
 /* -------------------------------------------------------------------------- */
 
-/* --------------- declares constants to point to html elements ------------- */
+/* -- declares constants to point to existing html elements in index.html --- */
 // constants that point to search form
 const flightsTabEl = document.getElementById("flights-tab");
 const searchFormEl = document.getElementById("form");
@@ -24,9 +24,13 @@ const tripSelectEl = document.getElementById("trip"); // One-way or Roundtrip
 const travelClassEl = document.getElementById("travel-class"); // ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
 const numberOfAdultsEl = document.getElementById("guests-select");
 
-// constants that point to flights search history grid
+// constant that points to searching message element
+const searchingMessageEl = document.getElementById("searching-message");
+// constant that points to error message element
+const errorMessageEl = document.getElementById("error-message");
+// constant that points to flights search history grid
 const flightsPastSearchGridEl = document.getElementById("past-search-grid");
-// constants that point to flights grid
+// constant that points to flights grid
 const flightsGridEl = document.getElementById("flights-grid");
 
 /* ----- declares variables for user input for "flight offers search" amadeus api ----- */
@@ -43,7 +47,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "Wr8oQL8OCCqUXsCOfWcE4wvYCsw6"; // access token must be renewed for 30 minutes at a time
+const accessToken = "EUFpR7pZFRAbPLsBWUSGteRT3fK5"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
@@ -70,6 +74,26 @@ const excludedAirlineCodes = "&excludedAirlineCodes="; // multiple airlines allo
 var oneWayFlightOffersSearchApiUrl;
 var roundTripFlightOffersSearchApiUrl;
 var apiUrl;
+
+//declares array to store fetched data from amadeus
+var amadeusData = [];
+
+// counters for writing api data to html
+var flightCounter;
+var intineraryCounter;
+var segmentCounter;
+var travelerCounter;
+
+/* ---------------- declares constants for airhex api urls ----------------- */
+const airhexHost = "https://content.airhex.com/content/logos/airlines";
+const carrierLogoWidth = 70; // requested logo width in pixels
+const carrierLogoHeight = 70; // requested logo height in pixels
+const carrierLogoType = "s"; // Type of a logo: r - for rectangular, s - for square and t - for tail logo
+const carrierLogoFormat = ".png"; // can change to .svg
+const carrierLogoProportions = "?proportions=keep"; // keeps proportions of logo image
+const queryairhexApi = "?md5apikey=";
+const airhexApiKey = "VDjfGgv8mxiTvvLLwGicD6V2eq";
+
 /* -------------------------------------------------------------------------- */
 /* ----------- ENDS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ------------ */
 /* -------------------------------------------------------------------------- */
@@ -90,11 +114,13 @@ var getFlightOffersSearch = function () {
       return response.json();
     })
     .then(function (data) {
+      amadeusData = data;
+      console.log(amadeusData);
       writeData(data);
     })
     .catch(function (error) {
-      flightsGridEl.innerHTML =
-        "No flights were found. Please change the dates or cities.";
+      errorMessageEl.textContent =
+        "There was an error in this search. Please change the dates or cities.";
     });
 };
 /* -------------------------------------------------------------------------- */
@@ -318,7 +344,9 @@ var searchFormHandler = function () {
     // calls function in script.js to display id=flights-container (overall flights container)
     showFlights();
     // clears data from previous search, and informs user that search is running
-    flightsGridEl.innerHTML = "Searching...";
+    searchingMessageEl.textContent = "Searching...";
+    // resets flights grid
+    flightsGridEl.innerHTML = "";
     saveUrl();
     getFlightOffersSearch();
   }
@@ -388,16 +416,20 @@ var writeData = function (data) {
   var flightCount = data.meta.count;
 
   // displays number of matching search results
-  flightsGridEl.innerHTML =
+  searchingMessageEl.innerHTML =
     "There are " + flightCount + " flights available for your selected route!";
 
   // each flight details
-  for (var i = 0; i < flightCount; i++) {
+  for (flightCounter = 0; flightCounter < flightCount; flightCounter++) {
     // gets number of itineraries
-    var intineraryCount = data.data[i].itineraries.length;
+    var intineraryCount = data.data[flightCounter].itineraries.length;
 
     // loops through number of itineraries to create a container element for each
-    for (var y = 0; y < intineraryCount; y++) {
+    for (
+      intineraryCounter = 0;
+      intineraryCounter < intineraryCount;
+      intineraryCounter++
+    ) {
       var itineraryContainerEl = document.createElement("div");
       itineraryContainerEl.classList.add(
         "uk-grid",
@@ -410,40 +442,78 @@ var writeData = function (data) {
       flightsGridEl.appendChild(itineraryContainerEl);
 
       // number of segments for each flight. it is also "number of stops" for "trip"
-      var segmentCount = data.data[i].itineraries[y].segments.length;
+      var segmentCount =
+        data.data[flightCounter].itineraries[intineraryCounter].segments.length;
 
       /* ----- allocates data from fetch into variables ----- */
-      for (var x = 0; x < segmentCount; x++) {
+      for (
+        segmentCounter = 0;
+        segmentCounter < segmentCount;
+        segmentCounter++
+      ) {
         // essential details
-        var carrierCode = data.data[i].itineraries[y].segments[x].carrierCode;
+        var carrierCode =
+          data.data[flightCounter].itineraries[intineraryCounter].segments[
+            segmentCounter
+          ].carrierCode;
         var carrierFull = carriersCodeList[carrierCode];
-        var flightNumber = data.data[i].itineraries[y].segments[x].number;
+        var flightNumber =
+          data.data[flightCounter].itineraries[intineraryCounter].segments[
+            segmentCounter
+          ].number;
         var departureCityCode =
-          data.data[i].itineraries[y].segments[x].departure.iataCode;
+          data.data[flightCounter].itineraries[intineraryCounter].segments[
+            segmentCounter
+          ].departure.iataCode;
         var arrivalCityCode =
-          data.data[i].itineraries[y].segments[x].arrival.iataCode;
+          data.data[flightCounter].itineraries[intineraryCounter].segments[
+            segmentCounter
+          ].arrival.iataCode;
         var departureTime =
-          data.data[i].itineraries[y].segments[x].departure.at;
-        var arrivalTime = data.data[i].itineraries[y].segments[x].arrival.at;
-        var travelerPricingsCount = data.data[i].travelerPricings.length;
+          data.data[flightCounter].itineraries[intineraryCounter].segments[
+            segmentCounter
+          ].departure.at;
+        var arrivalTime =
+          data.data[flightCounter].itineraries[intineraryCounter].segments[
+            segmentCounter
+          ].arrival.at;
+        var travelerPricingsCount =
+          data.data[flightCounter].travelerPricings.length;
         var cabin = [];
-        for (var z = 0; z < travelerPricingsCount; z++) {
+        for (
+          travelerCounter = 0;
+          travelerCounter < travelerPricingsCount;
+          travelerCounter++
+        ) {
           cabin.push(
-            data.data[i].travelerPricings[z].fareDetailsBySegment[x].cabin
+            data.data[flightCounter].travelerPricings[travelerCounter]
+              .fareDetailsBySegment[segmentCounter].cabin
           );
         }
-        var grandTotalPrice = data.data[i].price.grandTotal;
+        var grandTotalPrice = data.data[flightCounter].price.grandTotal;
 
         // more details
         var departureTerminal =
-          data.data[i].itineraries[y].segments[x].departure.terminal;
+          data.data[flightCounter].itineraries[intineraryCounter].segments[
+            segmentCounter
+          ].departure.terminal;
         var arrivalTerminal =
-          data.data[i].itineraries[y].segments[x].arrival.terminal;
-        var flightDuration = data.data[i].itineraries[y].segments[x].duration;
+          data.data[flightCounter].itineraries[intineraryCounter].segments[
+            segmentCounter
+          ].arrival.terminal;
+        var flightDuration =
+          data.data[flightCounter].itineraries[intineraryCounter].segments[
+            segmentCounter
+          ].duration;
         var airClass = [];
-        for (var z = 0; z < travelerPricingsCount; z++) {
+        for (
+          travelerCounter = 0;
+          travelerCounter < travelerPricingsCount;
+          travelerCounter++
+        ) {
           airClass.push(
-            data.data[i].travelerPricings[z].fareDetailsBySegment[x].class
+            data.data[flightCounter].travelerPricings[travelerCounter]
+              .fareDetailsBySegment[segmentCounter].class
           );
         }
 
@@ -473,11 +543,20 @@ var writeData = function (data) {
         carrierLogoEl.alt = "airline logo";
         carrierLogoEl.style.width = "70";
         carrierLogoEl.style.height = "70";
-        // HARDCODED. NEED TO CHANGE TO GET CORRESPONDING LOGO
         carrierLogoEl.src =
-          "https://content.airhex.com/content/logos/airlines_" +
+          airhexHost +
+          "_" +
           carrierCode +
-          "_70_70_s.png";
+          "_" +
+          carrierLogoWidth +
+          "_" +
+          carrierLogoHeight +
+          "_" +
+          carrierLogoType +
+          carrierLogoFormat +
+          carrierLogoProportions +
+          queryairhexApi +
+          airhexApiKey;
         segmentContainerEl.appendChild(carrierLogoEl);
 
         /* ----- flight details ----- */
