@@ -1,18 +1,18 @@
-/* -------------------------------------------------------------------------- */
-/* ----------------------------- UCB EXTENSION ------------------------------ */
-/* ---------- BLENDED ONLINE | FULL STACK WEB DEVELOPMENT BOOTCAMP ---------- */
-/* ------------------ PROJECT 1 GROUP 7 | BOOTCAMP TRAVEL ------------------- */
-/* ----------------------- THIS FILE WAS DEVELOPED BY ----------------------- */
-/* ----------------------------- AHMAD EL GAMAL ----------------------------- */
-/* -------------------------- OTHER GROUP MEMBERS --------------------------- */
-/* ------------------- GAUTAM TANKHA & MARCO EVANGELISTA -------------------- */
-/* -------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------- */
+/* --------------------------------------- UCB EXTENSION ---------------------------------------- */
+/* -------------------- BLENDED ONLINE | FULL STACK WEB DEVELOPMENT BOOTCAMP -------------------- */
+/* ---------------------------- PROJECT 1 GROUP 7 | BOOTCAMP TRAVEL ----------------------------- */
+/* --------------------------------- THIS FILE WAS DEVELOPED BY --------------------------------- */
+/* --------------------------------------- AHMAD EL GAMAL --------------------------------------- */
+/* ------------------------------------ OTHER GROUP MEMBERS ------------------------------------- */
+/* ----------------------------- GAUTAM TANKHA & MARCO EVANGELISTA ------------------------------ */
+/* ---------------------------------------------------------------------------------------------- */
 
-/* -------------------------------------------------------------------------- */
-/* ----------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ---------- */
-/* -------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------- */
+/* --------------------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES -------------------- */
+/* ---------------------------                                        --------------------------- */
 
-/* -- declares constants to point to existing html elements in index.html --- */
+/* ------------ declares constants to point to existing html elements in index.html ------------- */
 // constants that point to search form
 const flightsTabEl = document.getElementById("flights-tab");
 const searchFormEl = document.getElementById("form");
@@ -27,6 +27,12 @@ const numberOfAdultsEl = document.getElementById("guests-select");
 // constants that point to sorting flight search elements
 // this time I'm using querySelector for a change :)
 const sortFlightsByPriceEl = document.querySelector("#sort-flight-price");
+const sortFlightsByHighestPriceEl = document.querySelector(
+  "#highest-flight-price"
+);
+const sortFlightsByLowestPriceEl = document.querySelector(
+  "#lowest-flight-price"
+);
 
 // constants that point to other flight search elements
 const searchingMessageEl = document.getElementById("searching-message"); // constant that points to searching message element
@@ -34,7 +40,7 @@ const errorMessageEl = document.getElementById("error-message"); // constant tha
 const flightsPastSearchGridEl = document.getElementById("past-search-grid"); // constant that points to flights search history grid
 const flightsGridEl = document.getElementById("flights-grid"); // constant that points to flights grid
 
-/* ----- declares variables for user input for "flight offers search" amadeus api ----- */
+/* ---------- declares variables for user input for "flight offers search" amadeus api ---------- */
 var originCode = goingFromEl.value; // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
 var destinationCode = goingToEl.value; // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
 var departureDate = dateDepartureEl.value; // Format: YYYY-MM-DD
@@ -44,11 +50,11 @@ var travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
 
 const currencyCode = "USD"; // sets currency in fetch request to USD (default in amadeus is euro)
 
-/* ---------- declares common constants & variables of amadeus apis url --------- */
+/* ------------------ declares common constants & variables of amadeus apis url ----------------- */
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "1RzrPUWCiWdWMBGAPF8Z8SPgvx0h"; // access token must be renewed for 30 minutes at a time
+const accessToken = "O30SaKHhoiJuGZgVxHcxDhKzQpKG"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
@@ -57,7 +63,7 @@ const queryDestination = "&destinationLocationCode=";
 const queryDepartureDate = "&departureDate=";
 const queryNumberOfAdults = "&adults=";
 
-/* ---------- declares important query variables for "flight offers search" amadeus api ---------- */
+/* --------- declares important query variables for "flight offers search" amadeus api ---------- */
 const queryReturnDate = "&returnDate="; // required for roundtrip flights
 const queryTravelClass = "&travelClass="; // ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
 const queryCurrency = "&currencyCode="; // default is EUR, so needed for USD
@@ -71,7 +77,7 @@ const max = "&max="; // maximum number of flight options (default is 250)
 const includedAirlineCodes = "&includedAirlineCodes="; // multiple airlines allowed, separate with comma (no spaces). cannot be combined with excludedAirlineCodes
 const excludedAirlineCodes = "&excludedAirlineCodes="; // multiple airlines allowed, separate with comma (no spaces). cannot be combined with includedAirlineCodes
 
-/* ---------------- declares variables for amadeus api urls ----------------- */
+/* -------------------------- declares variables for amadeus api urls --------------------------- */
 var oneWayFlightOffersSearchApiUrl;
 var roundTripFlightOffersSearchApiUrl;
 var apiUrl;
@@ -85,7 +91,7 @@ var intineraryCounter;
 var segmentCounter;
 var travelerCounter;
 
-/* ---------------- declares constants for airhex api urls ----------------- */
+/* --------------------------- declares constants for airhex api urls --------------------------- */
 const airhexHost = "https://content.airhex.com/content/logos/airlines";
 const carrierLogoWidth = 70; // requested logo width in pixels
 const carrierLogoHeight = 70; // requested logo height in pixels
@@ -95,17 +101,18 @@ const carrierLogoProportions = "?proportions=keep"; // keeps proportions of logo
 const queryairhexApi = "?md5apikey=";
 const airhexApiKey = "VDjfGgv8mxiTvvLLwGicD6V2eq";
 
+/* ---------------------------------- declares other variables ---------------------------------- */
 var toggleInterval; // timer for toggling "searching" message
 
-/* -------------------------------------------------------------------------- */
-/* ----------- ENDS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ------------ */
-/* -------------------------------------------------------------------------- */
+/* ---------------------------                                        --------------------------- */
+/* --------------------- ENDS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ---------------------- */
+/* ---------------------------------------------------------------------------------------------- */
 
-/* -------------------------------------------------------------------------- */
-/* ---------------------------- BEGINS FETCH APIS --------------------------- */
-/* -------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------- */
+/* -------------------------------------- BEGINS FETCH APIS ------------------------------------- */
+/* ---------------------------                                        --------------------------- */
 
-/* ----------------- gets "flight offers search" amadeus api ---------------- */
+/* ------------- gets flight search results from "flight offers search" amadeus api ------------- */
 var getFlightOffersSearch = function () {
   fetch(apiUrl, {
     method: "GET",
@@ -118,6 +125,7 @@ var getFlightOffersSearch = function () {
     })
     .then(function (data) {
       amadeusData = data;
+      console.log(amadeusData);
       writeData();
     })
     .catch(function (error) {
@@ -128,7 +136,7 @@ var getFlightOffersSearch = function () {
     });
 };
 
-/* --------------- gets airline carrier's logo from airhex api -------------- */
+/* ------------------------- gets airline carrier's logo from airhex api ------------------------ */
 var getCarrierLogo = function (carrierCode) {
   logoApiUrl =
     airhexHost +
@@ -147,15 +155,16 @@ var getCarrierLogo = function (carrierCode) {
 
   return logoApiUrl;
 };
-/* -------------------------------------------------------------------------- */
-/* ---------------------------- ENDS FETCH APIS ----------------------------- */
-/* -------------------------------------------------------------------------- */
 
-/* -------------------------------------------------------------------------- */
-/* --------------------------- BEGINS LOCALSTORAGE -------------------------- */
-/* -------------------------------------------------------------------------- */
+/* ---------------------------                                        --------------------------- */
+/* -------------------------------------- ENDS FETCH APIS --------------------------------------- */
+/* ---------------------------------------------------------------------------------------------- */
 
-/* -------------- saves search-form user-input to localStorage -------------- */
+/* ---------------------------------------------------------------------------------------------- */
+/* ------------------------------------- BEGINS LOCALSTORAGE ------------------------------------ */
+/* ---------------------------                                        --------------------------- */
+
+/* ----------------------- saves search-form user-input to localStorage ------------------------ */
 var saveFlightSearch = function () {
   // get today's date (date of search)
   var searchDate = new Date();
@@ -195,7 +204,7 @@ var saveFlightSearch = function () {
   localStorage.setItem("flightSearchHistory", JSON.stringify(flightSearchLS));
 };
 
-/* ---------- creates search history elements on visit and refresh ---------- */
+/* -------------------- creates search history elements on visit and refresh -------------------- */
 var createSearchHistoryElements = function (flightSearchLS) {
   for (let i = 0; i < flightSearchLS.length; i++) {
     // creates container element for each flight search item
@@ -287,7 +296,7 @@ var createSearchHistoryElements = function (flightSearchLS) {
   }
 };
 
-/* ---------- loads search history elements from data in localStorage ---------- */
+/* ------------------ loads search history elements from data in localStorage ------------------- */
 var loadFlightsSearchHistory = function () {
   // get existing search history from localStorage if it exists
   var flightSearchLS = JSON.parse(localStorage.getItem("flightSearchHistory"));
@@ -297,15 +306,37 @@ var loadFlightsSearchHistory = function () {
     createSearchHistoryElements(flightSearchLS);
   }
 };
-/* -------------------------------------------------------------------------- */
-/* ---------------------------- ENDS LOCALSTORAGE --------------------------- */
-/* -------------------------------------------------------------------------- */
+/* ---------------------------                                        --------------------------- */
+/* -------------------------------------- ENDS LOCALSTORAGE ------------------------------------- */
+/* ---------------------------------------------------------------------------------------------- */
 
-/* -------------------------------------------------------------------------- */
-/* ----------------------------- BEGINS METHODS ----------------------------- */
-/* -------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------- */
+/* --------------------------------------- BEGINS METHODS --------------------------------------- */
+/* ---------------------------                                        --------------------------- */
 
-/* ------------------- gets current values in search form ------------------- */
+/* ------------------------------------- search-form handler ------------------------------------ */
+var searchFormHandler = function () {
+  if (flightsTabEl.className === "uk-active") {
+    // prevents the search-form submit from triggering a refresh of index.html
+    event.preventDefault();
+
+    captureSearchForm();
+    // clears previous fetch from memory;
+    amadeusData = [];
+    // calls function in script.js to display id=flights-container (overall flights container)
+    showFlights();
+    // informs user that search is running
+    searchingMessage();
+    // clears data from previous search
+    flightsGridEl.innerHTML = "";
+    // clears error message from previous search
+    errorMessageEl.textContent = "";
+    saveUrl();
+    getFlightOffersSearch();
+  }
+};
+
+/* ----------------------------- gets current values in search form ----------------------------- */
 var captureSearchForm = function () {
   // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
   originCode = goingFromEl.value;
@@ -326,7 +357,7 @@ var captureSearchForm = function () {
   }
 };
 
-/* ------------- saves api url depending on one-way or roundtrip ------------ */
+/* -------------------- saves api url depending on one-way or roundtrip input ------------------- */
 var saveUrl = function () {
   // full "flight offers search" api url for one-way
   oneWayFlightOffersSearchApiUrl =
@@ -358,7 +389,7 @@ var saveUrl = function () {
   }
 };
 
-/* -------------- displays "searching" message during search -------------- */
+/* ------------------------- displays "searching" message during search ------------------------- */
 var searchingMessage = function () {
   toggleInterval = setInterval(toggleMessage, 500);
 
@@ -378,7 +409,7 @@ var searchingMessage = function () {
   }
 };
 
-/* --------------- converts time from fetch to ui time format --------------- */
+/* ------------------------- converts time from fetch to ui time format ------------------------- */
 var convertTime = function (timeToConvert) {
   // first change time to proper format
   var convertedTime = timeToConvert.split("");
@@ -429,7 +460,7 @@ var convertTime = function (timeToConvert) {
   return convertedTime;
 };
 
-/* --------------- converts price from fetch to comma separated format --------------- */
+/* -------------------- converts price from fetch to comma separated format --------------------- */
 var convertPrice = function (priceToConvert) {
   var convertedPrice = priceToConvert.toString();
   convertedPrice = convertedPrice.split("");
@@ -442,30 +473,12 @@ var convertPrice = function (priceToConvert) {
   return convertedPrice;
 };
 
-/* --------------------------- search form handler -------------------------- */
-var searchFormHandler = function () {
-  if (flightsTabEl.className === "uk-active") {
-    // prevents the search-form submit from triggering a refresh of index.html
-    event.preventDefault();
-
-    captureSearchForm();
-    // clears previous fetch from memory;
-    amadeusData = [];
-    // calls function in script.js to display id=flights-container (overall flights container)
-    showFlights();
-    // informs user that search is running
-    searchingMessage();
-    // clears data from previous search
-    flightsGridEl.innerHTML = "";
-    saveUrl();
-    getFlightOffersSearch();
-  }
-};
-
-/* ------ writes data from "flight offers search" amadeus api to html ------- */
+/* ---------------- writes data from "flight offers search" amadeus api to html ----------------- */
 var writeData = function (data) {
   // if fetch was successful, then save search user input to localStorage
   saveFlightSearch();
+  sortAmadeusData = amadeusData.data;
+  console.log(sortAmadeusData.sort(compare));
 
   // dictionary of codes. used to convert codes to full names
   var carriersCodeList = amadeusData.dictionaries.carriers;
@@ -671,34 +684,64 @@ var writeData = function (data) {
     priceContainerEl.appendChild(saveBtn);
   }
 };
-/* -------------------------------------------------------------------------- */
-/* ------------------------------ ENDS METHODS ------------------------------ */
-/* -------------------------------------------------------------------------- */
 
-/* -------------------------------------------------------------------------- */
-/* --------------------------- BEGINS LOAD EVENTS --------------------------- */
-/* -------------------------------------------------------------------------- */
+/* ------------------------- sorts search results according to price ---------------------------- */
+// var sortData = function () {
+// if (sortFlightsByLowestPriceEl.className === "active") {
+function compare(a, b) {
+  // console.log(a.copyAmadeusData.price.grandTotal);
+  // console.log(b.copyAmadeusData.price.grandTotal);
+
+  const priceA = a.price.grandTotal;
+  const priceB = b.price.grandTotal;
+
+  let comparison = 0;
+  if (priceA > priceB) {
+    comparison = 1;
+  } else if (priceA < priceB) {
+    comparison = -1;
+  }
+
+  return comparison * -1;
+}
+
+// }
+// };
+
+/* --------------------- sorts search results according to arrival time ------------------------- */
+// NOT DONE YET
+
+/* -------------------- sorts search results according to departure time ------------------------ */
+// NOT DONE YET
+
+/* ---------------------------                                        --------------------------- */
+/* ---------------------------------------- ENDS METHODS ---------------------------------------- */
+/* ---------------------------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------------------------- */
+/* ------------------------------------- BEGINS LOAD EVENTS ------------------------------------- */
+/* ---------------------------                                        --------------------------- */
 loadFlightsSearchHistory();
-/* -------------------------------------------------------------------------- */
-/* ---------------------------- ENDS LOAD EVENTS ---------------------------- */
-/* -------------------------------------------------------------------------- */
+/* ---------------------------                                        --------------------------- */
+/* -------------------------------------- ENDS LOAD EVENTS -------------------------------------- */
+/* ---------------------------------------------------------------------------------------------- */
 
-/* -------------------------------------------------------------------------- */
-/* -------------------------- BEGINS EVENT HANDLERS ------------------------- */
-/* -------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------- */
+/* ------------------------------------ BEGINS EVENT HANDLERS ----------------------------------- */
+/* ---------------------------                                        --------------------------- */
 searchFormEl.addEventListener("submit", searchFormHandler);
 
 // sorts search results by price
 // sortFlightsByPriceEl.addEventListener("onchange")
-/* -------------------------------------------------------------------------- */
-/* -------------------------- ENDS EVENT HANDLERS --------------------------- */
-/* -------------------------------------------------------------------------- */
+/* ---------------------------                                        --------------------------- */
+/* ------------------------------------ ENDS EVENT HANDLERS ------------------------------------- */
+/* ---------------------------------------------------------------------------------------------- */
 
-/* -------------------------------------------------------------------------- */
-/* -------------------------- BEGINS TESTING CODE --------------------------- */
-/* -------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------- */
+/* ------------------------------------ BEGINS TESTING CODE ------------------------------------- */
+/* ---------------------------                                        --------------------------- */
 /*  CODE BELOW IS NOT PART OF THE APP. IT IS ONLY USED FOR TESTING PURPOSES   */
-/* ---------------- begins amadeus credentials status check ----------------- */
+/* -------------------------- begins amadeus credentials status check --------------------------- */
 
 // checks status of access token. expires every 30 minutes
 var accessTokenStatus = function () {
@@ -718,6 +761,6 @@ var accessTokenStatus = function () {
 
 // UNCOMMENT function below to check on status of access token
 // accessTokenStatus();
-/* -------------------------------------------------------------------------- */
-/* --------------------------- ENDS TESTING CODE ---------------------------- */
-/* -------------------------------------------------------------------------- */
+/* ---------------------------                                        --------------------------- */
+/* ------------------------------------- ENDS TESTING CODE -------------------------------------- */
+/* ---------------------------------------------------------------------------------------------- */
