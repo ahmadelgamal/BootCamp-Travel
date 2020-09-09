@@ -8,7 +8,7 @@ var maxHistoryLength = 3; // History length
 var urlKey = "82aa230269msh2cf9909e3ed2b47p118c19jsn0f399e353b6d"; // URL Key
 var newHotellay1 = document.getElementById("hotels-grid"); // Get parent element of HTML document
 var pageNumber = 1; // # of pages to display
-var resultMax = 1; // # of hotels to show up in a single request
+var resultMax = 4; // # of hotels to show up in a single request
 var adults = 1; // # of adults
 curr = "USD"; // Currency
 var sortOrd = "PRICE"; // Sort order
@@ -63,6 +63,7 @@ var displayPropertyInfo = function (
     .then(function (response) {
       response.json().then(function (data3) {
         var guestRv = data3.data.body.guestReviews;
+        console.log(guestRv.brands);
         if (guestRv.brands !== undefined) {
           // var reviewRating = data3.data.body.guestReviews.brands.rating; // Rating information
           var totalReviews = data3.data.body.guestReviews.brands.total; // Total reviews
@@ -73,9 +74,7 @@ var displayPropertyInfo = function (
 
         var propertyName = data3.data.body.propertyDescription.name; // Hotel name
         //  var cityName = data3.data.body.propertyDescription.address.cityName;
-        var price =
-          data3.data.body.propertyDescription.featuredPrice.currentPrice
-            .formatted; // Hotel price
+        var price = data3.data.body.propertyDescription.featuredPrice.currentPrice.formatted; // Hotel price
         var tagline = data3.data.body.propertyDescription.tagline; // Tagline describing hotel
         var neighborhood = data3.neighborhood.neighborhoodName; // Hotel's neighborhood
 
@@ -83,33 +82,33 @@ var displayPropertyInfo = function (
         var hotellayvar = "hotellay" + j.toString();
         $(newHotellay1).append(
           '<div class = "uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal" id = "' +
-            hotellayvar +
-            '">'
+          hotellayvar +
+          '">'
         );
         var newHotellay2 = document.getElementById(hotellayvar);
 
         $(newHotellay2).append(
           '<div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s uk-background-muted"> <img class="uk-border-rounded" src=' +
-            urlTh +
-            "> </div>"
+          urlTh +
+          "> </div>"
         );
 
         $(newHotellay2).append(
           '<div class="uk-grid uk-width-2-3@m uk-width-1-1@s"> <div class="uk-width-1-2 uk-margin-medium"> <h4>' +
-            propertyName +
-            "<br>" +
-            tagline +
-            " </h4>  <p>" +
-            neighborhood +
-            ' <br> <span class="uk-text-success">Reserve Now, Pay Later</span><br> <span class="uk-text-success">Free Cancellation</span> </p>  <span class="uk-position-bottom uk-position-relative">' +
-            reviewRating +
-            "/5 Rating (" +
-            totalReviews +
-            ' Reviews)</span></div> <div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price"> <h2 class="uk-margin-remove-vertical">' +
-            price +
-            '</h2> <b>per Night</b> <button class="reserve uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded" id="' +
-            identity +
-            '">Reserve</button> </div> </div>'
+          propertyName +
+          "<br>" +
+          tagline +
+          " </h4>  <p>" +
+          neighborhood +
+          ' <br> <span class="uk-text-success">Reserve Now, Pay Later</span><br> <span class="uk-text-success">Free Cancellation</span> </p>  <span class="uk-position-bottom uk-position-relative">' +
+          reviewRating +
+          "/5 Rating (" +
+          totalReviews +
+          ' Reviews)</span></div> <div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price"> <h2 class="uk-margin-remove-vertical">' +
+          price +
+          '</h2> <b>per Night</b> <button class="reserve uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded" id="' +
+          identity +
+          '">Reserve</button> </div> </div>'
         );
       });
     })
@@ -126,7 +125,7 @@ var displayPropertyInfo = function (
 var GetIdhotel = function (City, checkIn, checkOut) {
   fetch(
     "https://cors-anywhere.herokuapp.com/https://hotels4.p.rapidapi.com/locations/search?locale=en_US&query=" +
-      City,
+    City,
     {
       method: "GET",
       headers: {
