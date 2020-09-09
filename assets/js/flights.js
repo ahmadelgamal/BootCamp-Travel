@@ -24,6 +24,10 @@ const tripSelectEl = document.getElementById("trip"); // One-way or Roundtrip
 const travelClassEl = document.getElementById("travel-class"); // ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
 const numberOfAdultsEl = document.getElementById("guests-select");
 
+// constants that point to sorting flight search elements
+// this time I'm using querySelector for a change :)
+const sortFlightsByPriceEl = document.querySelector("#sort-flight-price");
+
 // constants that point to other flight search elements
 const searchingMessageEl = document.getElementById("searching-message"); // constant that points to searching message element
 const errorMessageEl = document.getElementById("error-message"); // constant that points to error message element
@@ -44,7 +48,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "unQ9NY8fo7YVuc2WBWmwT2VbmAvn"; // access token must be renewed for 30 minutes at a time
+const accessToken = "PxTV8U8uAqmc5xx8e9qQ54l1v0D4"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
@@ -114,8 +118,7 @@ var getFlightOffersSearch = function () {
     })
     .then(function (data) {
       amadeusData = data;
-      console.log(amadeusData);
-      writeData(data);
+      writeData();
     })
     .catch(function (error) {
       clearInterval(toggleInterval); // stops toggling searching message
@@ -362,6 +365,8 @@ var searchFormHandler = function () {
     event.preventDefault();
 
     captureSearchForm();
+    // clears previous fetch from memory;
+    amadeusData = [];
     // calls function in script.js to display id=flights-container (overall flights container)
     showFlights();
     // informs user that search is running
@@ -443,11 +448,11 @@ var writeData = function (data) {
   saveFlightSearch();
 
   // dictionary of codes. used to convert codes to full names
-  var carriersCodeList = data.dictionaries.carriers;
-  var locationsCityCodeList = data.dictionaries.locations;
+  var carriersCodeList = amadeusData.dictionaries.carriers;
+  var locationsCityCodeList = amadeusData.dictionaries.locations;
 
   // number of flights available matching user input
-  var flightCount = data.meta.count;
+  var flightCount = amadeusData.meta.count;
 
   clearInterval(toggleInterval); // stops toggling searching message
   searchingMessageEl.innerHTML =
@@ -456,7 +461,7 @@ var writeData = function (data) {
   // each flight details
   for (flightCounter = 0; flightCounter < flightCount; flightCounter++) {
     // gets number of itineraries
-    var intineraryCount = data.data[flightCounter].itineraries.length;
+    var intineraryCount = amadeusData.data[flightCounter].itineraries.length;
 
     // loops through number of itineraries to create a container element for each
     for (
@@ -477,7 +482,8 @@ var writeData = function (data) {
 
       // number of segments for each flight. it is also "number of stops" for "trip"
       var segmentCount =
-        data.data[flightCounter].itineraries[intineraryCounter].segments.length;
+        amadeusData.data[flightCounter].itineraries[intineraryCounter].segments
+          .length;
 
       /* ----- allocates data from fetch into variables ----- */
       for (
@@ -487,32 +493,26 @@ var writeData = function (data) {
       ) {
         // essential details
         var carrierCode =
-          data.data[flightCounter].itineraries[intineraryCounter].segments[
-            segmentCounter
-          ].carrierCode;
+          amadeusData.data[flightCounter].itineraries[intineraryCounter]
+            .segments[segmentCounter].carrierCode;
         var carrierFull = carriersCodeList[carrierCode];
         var flightNumber =
-          data.data[flightCounter].itineraries[intineraryCounter].segments[
-            segmentCounter
-          ].number;
+          amadeusData.data[flightCounter].itineraries[intineraryCounter]
+            .segments[segmentCounter].number;
         var departureCityCode =
-          data.data[flightCounter].itineraries[intineraryCounter].segments[
-            segmentCounter
-          ].departure.iataCode;
+          amadeusData.data[flightCounter].itineraries[intineraryCounter]
+            .segments[segmentCounter].departure.iataCode;
         var arrivalCityCode =
-          data.data[flightCounter].itineraries[intineraryCounter].segments[
-            segmentCounter
-          ].arrival.iataCode;
+          amadeusData.data[flightCounter].itineraries[intineraryCounter]
+            .segments[segmentCounter].arrival.iataCode;
         var departureTime =
-          data.data[flightCounter].itineraries[intineraryCounter].segments[
-            segmentCounter
-          ].departure.at;
+          amadeusData.data[flightCounter].itineraries[intineraryCounter]
+            .segments[segmentCounter].departure.at;
         var arrivalTime =
-          data.data[flightCounter].itineraries[intineraryCounter].segments[
-            segmentCounter
-          ].arrival.at;
+          amadeusData.data[flightCounter].itineraries[intineraryCounter]
+            .segments[segmentCounter].arrival.at;
         var travelerPricingsCount =
-          data.data[flightCounter].travelerPricings.length;
+          amadeusData.data[flightCounter].travelerPricings.length;
         var cabin = [];
         for (
           travelerCounter = 0;
@@ -520,25 +520,22 @@ var writeData = function (data) {
           travelerCounter++
         ) {
           cabin.push(
-            data.data[flightCounter].travelerPricings[travelerCounter]
+            amadeusData.data[flightCounter].travelerPricings[travelerCounter]
               .fareDetailsBySegment[segmentCounter].cabin
           );
         }
-        var grandTotalPrice = data.data[flightCounter].price.grandTotal;
+        var grandTotalPrice = amadeusData.data[flightCounter].price.grandTotal;
 
         // more details
         var departureTerminal =
-          data.data[flightCounter].itineraries[intineraryCounter].segments[
-            segmentCounter
-          ].departure.terminal;
+          amadeusData.data[flightCounter].itineraries[intineraryCounter]
+            .segments[segmentCounter].departure.terminal;
         var arrivalTerminal =
-          data.data[flightCounter].itineraries[intineraryCounter].segments[
-            segmentCounter
-          ].arrival.terminal;
+          amadeusData.data[flightCounter].itineraries[intineraryCounter]
+            .segments[segmentCounter].arrival.terminal;
         var flightDuration =
-          data.data[flightCounter].itineraries[intineraryCounter].segments[
-            segmentCounter
-          ].duration;
+          amadeusData.data[flightCounter].itineraries[intineraryCounter]
+            .segments[segmentCounter].duration;
         var airClass = [];
         for (
           travelerCounter = 0;
@@ -546,7 +543,7 @@ var writeData = function (data) {
           travelerCounter++
         ) {
           airClass.push(
-            data.data[flightCounter].travelerPricings[travelerCounter]
+            amadeusData.data[flightCounter].travelerPricings[travelerCounter]
               .fareDetailsBySegment[segmentCounter].class
           );
         }
@@ -672,14 +669,6 @@ var writeData = function (data) {
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */
-/* -------------------------- BEGINS EVENT HANDLERS ------------------------- */
-/* -------------------------------------------------------------------------- */
-searchFormEl.addEventListener("submit", searchFormHandler);
-/* -------------------------------------------------------------------------- */
-/* -------------------------- ENDS EVENT HANDLERS --------------------------- */
-/* -------------------------------------------------------------------------- */
-
-/* -------------------------------------------------------------------------- */
 /* --------------------------- BEGINS LOAD EVENTS --------------------------- */
 /* -------------------------------------------------------------------------- */
 loadFlightsSearchHistory();
@@ -688,15 +677,23 @@ loadFlightsSearchHistory();
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */
-/* -- CODE BELOW IS NOT PART OF THE APP AND SHOULD BE DELETED BEFORE LAUNCH - */
+/* -------------------------- BEGINS EVENT HANDLERS ------------------------- */
+/* -------------------------------------------------------------------------- */
+searchFormEl.addEventListener("submit", searchFormHandler);
+
+// sorts search results by price
+// sortFlightsByPriceEl.addEventListener("onchange")
+/* -------------------------------------------------------------------------- */
+/* -------------------------- ENDS EVENT HANDLERS --------------------------- */
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */
-/* ----------------------- BEGINS AMADEUS CREDENTIALS ----------------------- */
+/* -------------------------- BEGINS TESTING CODE --------------------------- */
 /* -------------------------------------------------------------------------- */
+/*  CODE BELOW IS NOT PART OF THE APP. IT IS ONLY USED FOR TESTING PURPOSES   */
+/* ---------------- begins amadeus credentials status check ----------------- */
 
-/* -------- checks status of access token. expires every 30 minutes --------- */
-/* -- not related to running of website application. used for testing only -- */
+// checks status of access token. expires every 30 minutes
 var accessTokenStatus = function () {
   var fetchAccessToken = baseUrl + accessTokenPath + accessToken;
 
@@ -715,5 +712,5 @@ var accessTokenStatus = function () {
 // UNCOMMENT function below to check on status of access token
 // accessTokenStatus();
 /* -------------------------------------------------------------------------- */
-/* ------------------------ ENDS AMADEUS CREDENTIALS ------------------------ */
+/* --------------------------- ENDS TESTING CODE ---------------------------- */
 /* -------------------------------------------------------------------------- */
