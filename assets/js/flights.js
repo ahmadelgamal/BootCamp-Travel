@@ -8,8 +8,9 @@
 /* ------------------- GAUTAM TANKHA & MARCO EVANGELISTA -------------------- */
 /* -------------------------------------------------------------------------- */
 
-/* ----------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ----------- */
-/* --------------- declares constants to point to html elements -------------- */
+/* -------------------------------------------------------------------------- */
+/* ----------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ---------- */
+/* --------------- declares constants to point to html elements ------------- */
 // constants that point to search form
 const flightsTabEl = document.getElementById("flights-tab");
 const searchFormEl = document.getElementById("form");
@@ -27,30 +28,21 @@ const flightsPastSearchGridEl = document.getElementById("past-search-grid");
 const flightsGridEl = document.getElementById("flights-grid");
 
 /* ----- declares variables for user input for "flight offers search" amadeus api ----- */
-// CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
-var originCode = goingFromEl.value;
-// CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
-var destinationCode = goingToEl.value;
+var originCode = goingFromEl.value; // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
+var destinationCode = goingToEl.value; // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
 var departureDate = dateDepartureEl.value; // Format: YYYY-MM-DD
 var returnDate = dateReturnEl.value; // Format: YYYY-MM-DD
 var numberOfAdults = numberOfAdultsEl.value.charAt(0);
 var travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
 
-// sets currency to USD in fetch request (default in amadeus is euro)
-const currencyCode = "USD";
+const currencyCode = "USD"; // sets currency in fetch request to USD (default in amadeus is euro)
 
-/* ---------- declares common constants & variables of amadeus apis ---------- */
-// amadeus for developers testing baseUrl
-const baseUrl = "https://test.api.amadeus.com";
-// url for requesting and checking on access token
-const accessTokenPath = "/v1/security/oauth2/token/";
-// access token must be renewed for 30 minutes at a time
-const accessToken = "AVpqizcIGIbTqhxWgh9QFSTv2joS";
-// `value` of `headers` "Authorization" `key`
-const authorizationValue = "Bearer " + accessToken;
-
-// path for flight offers search
-const flightOffersSearchPath = "/v2/shopping/flight-offers";
+/* ---------- declares common constants & variables of amadeus apis url --------- */
+const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
+const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
+const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
+const accessToken = "OLDFZzD9UAHRDOAqAO7tzUDfq6Us"; // access token must be renewed for 30 minutes at a time
+const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
 const queryOrigin = "?originLocationCode=";
@@ -72,14 +64,113 @@ const max = "&max="; // maximum number of flight options (default is 250)
 const includedAirlineCodes = "&includedAirlineCodes="; // multiple airlines allowed, separate with comma (no spaces). cannot be combined with excludedAirlineCodes
 const excludedAirlineCodes = "&excludedAirlineCodes="; // multiple airlines allowed, separate with comma (no spaces). cannot be combined with includedAirlineCodes
 
-/* ---------- declares variables for amadeus api urls ---------- */
+/* ---------------- declares variables for amadeus api urls ----------------- */
 var oneWayFlightOffersSearchApiUrl;
 var roundTripFlightOffersSearchApiUrl;
 var apiUrl;
-/* -------------------- ENDS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES -------------------- */
 
-/* -------------------- BEGINS FETCH APIS -------------------- */
-/* ---------- gets "flight offers search" amadeus api ---------- */
+/* ----------- ENDS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ------------ */
+/* -------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------- */
+/* --------- BEGINS CREATING FLIGHT ELEMENTS FOR VISIT AND REFRESH ---------- */
+/* ---------- creates search history elements on visit and refresh ---------- */
+var createSearchHistoryElements = function (flightSearchLS) {
+  for (let i = 0; i < flightSearchLS.length; i++) {
+    // creates container element for each flight search item
+    var flightSearchHistoryContainerEl = document.createElement("div");
+    flightSearchHistoryContainerEl.classList.add(
+      "uk-grid",
+      "uk-width-1-1",
+      "uk-background-default",
+      "uk-border-rounded",
+      "test-border",
+      "margin-zero"
+    );
+    flightsPastSearchGridEl.appendChild(flightSearchHistoryContainerEl);
+
+    // creates container element for left column
+    var flightSearchHistoryEl = document.createElement("div");
+    flightSearchHistoryEl.classList.add(
+      "uk-width-1-2",
+      "uk-padding-remove-horizontal"
+    );
+    flightSearchHistoryContainerEl.appendChild(flightSearchHistoryEl);
+
+    var searchedOnEl = document.createElement("p");
+    searchedOnEl.innerHTML = "Searched on " + flightSearchLS[i].dateOfSearch;
+    flightSearchHistoryEl.appendChild(searchedOnEl);
+
+    var routeEl = document.createElement("h4");
+    routeEl.innerHTML =
+      "<span class='fa'>" +
+      flightSearchLS[i].from +
+      " &#xf072; " +
+      flightSearchLS[i].to +
+      "</span>";
+    flightSearchHistoryEl.appendChild(routeEl);
+
+    var tripDateEl = document.createElement("p");
+    tripDateEl.className = "fa";
+    if (flightSearchLS[i].returns === "") {
+      tripDateEl.innerHTML = "&#xf783; " + flightSearchLS[i].departs + "<br />";
+    } else {
+      tripDateEl.innerHTML =
+        "&#xf783; " +
+        flightSearchLS[i].departs +
+        "<br />" +
+        "&#xf783; " +
+        flightSearchLS[i].returns;
+    }
+    flightSearchHistoryEl.appendChild(tripDateEl);
+
+    // creates container element for right-column
+    var flightIconContainerEl = document.createElement("div");
+    flightIconContainerEl.classList.add(
+      "uk-border-rounded",
+      "uk-width-1-2",
+      "uk-padding-small",
+      "price"
+    );
+    flightSearchHistoryContainerEl.appendChild(flightIconContainerEl);
+
+    var flightIconEl = document.createElement("h3");
+    flightIconEl.classList.add(
+      "uk-margin-remove-vertical",
+      "uk-text-center",
+      "fa"
+    );
+    if (flightSearchLS[i].returns === "") {
+      flightIconEl.innerHTML = "&#xf072;<br />One-way";
+    } else {
+      flightIconEl.innerHTML = "&#xf072;<br />Roundtrip";
+    }
+    flightIconContainerEl.appendChild(flightIconEl);
+
+    // // adds button for event listener to make search history items clickable
+    // var flightHistorySelectBtn = document.createElement("button");
+    // flightHistorySelectBtn.classList.add(
+    //   "uk-button",
+    //   "uk-margin-large-top",
+    //   "uk-margin-remove-horizontal",
+    //   "uk-button-large",
+    //   "uk-button-primary",
+    //   "uk-border-rounded",
+    //   "hide"
+    // );
+    // flightHistorySelectBtn.innerHTML = "Select";
+    // flightIconContainerEl.appendChild(flightHistorySelectBtn);
+
+    // adds event listener to flightSearchHistoryContainerEl
+    // flightSearchHistoryContainerEl.onclick = console.log("clicked");
+  }
+};
+/* ---------- ENDS CREATING FLIGHT ELEMENTS FOR VISIT AND REFRESH ----------- */
+/* -------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------- */
+/* ---------------------------- BEGINS FETCH APIS --------------------------- */
+/* ----------------- gets "flight offers search" amadeus api ---------------- */
 var getFlightOffersSearch = function () {
   fetch(apiUrl, {
     method: "GET",
@@ -98,10 +189,12 @@ var getFlightOffersSearch = function () {
         "No flights were found. Please change the dates or cities.";
     });
 };
-/* -------------------- ENDS FETCH -------------------- */
+/* ------------------------------- ENDS FETCH ------------------------------- */
+/* -------------------------------------------------------------------------- */
 
-/* -------------------- BEGINS LOCALSTORAGE -------------------- */
-/* ---------- saves search-form user-input to localStorage ---------- */
+/* -------------------------------------------------------------------------- */
+/* --------------------------- BEGINS LOCALSTORAGE -------------------------- */
+/* -------------- saves search-form user-input to localStorage -------------- */
 var saveFlightSearch = function () {
   // get today's date (date of search)
   var searchDate = new Date();
@@ -111,7 +204,7 @@ var saveFlightSearch = function () {
   var yyyy = searchDate.getFullYear();
   searchDate = mm + "/" + dd + "/" + yyyy;
 
-  // declares array with object to hold current flight search
+  // declares an object to hold user input into flight search form
   var currentFlightSearch = {
     dateOfSearch: searchDate,
     from: originCode,
@@ -120,6 +213,7 @@ var saveFlightSearch = function () {
     returns: returnDate,
   };
 
+  // declares an array to be used for localStorage
   var flightSearchLS = [];
   // get existing search history from localStorage if it exists
   flightSearchLS = JSON.parse(localStorage.getItem("flightSearchHistory"));
@@ -127,7 +221,7 @@ var saveFlightSearch = function () {
   // if there was no search history, then it is set to current flight search
   if (flightSearchLS === null) {
     flightSearchLS = [currentFlightSearch];
-    // otherwise, if there was a search history, then the current search is added on top of the list
+    // otherwise, if there is a search history, then the current search is added on top of the list
   } else {
     flightSearchLS.unshift(currentFlightSearch);
   }
@@ -139,111 +233,24 @@ var saveFlightSearch = function () {
 
   localStorage.setItem("flightSearchHistory", JSON.stringify(flightSearchLS));
 };
-/* ---------- creates search history elements from data in localStorage ---------- */
+
+/* ---------- loads search history elements from data in localStorage ---------- */
 var loadFlightsSearchHistory = function () {
   // get existing search history from localStorage if it exists
   var flightSearchLS = JSON.parse(localStorage.getItem("flightSearchHistory"));
 
-  // if there was no search history, then nothing is displayed under search form
-  if (flightSearchLS === null) {
-    return;
-    // otherwise, if there was a search history, then the search history will write the following elements
-  } else {
-    for (let i = 0; i < flightSearchLS.length; i++) {
-      // Container element for each flight search item
-      var flightSearchHistoryContainerEl = document.createElement("div");
-      flightSearchHistoryContainerEl.classList.add(
-        "uk-grid",
-        "uk-width-1-1",
-        "uk-background-default",
-        "uk-border-rounded",
-        "test-border",
-        "margin-zero"
-      );
-      flightsPastSearchGridEl.appendChild(flightSearchHistoryContainerEl);
-
-      // container element for left column
-      var flightSearchHistoryEl = document.createElement("div");
-      flightSearchHistoryEl.classList.add(
-        "uk-width-1-2",
-        "uk-padding-remove-horizontal"
-      );
-      flightSearchHistoryContainerEl.appendChild(flightSearchHistoryEl);
-
-      var searchedOnEl = document.createElement("p");
-      searchedOnEl.innerHTML = "Searched on " + flightSearchLS[i].dateOfSearch;
-      flightSearchHistoryEl.appendChild(searchedOnEl);
-
-      var routeEl = document.createElement("h4");
-      routeEl.innerHTML =
-        "<span class='fa'>" +
-        flightSearchLS[i].from +
-        " &#xf072; " +
-        flightSearchLS[i].to +
-        "</span>";
-      flightSearchHistoryEl.appendChild(routeEl);
-
-      var tripDateEl = document.createElement("p");
-      tripDateEl.className = "fa";
-      if (flightSearchLS[i].returns === "") {
-        tripDateEl.innerHTML =
-          "&#xf783; " + flightSearchLS[i].departs + "<br />";
-      } else {
-        tripDateEl.innerHTML =
-          "&#xf783; " +
-          flightSearchLS[i].departs +
-          "<br />" +
-          "&#xf783; " +
-          flightSearchLS[i].returns;
-      }
-      flightSearchHistoryEl.appendChild(tripDateEl);
-
-      // container for right-column
-      var flightIconContainerEl = document.createElement("div");
-      flightIconContainerEl.classList.add(
-        "uk-border-rounded",
-        "uk-width-1-2",
-        "uk-padding-small",
-        "price"
-      );
-      flightSearchHistoryContainerEl.appendChild(flightIconContainerEl);
-
-      var flightIconEl = document.createElement("h3");
-      flightIconEl.classList.add(
-        "uk-margin-remove-vertical",
-        "uk-text-center",
-        "fa"
-      );
-      if (flightSearchLS[i].returns === "") {
-        flightIconEl.innerHTML = "&#xf072;<br />One-way";
-      } else {
-        flightIconEl.innerHTML = "&#xf072;<br />Roundtrip";
-      }
-      flightIconContainerEl.appendChild(flightIconEl);
-
-      // // adds button for event listener to make search history items clickable
-      // var flightHistorySelectBtn = document.createElement("button");
-      // flightHistorySelectBtn.classList.add(
-      //   "uk-button",
-      //   "uk-margin-large-top",
-      //   "uk-margin-remove-horizontal",
-      //   "uk-button-large",
-      //   "uk-button-primary",
-      //   "uk-border-rounded",
-      //   "hide"
-      // );
-      // flightHistorySelectBtn.innerHTML = "Select";
-      // flightIconContainerEl.appendChild(flightHistorySelectBtn);
-
-      // adds event listener to flightSearchHistoryContainerEl
-      // flightSearchHistoryContainerEl.onclick = console.log("clicked");
-    }
+  // if there is a search history, the following creates search history elements from data in localStorage
+  if (flightSearchLS !== null) {
+    createSearchHistoryElements(flightSearchLS);
   }
 };
-/* -------------------- ENDS LOCALSTORAGE -------------------- */
 
-/* -------------------- BEGINS METHODS -------------------- */
-/* ---------- saves api url depending on one-way or roundtrip ---------- */
+/* ---------------------------- ENDS LOCALSTORAGE --------------------------- */
+/* -------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------- */
+/* ----------------------------- BEGINS METHODS ----------------------------- */
+/* ------------- saves api url depending on one-way or roundtrip ------------ */
 var saveUrl = function () {
   // full "flight offers search" api url for one-way
   oneWayFlightOffersSearchApiUrl =
@@ -275,32 +282,35 @@ var saveUrl = function () {
   }
 };
 
-/* ---------- search form handler ---------- */
+/* ------------------- gets current values in search form ------------------- */
+var captureSearchForm = function () {
+  // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
+  originCode = goingFromEl.value;
+  // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
+  destinationCode = goingToEl.value;
+  departureDate = dateDepartureEl.value;
+  // checks if user selects roundtrip or one-way
+  if (tripSelectEl.options[tripSelectEl.selectedIndex].value === "Roundtrip") {
+    returnDate = dateReturnEl.value;
+  } else {
+    returnDate = "";
+  }
+  numberOfAdults = numberOfAdultsEl.value.charAt(0);
+  // if no class is selected, then "economy" is selected as default
+  travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
+  if (travelClass === "") {
+    travelClass = "ECONOMY";
+  }
+};
+
+/* --------------------------- search form handler -------------------------- */
 var searchFormHandler = function () {
   if (flightsTabEl.className === "uk-active") {
-    // prevents the initials submit from triggering a refresh of index.html
+    // prevents the search-form submit from triggering a refresh of index.html
     event.preventDefault();
 
-    /* ---------- gets current values in search form ---------- */
-    // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
-    originCode = goingFromEl.value;
-    // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
-    destinationCode = goingToEl.value;
-    departureDate = dateDepartureEl.value;
-    if (
-      tripSelectEl.options[tripSelectEl.selectedIndex].value === "Roundtrip"
-    ) {
-      returnDate = dateReturnEl.value;
-    } else {
-      returnDate = "";
-    }
-    numberOfAdults = numberOfAdultsEl.value.charAt(0);
-    travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
-    if (travelClass === "") {
-      travelClass = "ECONOMY";
-    }
-
-    // calls function in script.js
+    captureSearchForm();
+    // calls function in script.js to display id=flights-container (overall flights container)
     showFlights();
     // clears data from previous search, and informs user that search is running
     flightsGridEl.innerHTML = "Searching...";
@@ -309,7 +319,7 @@ var searchFormHandler = function () {
   }
 };
 
-/* ---------- converts time from fetch to ui time format ---------- */
+/* --------------- converts time from fetch to ui time format --------------- */
 var convertTime = function (timeToConvert) {
   // first change time to proper format
   var convertedTime = timeToConvert.split("");
@@ -360,7 +370,7 @@ var convertTime = function (timeToConvert) {
   return convertedTime;
 };
 
-/* ---------- writes data from "flight offers search" amadeus api to html ---------- */
+/* ------ writes data from "flight offers search" amadeus api to html ------- */
 var writeData = function (data) {
   // if fetch was successful, then save search user input to localStorage
   saveFlightSearch();
@@ -380,11 +390,6 @@ var writeData = function (data) {
 
   // each flight details
   for (var i = 0; i < flightCount; i++) {
-    /* ----- creates a "single flight" (trip) container, in index.html, for each trip ----- */
-    // var tripContainerEl = document.createElement("div");
-    // flightsGridEl.appendChild(tripContainerEl);
-
-    /* ----- creates a container element for each itinerary ----- */
     // gets number of itineraries
     var intineraryCount = data.data[i].itineraries.length;
 
@@ -573,26 +578,33 @@ var writeData = function (data) {
     priceContainerEl.appendChild(saveBtn);
   }
 };
-/* -------------------- ENDS METHODS -------------------- */
 
-/* -------------------- BEGINS EVENT HANDLERS -------------------- */
-// search form submit event handler
+/* ------------------------------ ENDS METHODS ------------------------------ */
+/* -------------------------------------------------------------------------- */
 
+/* -------------------------------------------------------------------------- */
+/* -------------------------- BEGINS EVENT HANDLERS ------------------------- */
 searchFormEl.addEventListener("submit", searchFormHandler);
 
-/* -------------------- ENDS EVENT HANDLERS -------------------- */
+/* -------------------------- ENDS EVENT HANDLERS --------------------------- */
+/* -------------------------------------------------------------------------- */
 
-/* -------------------- BEGINS LOAD EVENTS -------------------- */
+/* -------------------------------------------------------------------------- */
+/* --------------------------- BEGINS LOAD EVENTS --------------------------- */
 loadFlightsSearchHistory();
-/* -------------------- ENDS LOAD EVENTS -------------------- */
 
-/* --------------------------------------------------------------------------------- */
-/* ----- CODE BELOW IS NOT PART OF THE APP AND SHOULD BE DELETED BEFORE LAUNCH ----- */
-/* --------------------------------------------------------------------------------- */
+/* ---------------------------- ENDS LOAD EVENTS ---------------------------- */
+/* -------------------------------------------------------------------------- */
 
-/* -------------------- BEGINS AMADEUS CREDENTIALS -------------------- */
-/* ---------- checks status of access token. expires every 30 minutes ---------- */
-/* ----- not related to running of website application. used for testing only ----- */
+/* -------------------------------------------------------------------------- */
+/* -- CODE BELOW IS NOT PART OF THE APP AND SHOULD BE DELETED BEFORE LAUNCH - */
+/* -------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------- */
+/* ----------------------- BEGINS AMADEUS CREDENTIALS ----------------------- */
+
+/* -------- checks status of access token. expires every 30 minutes --------- */
+/* -- not related to running of website application. used for testing only -- */
 var accessTokenStatus = function () {
   var fetchAccessToken = baseUrl + accessTokenPath + accessToken;
 
@@ -608,6 +620,8 @@ var accessTokenStatus = function () {
     });
 };
 
-// Calls function to check on status of access token
+// UNCOMMENT function below to check on status of access token
 // accessTokenStatus();
-/* -------------------- ENDS AMADEUS CREDENTIALS -------------------- */
+
+/* ------------------------ ENDS AMADEUS CREDENTIALS ------------------------ */
+/* -------------------------------------------------------------------------- */
