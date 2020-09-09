@@ -13,7 +13,7 @@
 ## Collaborators (Group Members)
 | Name | GitHub Page | Main Role |
 | ---- | ----------- | --------- |
-| Marco Evangelista | https://github.com/marcobjj | UI (`index.html` and `script.js`)
+| Marco Evangelista | https://github.com/marcobjj | UI (`index.html`, `style.css`, `script.js`, `form-select.js`, UI Kit, and all other css and js, except for `hotel.js` and `flights.js`)
 | Gautam Tankha | https://github.com/gtankha | Hotel search (`hotel.js`) |
 | Ahmad El Gamal | https://github.com/ahmadelgamal | Flights search (`flights.js`)
 
