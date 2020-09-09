@@ -48,7 +48,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "PxTV8U8uAqmc5xx8e9qQ54l1v0D4"; // access token must be renewed for 30 minutes at a time
+const accessToken = "1RzrPUWCiWdWMBGAPF8Z8SPgvx0h"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
@@ -126,6 +126,26 @@ var getFlightOffersSearch = function () {
       errorMessageEl.textContent =
         "There was an error in this search. Please change the dates or cities.";
     });
+};
+
+/* --------------- gets airline carrier's logo from airhex api -------------- */
+var getCarrierLogo = function (carrierCode) {
+  logoApiUrl =
+    airhexHost +
+    "_" +
+    carrierCode +
+    "_" +
+    carrierLogoWidth +
+    "_" +
+    carrierLogoHeight +
+    "_" +
+    carrierLogoType +
+    carrierLogoFormat +
+    // carrierLogoProportions +
+    queryairhexApi +
+    airhexApiKey;
+
+  return logoApiUrl;
 };
 /* -------------------------------------------------------------------------- */
 /* ---------------------------- ENDS FETCH APIS ----------------------------- */
@@ -285,6 +305,27 @@ var loadFlightsSearchHistory = function () {
 /* ----------------------------- BEGINS METHODS ----------------------------- */
 /* -------------------------------------------------------------------------- */
 
+/* ------------------- gets current values in search form ------------------- */
+var captureSearchForm = function () {
+  // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
+  originCode = goingFromEl.value;
+  // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
+  destinationCode = goingToEl.value;
+  departureDate = dateDepartureEl.value;
+  // checks if user selects roundtrip or one-way
+  if (tripSelectEl.options[tripSelectEl.selectedIndex].value === "Roundtrip") {
+    returnDate = dateReturnEl.value;
+  } else {
+    returnDate = "";
+  }
+  numberOfAdults = numberOfAdultsEl.value.charAt(0);
+  // if no class is selected, then "economy" is selected as default
+  travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
+  if (travelClass === "") {
+    travelClass = "ECONOMY";
+  }
+};
+
 /* ------------- saves api url depending on one-way or roundtrip ------------ */
 var saveUrl = function () {
   // full "flight offers search" api url for one-way
@@ -317,27 +358,6 @@ var saveUrl = function () {
   }
 };
 
-/* ------------------- gets current values in search form ------------------- */
-var captureSearchForm = function () {
-  // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
-  originCode = goingFromEl.value;
-  // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
-  destinationCode = goingToEl.value;
-  departureDate = dateDepartureEl.value;
-  // checks if user selects roundtrip or one-way
-  if (tripSelectEl.options[tripSelectEl.selectedIndex].value === "Roundtrip") {
-    returnDate = dateReturnEl.value;
-  } else {
-    returnDate = "";
-  }
-  numberOfAdults = numberOfAdultsEl.value.charAt(0);
-  // if no class is selected, then "economy" is selected as default
-  travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
-  if (travelClass === "") {
-    travelClass = "ECONOMY";
-  }
-};
-
 /* -------------- displays "searching" message during search -------------- */
 var searchingMessage = function () {
   toggleInterval = setInterval(toggleMessage, 500);
@@ -355,26 +375,6 @@ var searchingMessage = function () {
       searchingMessageEl.innerHTML = "Searching...";
     }
     i++;
-  }
-};
-
-/* --------------------------- search form handler -------------------------- */
-var searchFormHandler = function () {
-  if (flightsTabEl.className === "uk-active") {
-    // prevents the search-form submit from triggering a refresh of index.html
-    event.preventDefault();
-
-    captureSearchForm();
-    // clears previous fetch from memory;
-    amadeusData = [];
-    // calls function in script.js to display id=flights-container (overall flights container)
-    showFlights();
-    // informs user that search is running
-    searchingMessage();
-    // clears data from previous search
-    flightsGridEl.innerHTML = "";
-    saveUrl();
-    getFlightOffersSearch();
   }
 };
 
@@ -440,6 +440,26 @@ var convertPrice = function (priceToConvert) {
     convertedPrice = priceToConvert;
   }
   return convertedPrice;
+};
+
+/* --------------------------- search form handler -------------------------- */
+var searchFormHandler = function () {
+  if (flightsTabEl.className === "uk-active") {
+    // prevents the search-form submit from triggering a refresh of index.html
+    event.preventDefault();
+
+    captureSearchForm();
+    // clears previous fetch from memory;
+    amadeusData = [];
+    // calls function in script.js to display id=flights-container (overall flights container)
+    showFlights();
+    // informs user that search is running
+    searchingMessage();
+    // clears data from previous search
+    flightsGridEl.innerHTML = "";
+    saveUrl();
+    getFlightOffersSearch();
+  }
 };
 
 /* ------ writes data from "flight offers search" amadeus api to html ------- */
@@ -574,20 +594,7 @@ var writeData = function (data) {
         carrierLogoEl.alt = "airline logo";
         carrierLogoEl.style.width = "70";
         carrierLogoEl.style.height = "70";
-        carrierLogoEl.src =
-          airhexHost +
-          "_" +
-          carrierCode +
-          "_" +
-          carrierLogoWidth +
-          "_" +
-          carrierLogoHeight +
-          "_" +
-          carrierLogoType +
-          carrierLogoFormat +
-          // carrierLogoProportions +
-          queryairhexApi +
-          airhexApiKey;
+        carrierLogoEl.src = getCarrierLogo(carrierCode); // gets carrier logo from airhex api
         segmentContainerEl.appendChild(carrierLogoEl);
 
         /* ----- flight details ----- */
