@@ -10,6 +10,8 @@
 
 /* -------------------------------------------------------------------------- */
 /* ----------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ---------- */
+/* -------------------------------------------------------------------------- */
+
 /* --------------- declares constants to point to html elements ------------- */
 // constants that point to search form
 const flightsTabEl = document.getElementById("flights-tab");
@@ -68,12 +70,81 @@ const excludedAirlineCodes = "&excludedAirlineCodes="; // multiple airlines allo
 var oneWayFlightOffersSearchApiUrl;
 var roundTripFlightOffersSearchApiUrl;
 var apiUrl;
-
+/* -------------------------------------------------------------------------- */
 /* ----------- ENDS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ------------ */
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */
-/* --------- BEGINS CREATING FLIGHT ELEMENTS FOR VISIT AND REFRESH ---------- */
+/* ---------------------------- BEGINS FETCH APIS --------------------------- */
+/* -------------------------------------------------------------------------- */
+
+/* ----------------- gets "flight offers search" amadeus api ---------------- */
+var getFlightOffersSearch = function () {
+  fetch(apiUrl, {
+    method: "GET",
+    headers: {
+      Authorization: authorizationValue,
+    },
+  })
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      writeData(data);
+    })
+    .catch(function (error) {
+      flightsGridEl.innerHTML =
+        "No flights were found. Please change the dates or cities.";
+    });
+};
+/* -------------------------------------------------------------------------- */
+/* ---------------------------- ENDS FETCH APIS ----------------------------- */
+/* -------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------- */
+/* --------------------------- BEGINS LOCALSTORAGE -------------------------- */
+/* -------------------------------------------------------------------------- */
+
+/* -------------- saves search-form user-input to localStorage -------------- */
+var saveFlightSearch = function () {
+  // get today's date (date of search)
+  var searchDate = new Date();
+  // converts it into ui design format
+  var dd = String(searchDate.getDate()).padStart(2, "0");
+  var mm = String(searchDate.getMonth() + 1).padStart(2, "0"); //January is 0!
+  var yyyy = searchDate.getFullYear();
+  searchDate = mm + "/" + dd + "/" + yyyy;
+
+  // declares an object to hold user input into flight search form
+  var currentFlightSearch = {
+    dateOfSearch: searchDate,
+    from: originCode,
+    to: destinationCode,
+    departs: departureDate,
+    returns: returnDate,
+  };
+
+  // declares an array to be used for localStorage
+  var flightSearchLS = [];
+  // get existing search history from localStorage if it exists
+  flightSearchLS = JSON.parse(localStorage.getItem("flightSearchHistory"));
+
+  // if there was no search history, then it is set to current flight search
+  if (flightSearchLS === null) {
+    flightSearchLS = [currentFlightSearch];
+    // otherwise, if there is a search history, then the current search is added on top of the list
+  } else {
+    flightSearchLS.unshift(currentFlightSearch);
+  }
+
+  // limits search history to five searches
+  if (flightSearchLS.length === 6) {
+    flightSearchLS.splice(5, 1);
+  }
+
+  localStorage.setItem("flightSearchHistory", JSON.stringify(flightSearchLS));
+};
+
 /* ---------- creates search history elements on visit and refresh ---------- */
 var createSearchHistoryElements = function (flightSearchLS) {
   for (let i = 0; i < flightSearchLS.length; i++) {
@@ -165,74 +236,6 @@ var createSearchHistoryElements = function (flightSearchLS) {
     // flightSearchHistoryContainerEl.onclick = console.log("clicked");
   }
 };
-/* ---------- ENDS CREATING FLIGHT ELEMENTS FOR VISIT AND REFRESH ----------- */
-/* -------------------------------------------------------------------------- */
-
-/* -------------------------------------------------------------------------- */
-/* ---------------------------- BEGINS FETCH APIS --------------------------- */
-/* ----------------- gets "flight offers search" amadeus api ---------------- */
-var getFlightOffersSearch = function () {
-  fetch(apiUrl, {
-    method: "GET",
-    headers: {
-      Authorization: authorizationValue,
-    },
-  })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      writeData(data);
-    })
-    .catch(function (error) {
-      flightsGridEl.innerHTML =
-        "No flights were found. Please change the dates or cities.";
-    });
-};
-/* ------------------------------- ENDS FETCH ------------------------------- */
-/* -------------------------------------------------------------------------- */
-
-/* -------------------------------------------------------------------------- */
-/* --------------------------- BEGINS LOCALSTORAGE -------------------------- */
-/* -------------- saves search-form user-input to localStorage -------------- */
-var saveFlightSearch = function () {
-  // get today's date (date of search)
-  var searchDate = new Date();
-  // converts it into ui design format
-  var dd = String(searchDate.getDate()).padStart(2, "0");
-  var mm = String(searchDate.getMonth() + 1).padStart(2, "0"); //January is 0!
-  var yyyy = searchDate.getFullYear();
-  searchDate = mm + "/" + dd + "/" + yyyy;
-
-  // declares an object to hold user input into flight search form
-  var currentFlightSearch = {
-    dateOfSearch: searchDate,
-    from: originCode,
-    to: destinationCode,
-    departs: departureDate,
-    returns: returnDate,
-  };
-
-  // declares an array to be used for localStorage
-  var flightSearchLS = [];
-  // get existing search history from localStorage if it exists
-  flightSearchLS = JSON.parse(localStorage.getItem("flightSearchHistory"));
-
-  // if there was no search history, then it is set to current flight search
-  if (flightSearchLS === null) {
-    flightSearchLS = [currentFlightSearch];
-    // otherwise, if there is a search history, then the current search is added on top of the list
-  } else {
-    flightSearchLS.unshift(currentFlightSearch);
-  }
-
-  // limits search history to five searches
-  if (flightSearchLS.length === 6) {
-    flightSearchLS.splice(5, 1);
-  }
-
-  localStorage.setItem("flightSearchHistory", JSON.stringify(flightSearchLS));
-};
 
 /* ---------- loads search history elements from data in localStorage ---------- */
 var loadFlightsSearchHistory = function () {
@@ -244,12 +247,14 @@ var loadFlightsSearchHistory = function () {
     createSearchHistoryElements(flightSearchLS);
   }
 };
-
+/* -------------------------------------------------------------------------- */
 /* ---------------------------- ENDS LOCALSTORAGE --------------------------- */
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */
 /* ----------------------------- BEGINS METHODS ----------------------------- */
+/* -------------------------------------------------------------------------- */
+
 /* ------------- saves api url depending on one-way or roundtrip ------------ */
 var saveUrl = function () {
   // full "flight offers search" api url for one-way
@@ -578,21 +583,23 @@ var writeData = function (data) {
     priceContainerEl.appendChild(saveBtn);
   }
 };
-
+/* -------------------------------------------------------------------------- */
 /* ------------------------------ ENDS METHODS ------------------------------ */
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------- BEGINS EVENT HANDLERS ------------------------- */
+/* -------------------------------------------------------------------------- */
 searchFormEl.addEventListener("submit", searchFormHandler);
-
+/* -------------------------------------------------------------------------- */
 /* -------------------------- ENDS EVENT HANDLERS --------------------------- */
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */
 /* --------------------------- BEGINS LOAD EVENTS --------------------------- */
+/* -------------------------------------------------------------------------- */
 loadFlightsSearchHistory();
-
+/* -------------------------------------------------------------------------- */
 /* ---------------------------- ENDS LOAD EVENTS ---------------------------- */
 /* -------------------------------------------------------------------------- */
 
@@ -602,6 +609,7 @@ loadFlightsSearchHistory();
 
 /* -------------------------------------------------------------------------- */
 /* ----------------------- BEGINS AMADEUS CREDENTIALS ----------------------- */
+/* -------------------------------------------------------------------------- */
 
 /* -------- checks status of access token. expires every 30 minutes --------- */
 /* -- not related to running of website application. used for testing only -- */
@@ -622,6 +630,6 @@ var accessTokenStatus = function () {
 
 // UNCOMMENT function below to check on status of access token
 // accessTokenStatus();
-
+/* -------------------------------------------------------------------------- */
 /* ------------------------ ENDS AMADEUS CREDENTIALS ------------------------ */
 /* -------------------------------------------------------------------------- */
