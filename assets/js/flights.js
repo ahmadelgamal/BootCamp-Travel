@@ -649,7 +649,6 @@ var writeData = function (data) {
     var priceEl = document.createElement("h2");
     priceEl.classList.add("uk-margin-remove-vertical", "black-ops");
     priceEl.innerHTML = "$" + convertPrice(grandTotalPrice);
-    console.log(convertPrice(grandTotalPrice));
     priceContainerEl.appendChild(priceEl);
 
     var saveBtn = document.createElement("button");
