@@ -24,14 +24,11 @@ const tripSelectEl = document.getElementById("trip"); // One-way or Roundtrip
 const travelClassEl = document.getElementById("travel-class"); // ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
 const numberOfAdultsEl = document.getElementById("guests-select");
 
-// constant that points to searching message element
-const searchingMessageEl = document.getElementById("searching-message");
-// constant that points to error message element
-const errorMessageEl = document.getElementById("error-message");
-// constant that points to flights search history grid
-const flightsPastSearchGridEl = document.getElementById("past-search-grid");
-// constant that points to flights grid
-const flightsGridEl = document.getElementById("flights-grid");
+// constants that point to other flight search elements
+const searchingMessageEl = document.getElementById("searching-message"); // constant that points to searching message element
+const errorMessageEl = document.getElementById("error-message"); // constant that points to error message element
+const flightsPastSearchGridEl = document.getElementById("past-search-grid"); // constant that points to flights search history grid
+const flightsGridEl = document.getElementById("flights-grid"); // constant that points to flights grid
 
 /* ----- declares variables for user input for "flight offers search" amadeus api ----- */
 var originCode = goingFromEl.value; // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
@@ -47,7 +44,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "EUFpR7pZFRAbPLsBWUSGteRT3fK5"; // access token must be renewed for 30 minutes at a time
+const accessToken = "fute1AAmHFE8kC4b5i9dYYeWg4ys"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
@@ -93,6 +90,8 @@ const carrierLogoFormat = ".png"; // can change to .svg
 const carrierLogoProportions = "?proportions=keep"; // keeps proportions of logo image
 const queryairhexApi = "?md5apikey=";
 const airhexApiKey = "VDjfGgv8mxiTvvLLwGicD6V2eq";
+
+var toggleInterval; // timer for toggling "searching" message
 
 /* -------------------------------------------------------------------------- */
 /* ----------- ENDS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ------------ */
@@ -334,6 +333,26 @@ var captureSearchForm = function () {
   }
 };
 
+/* -------------- displays "searching" message during search -------------- */
+var searchingMessage = function () {
+  toggleInterval = setInterval(toggleMessage, 500);
+
+  let i = 0;
+
+  function toggleMessage() {
+    if (i % 4 === 0) {
+      searchingMessageEl.innerHTML = "Searching";
+    } else if (i % 4 === 1) {
+      searchingMessageEl.innerHTML = "Searching.";
+    } else if (i % 4 === 2) {
+      searchingMessageEl.innerHTML = "Searching..";
+    } else if (i % 4 === 3) {
+      searchingMessageEl.innerHTML = "Searching...";
+    }
+    i++;
+  }
+};
+
 /* --------------------------- search form handler -------------------------- */
 var searchFormHandler = function () {
   if (flightsTabEl.className === "uk-active") {
@@ -343,9 +362,9 @@ var searchFormHandler = function () {
     captureSearchForm();
     // calls function in script.js to display id=flights-container (overall flights container)
     showFlights();
-    // clears data from previous search, and informs user that search is running
-    searchingMessageEl.textContent = "Searching...";
-    // resets flights grid
+    // informs user that search is running
+    searchingMessage();
+    // clears data from previous search
     flightsGridEl.innerHTML = "";
     saveUrl();
     getFlightOffersSearch();
@@ -415,9 +434,9 @@ var writeData = function (data) {
   // number of flights available matching user input
   var flightCount = data.meta.count;
 
-  // displays number of matching search results
+  clearInterval(toggleInterval); // stops toggling searching message
   searchingMessageEl.innerHTML =
-    "There are " + flightCount + " flights available for your selected route!";
+    "There are " + flightCount + " flights available for your selected route!"; // displays number of matching search results
 
   // each flight details
   for (flightCounter = 0; flightCounter < flightCount; flightCounter++) {
