@@ -44,7 +44,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "fute1AAmHFE8kC4b5i9dYYeWg4ys"; // access token must be renewed for 30 minutes at a time
+const accessToken = "unQ9NY8fo7YVuc2WBWmwT2VbmAvn"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
@@ -422,6 +422,19 @@ var convertTime = function (timeToConvert) {
   return convertedTime;
 };
 
+/* --------------- converts price from fetch to comma separated format --------------- */
+var convertPrice = function (priceToConvert) {
+  var convertedPrice = priceToConvert.toString();
+  convertedPrice = convertedPrice.split("");
+  if (convertedPrice.length > 6) {
+    convertedPrice.splice(convertedPrice[convertedPrice.length - 7], 0, ",");
+    convertedPrice = convertedPrice.join("");
+  } else {
+    convertedPrice = priceToConvert;
+  }
+  return convertedPrice;
+};
+
 /* ------ writes data from "flight offers search" amadeus api to html ------- */
 var writeData = function (data) {
   // if fetch was successful, then save search user input to localStorage
@@ -573,7 +586,7 @@ var writeData = function (data) {
           "_" +
           carrierLogoType +
           carrierLogoFormat +
-          carrierLogoProportions +
+          // carrierLogoProportions +
           queryairhexApi +
           airhexApiKey;
         segmentContainerEl.appendChild(carrierLogoEl);
@@ -635,7 +648,8 @@ var writeData = function (data) {
 
     var priceEl = document.createElement("h2");
     priceEl.classList.add("uk-margin-remove-vertical", "black-ops");
-    priceEl.innerHTML = "$" + grandTotalPrice;
+    priceEl.innerHTML = "$" + convertPrice(grandTotalPrice);
+    console.log(convertPrice(grandTotalPrice));
     priceContainerEl.appendChild(priceEl);
 
     var saveBtn = document.createElement("button");
