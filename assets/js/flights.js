@@ -43,7 +43,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "kQgmCEq4A7OA4IZKSFMRUChL9KDQ"; // access token must be renewed for 30 minutes at a time
+const accessToken = "Wr8oQL8OCCqUXsCOfWcE4wvYCsw6"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
@@ -380,10 +380,8 @@ var writeData = function (data) {
   // if fetch was successful, then save search user input to localStorage
   saveFlightSearch();
 
-  // dictionary of codes
-  var aircraftCodeList = data.dictionaries.aircraft;
+  // dictionary of codes. used to convert codes to full names
   var carriersCodeList = data.dictionaries.carriers;
-  var currenciesCodeList = data.dictionaries.currencies;
   var locationsCityCodeList = data.dictionaries.locations;
 
   // number of flights available matching user input
@@ -435,14 +433,8 @@ var writeData = function (data) {
           );
         }
         var grandTotalPrice = data.data[i].price.grandTotal;
-        // var currencyCode = data.data[i].price.currency;
-        // var currencyFull = currenciesCodeList[currencyCode];
-        // var oneWay = data.data[i].oneWay;
 
         // more details
-        var aircraftCode =
-          data.data[i].itineraries[y].segments[x].aircraft.code;
-        var aircraftFull = aircraftCodeList[aircraftCode];
         var departureTerminal =
           data.data[i].itineraries[y].segments[x].departure.terminal;
         var arrivalTerminal =
@@ -454,27 +446,12 @@ var writeData = function (data) {
             data.data[i].travelerPricings[z].fareDetailsBySegment[x].class
           );
         }
-        var numberOfBookableSeats = data.data[i].numberOfBookableSeats;
-        var lastTicketingDate = data.data[i].lastTicketingDate;
 
         // optional details
         var departureCountryCode =
           locationsCityCodeList[departureCityCode].countryCode;
         var arrivalCountryCode =
           locationsCityCodeList[arrivalCityCode].countryCode;
-        var basePrice = data.data[i].price.base;
-        var totalPrice = data.data[i].price.total;
-        // checks if there is data for operator, otherwise it does not look for it
-        // if (
-        //   typeof data.data[i].itineraries[y].segments[x].operating !==
-        //   "undefined"
-        // ) {
-        //   var operatorCode =
-        //     data.data[i].itineraries[y].segments[x].operating.carrierCode;
-        //   var operatorFull = carriersCodeList[operatorCode];
-        // }
-        // var numberOfStops =
-        //   data.data[i].itineraries[y].segments[x].numberOfStops;
 
         /* ----- writes segment data to index.html ----- */
         var segmentContainerEl = document.createElement("div");
@@ -505,7 +482,7 @@ var writeData = function (data) {
 
         /* ----- flight details ----- */
         var flightDetailsEl = document.createElement("p");
-        // append flight details to itinerary
+        // appends flight details to itinerary
         segmentContainerEl.appendChild(flightDetailsEl);
 
         // city data
@@ -553,12 +530,6 @@ var writeData = function (data) {
     flightsGridEl.appendChild(priceContainerEl);
 
     // more details
-    var moreDetailsSpanEl = document.createElement("span");
-    moreDetailsSpanEl.className = "fa";
-    moreDetailsSpanEl.innerHTML =
-      cabin.join(" + ") + "<br />" + numberOfBookableSeats + " seats available";
-    priceContainerEl.appendChild(moreDetailsSpanEl);
-
     var saveEl = document.createElement("span");
     saveEl.classList.add("black-ops", "stronger", "uk-text-emphasis");
     saveEl.innerHTML = "Reserve";
