@@ -118,6 +118,8 @@ var getFlightOffersSearch = function () {
       writeData(data);
     })
     .catch(function (error) {
+      clearInterval(toggleInterval); // stops toggling searching message
+      searchingMessageEl.textContent = ""; // clears searching message
       errorMessageEl.textContent =
         "There was an error in this search. Please change the dates or cities.";
     });
