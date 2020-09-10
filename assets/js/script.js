@@ -189,7 +189,7 @@ var inputBlurHandler = function(event){
 
     var input = event.target;
    console.log(input.value +"blur");
-   if(input.id == "going-to" || input.id  == "going-from")
+   if(input.id == "going-to" || input.id  == "going-from" || input.id  == "hotel-city")
    {
 
     input.value = tempAutoCompleteValue;
@@ -252,6 +252,7 @@ function autocomplete(inp, arr) {
 
         if (this.id == "going-from") icon = "&#xf5b0; ";
         if (this.id == "going-to") icon = "&#xf5af; ";
+        if (this.id == "hotel-city") icon = "&#xf594; ";
         /*insert a input field that will hold the current array item's value:*/
         b.innerHTML +=
           "<input class='fa' type='hidden' value='" +
