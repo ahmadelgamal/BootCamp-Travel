@@ -54,7 +54,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "O30SaKHhoiJuGZgVxHcxDhKzQpKG"; // access token must be renewed for 30 minutes at a time
+const accessToken = "Nwk4JikL4vYgFLXVOzre4Hd8ZZZU"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
