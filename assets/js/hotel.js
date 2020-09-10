@@ -235,7 +235,7 @@ var getProperties = function (
                 var neighbourhoodName = data6.data.body.searchResults.results[i].neighbourhood;
               }
 
-              if ((typeof data6.data.body.searchResults.results[i].ratePlan.price.current == "undefined")) {
+              if ((typeof data6.data.body.searchResults.results[i].ratePlan.price == "undefined")) {
                 price = "Missing Price Information";
               }
               else {
