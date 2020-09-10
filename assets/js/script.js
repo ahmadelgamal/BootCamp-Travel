@@ -185,6 +185,8 @@ var tabKeyHandler = function(event){
 
 var inputBlurHandler = function(event){
 
+ 
+
   if(tempAutoCompleteValue == "") return;
 
     var input = event.target;
@@ -240,6 +242,9 @@ function autocomplete(inp, arr) {
         if (max++ >= 4) break;
         /*create a DIV element for each matching element:*/
         b = document.createElement("DIV");
+
+        b.clasName = "auto-complete";
+
         /*make the matching letters bold:*/
         b.innerHTML =
           "<strong>" + arr[i].name.substr(0, val.length) + "</strong>";
@@ -274,9 +279,10 @@ function autocomplete(inp, arr) {
           }
 
         /*execute a function when someone clicks on the item value (DIV element):*/
-        b.addEventListener("click", function (e) {
+        b.addEventListener("mousedown", function (e) {
           /*insert the value for the autocomplete text field:*/
           inp.value = this.getElementsByTagName("input")[0].value;
+          tempAutoCompleteValue = "";
           /*close the list of autocompleted values
                     (or any other open lists of autocompleted values:*/
           closeAllLists(null,inp);
@@ -293,6 +299,7 @@ function autocomplete(inp, arr) {
     closeAllLists(e.target);
   });
   */
+  
 }
 
 function closeAllLists(elmnt,inp) {
