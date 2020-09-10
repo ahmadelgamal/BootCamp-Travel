@@ -1,11 +1,11 @@
 /* -------------------- BEGINS DECLARATIONS OF GLOBAL VARIABLES -------------------- */
 var city = ""; // Identifies city to be searched
-var checkin = ""; //Check-in date
-var checkout = ""; // Check-out date
+var checkInDt = ""; //Check-in date
+var checkOutDt = ""; // Check-out date
 var id = 0;
 var urls = []; // URLs of the images
-var maxHistoryLength = 3; // History length
-var urlKey = "82aa230269msh2cf9909e3ed2b47p118c19jsn0f399e353b6d"; // URL Key
+var maxHistoryLength = 5; // History length
+var urlKey = "083f233336mshc03be33994e1ed0p1698afjsnc157beab7f7c"; // URL Key
 var newHotellay1 = document.getElementById("hotels-grid"); // Get parent element of HTML document
 var pageNumber = 1; // # of pages to display
 var resultMax = 20; // # of hotels to show up in a single request
@@ -106,9 +106,9 @@ var GetIdhotel = function (City, checkIn, checkOut) {
               adults
             );
             var tempHotel = {
-              cityid: ide,
-              checkin: checkIn,
-              checkout: checkOut,
+              propertyId: ide,
+              checkInDt: checkIn,
+              checkOutDt: checkOut,
             };
             localStorage.setItem("tempHotel", JSON.stringify(tempHotel));
           } else {
@@ -273,12 +273,12 @@ var SortOrderFunction = function (sortSelect) {
       var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
       $("#hotels-grid").empty();
       getProperties(
-        tempHotel.cityid,
+        tempHotel.propertyId,
         curr,
         sortOrd,
         pageNumber,
-        tempHotel.checkin,
-        tempHotel.checkout,
+        tempHotel.checkInDt,
+        tempHotel.checkOutDt,
         resultMax,
         adults
       );
@@ -289,12 +289,12 @@ var SortOrderFunction = function (sortSelect) {
       var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
       $("#hotels-grid").empty();
       getProperties(
-        tempHotel.cityid,
+        tempHotel.propertyId,
         curr,
         sortOrd,
         pageNumber,
-        tempHotel.checkin,
-        tempHotel.checkout,
+        tempHotel.checkInDt,
+        tempHotel.checkOutDt,
         resultMax,
         adults
       );
@@ -309,12 +309,12 @@ var SortOrderFunction = function (sortSelect) {
       var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
       $("#hotels-grid").empty();
       getProperties(
-        tempHotel.cityid,
+        tempHotel.propertyId,
         curr,
         sortOrd,
         pageNumber,
-        tempHotel.checkin,
-        tempHotel.checkout,
+        tempHotel.checkInDt,
+        tempHotel.checkOutDt,
         resultMax,
         adults
       );
@@ -325,12 +325,12 @@ var SortOrderFunction = function (sortSelect) {
       var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
       $("#hotels-grid").empty();
       getProperties(
-        tempHotel.cityid,
+        tempHotel.propertyId,
         curr,
         sortOrd,
         pageNumber,
-        tempHotel.checkin,
-        tempHotel.checkout,
+        tempHotel.checkInDt,
+        tempHotel.checkOutDt,
         resultMax,
         adults
       );
@@ -351,16 +351,16 @@ $("#form").on("submit", function (event) {
     // Read city value from form
     city = $("#hotel-city").val();
     city = city.trim();
-    var spc2 = city.split("");
-    var spc3 = spc2[1].trim();
+    var spc2 = city.split("");
+    var spc3 = spc2[1].trim();  
     city = spc3;
     // Read check-in, check-out and # of guests value from form
-    checkin = $("#check-in").val();
-    checkout = $("#check-out").val();
-    checkin = moment(checkin, "MM-DD-YYYY");
-    checkin = moment(checkin).format("YYYY-MM-DD");
-    checkout = moment(checkout, "MM-DD-YYYY");
-    checkout = moment(checkout).format("YYYY-MM-DD");
+    checkInDt = $("#check-in").val();
+    checkOutDt = $("#check-out").val();
+    checkInDt = moment(checkInDt, "MM-DD-YYYY");
+    checkInDt = moment(checkInDt).format("YYYY-MM-DD");
+    checkOutDt = moment(checkOutDt, "MM-DD-YYYY");
+    checkOutDt = moment(checkOutDt).format("YYYY-MM-DD");
     adults = $("#guests-select").val();
 
     $("#hotels-grid").empty(); // Empties previous display
@@ -382,7 +382,7 @@ $("#form").on("submit", function (event) {
       $("#sort-hotel-rating").html("<b>RATING ↓</b>");
     }
 
-    GetIdhotel(city, checkin, checkout);
+    GetIdhotel(city, checkInDt, checkOutDt);
     $("#hotels-sub-menu").show();
   }
 });
@@ -454,8 +454,8 @@ $(document).on("click", ".reserve", function () {
       },
     ];
     hotels[0].IdCity = propval;
-    hotels[0].ChkInDate = checkin;
-    hotels[0].ChkOutDate = checkout;
+    hotels[0].ChkInDate = checkInDt;
+    hotels[0].ChkOutDate = checkOutDt;
     hotels[0].NumAdults = adults;
     hotels[0].Currcy = curr;
     hotels[0].UrlThumbNl = urlTn;
@@ -482,8 +482,8 @@ $(document).on("click", ".reserve", function () {
 
       hotels.push({
         IdCity: propval,
-        ChkInDate: checkin,
-        ChkOutDate: checkout,
+        ChkInDate: checkInDt,
+        ChkOutDate: checkOutDt,
         UrlThumbNl: urlTn,
         Currcy: curr,
         NumAdults: adults,
