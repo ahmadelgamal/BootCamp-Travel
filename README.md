@@ -33,7 +33,7 @@ The app is about 90% complete (as of Wednesday September 9th, 2020) and satisfie
     2. Amadeus API for flights search (JSON): https://test.api.amadeus.com/v2/shopping/flight-offers
     3. Airhex API for airline carrier logos: https://content.airhex.com/content/logos/airlines
 2. It uses UI Kit framework for styling (CSS).
-3. It uses localStorage to store the user's search history.
+3. It uses localStorage to store the user's favorite search items.
 4. It is responsive, designed mobile-first using UI Kit.
 5. It meets good coding standards, such as:
     1. HTML and Javascript code has been validated on 3rd party apps.
