@@ -15,8 +15,6 @@
       type="text/css"
       href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/css/addons/uikit.gradient.addons.min.css"
     />
-    <!--<link rel="stylesheet" type="text/css"
-        href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/css/uikit.gradient.min.css">-->
     <!-- Font Awesome CSS -->
     <link
       rel="stylesheet"
@@ -34,12 +32,12 @@
 
   <body>
     <!-- begins navbar / topbar -->
-    <nav class="uk-navbar-container" uk-navbar>
+    <nav
+      class="uk-navbar-container"
+      uk-navbar
+    >
       <div class="uk-navbar-center">
         <h3><span class="fa">&#xf19c;</span> Bootcamp Travel</h3>
-      </div>
-      <div class="uk-navbar-right uk-margin-small-right">
-        <span class="fa uk-margin-small-left uk-text-primary">&#xf0c7;</span>
       </div>
     </nav>
     <!-- ends navbar / topbar -->
@@ -54,7 +52,7 @@
       >
         <div class="uk-margin-small-top">
           <ul class="uk-flex-center" uk-tab>
-            <li class="uk-active" id="flights-tab">
+            <li id="flights-tab">
               <a id="flights-btn" href="#"
                 ><span class="fa">&#xf072; </span>Flights</a
               >
@@ -62,6 +60,11 @@
             <li id="hotels-tab">
               <a id="hotels-btn" href="#"
                 ><span class="fa">&#xf594; </span>Hotels</a
+              >
+            </li>
+            <li id="favorites-tab" class="uk-active">
+              <a id="favorites-btn" href="#"
+                ><span class="fa">&#xf004; </span></a
               >
             </li>
           </ul>
@@ -93,6 +96,21 @@
               id="going-to"
               type="text"
               placeholder="&#xf5af;  To:"
+            />
+          </div>
+        </div>
+
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical"
+        >
+          <!--arrival input with custom autocomplete (default browser autocomplete is turned off) -->
+          <div class="uk-form-controls relative">
+            <input
+              autocomplete="off"
+              class="uk-input uk-border-rounded fa"
+              id="hotel-city"
+              type="text"
+              placeholder="&#xf594;  To:"
             />
           </div>
         </div>
@@ -157,11 +175,6 @@
             >
               <option>1 Adult</option>
               <option>2 Adults</option>
-              <option>3 Adults</option>
-              <option>4 Adults</option>
-              <option>5 Adults</option>
-              <option>6 Adults</option>
-              <option>7 Adults</option>
             </select>
 
             <button
@@ -214,9 +227,31 @@
       id="past-search-container"
       class="uk-container uk-container-center uk-padding-small width-maxed"
     >
-      <h3>Your search history:</h3>
+      <h3>Your saved favorites:</h3>
 
       <!-- begins past search grid-->
+
+      <div
+        id="favorites-sub-menu"
+        class="uk-flex uk-flex-center uk-padding-remove-horizontal margin-zero uk-margin-medium-bottom"
+      >
+        <button
+          class="uk-button uk-button-small uk-margin-small-right uk-button-default uk-border-rounded dropdown xs-size-button"
+          id="favorite-flights"
+          type="button"
+        >
+          Flights
+        </button>
+
+        <button
+          class="uk-button uk-button-small uk-margin-small-left uk-button-default uk-border-rounded dropdown xs-size-button"
+          id="favorite-hotels"
+          type="button"
+        >
+          Hotels
+        </button>
+      </div>
+
       <div
         id="past-search-grid"
         class="uk-grid uk-width-1-1 uk-border-rounded uk-background-muted uk-padding-remove-horizontal margin-zero"
@@ -298,8 +333,8 @@
         </button>
         <div uk-dropdown>
           <ul id="sort-flight-price" class="uk-nav uk-dropdown-nav stronger">
-            <li class="active">Lowest</li>
-            <li>Highest</li>
+            <li class="active" id="lowest-flight-price">Lowest</li>
+            <li id="highest-flight-price">Highest</li>
           </ul>
         </div>
 
@@ -340,6 +375,9 @@
       </div>
       <!-- ends flights sorting menu / dropdowns -->
 
+      <h3 id="searching-message"></h3>
+      <h3 id="error-message"></h3>
+
       <!-- begins flights grid -->
       <div
         id="flights-grid"
@@ -351,7 +389,7 @@
           class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded margin-zero uk-margin-small-top"
         >
           <!-- begins segment -->
-          <div class="uk-width-1-2 uk-padding-remove-horizontal">
+          <!-- <div class="uk-width-1-2 uk-padding-remove-horizontal">
             <h4 class="black-ops">Delta Airlines</h4>
             <img
               width="70"
@@ -366,11 +404,11 @@
               <span class="fa"> &#xf152; &#xf1eb; &#xf5e7; </span>
             </p>
             <p></p>
-          </div>
+          </div> -->
           <!-- ends segment -->
 
           <!-- begins segment -->
-          <div class="uk-width-1-2 uk-padding-remove-horizontal">
+          <!-- <div class="uk-width-1-2 uk-padding-remove-horizontal">
             <h4 class="black-ops">Fly Emirates</h4>
             <img
               width="70"
@@ -386,13 +424,13 @@
               <br />6:05am to 7:37am
               <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
             </p>
-          </div>
+          </div> -->
           <!-- ends segment -->
         </div>
         <!-- ends outbound itinerary -->
 
         <!-- begins inbound itinerary -->
-        <div
+        <!-- <div
           class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded margin-zero uk-margin-small-top"
         >
           <div class="uk-width-1-2 uk-padding-remove-horizontal">
@@ -426,11 +464,11 @@
               <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
             </p>
           </div>
-        </div>
+        </div> -->
         <!-- ends inbound itinerary -->
 
         <!-- begins price container -->
-        <div
+        <!-- <div
           class="uk-border-rounded uk-width-1-1 uk-padding-small uk-margin-small-top price-flights"
         >
           <span class="black-ops stronger uk-text-emphasis">Reserve</span>
@@ -441,7 +479,7 @@
           >
             Select
           </button>
-        </div>
+        </div> -->
         <!-- ends price container -->
         <!-- THIS IS NOT AN ELEMENT - ends single flight (trip) container -->
       </div>
@@ -473,7 +511,7 @@
         </button>
       </div>
 
-      <!-- end of hotels menu container -->
+      <!-- ends favorites container -->
 
       <!-- this is the hotels container grid. All single hotel offers should be appended here with JS -->
       <div
@@ -536,11 +574,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/js/addons/datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.5.7/js/uikit.min.js"></script>
 
+    <!-- moment JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
 
+    <!-- database of cities for autocomplete -->
     <script src="./assets/js/world-cities.js"></script>
+    <!-- developed by Marco Evangelista -->
     <script src="./assets/js/script.js"></script>
+    <!-- developed by Gautam Tankha -->
     <script src="./assets/js/hotel.js"></script>
+    <!-- developed by Ahmad El Gamal -->
     <script src="./assets/js/flights.js"></script>
   </body>
 </html>
