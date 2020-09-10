@@ -17,23 +17,10 @@
 | Marco Evangelista | https://github.com/marcobjj | User Interface (Structure & Styling) | `index.html`, `style.css`, `script.js`, & `form-select.js` |
 | Ahmad El Gamal | https://github.com/ahmadelgamal | Flights search | `flights.js` |
 
-## Project Requirements
-1. Must use at least two server-side APIs
-2. Must use a CSS framework _other than_ Bootstrap
-3. Must use client-side storage for persistent data
-4. Must have a polished, mobile-first UI
-5. Must meet good quality coding standards (indentation, scoping, naming, etc.)
-6. Does NOT use alerts, confirms, or prompts (look into _modals_)
-7. Must be deployed to GitHub Pages
-8. Must be interactive (i.e: accept and respond to user input)
-
-## Project Deadline
-11:59PM on Sunday, September 13th, 2020.
-
 ## Technologies Used
 1. HTML5
 2. CSS3
-3. ES6 JavaScript
+3. JavaScript
 4. JSON
 5. AJAX
 6. jQuery
@@ -42,7 +29,7 @@
 ## Project Status
 The app is about 90% complete (as of Wednesday September 9th, 2020) and satisfies all the requirements (listed above) as follows:
 1. It uses 3 server-side API's, 2 of which return data in JSON format:
-    1. Rapid API for hotels (JSON) - 3 different fetch requests are sent to access hotel information: https://hotels4.p.rapidapi.com/locations/search
+    1. Rapid API for hotels (JSON) - 2 different fetch requests are sent to access hotel information: https://hotels4.p.rapidapi.com/locations/search
     2. Amadeus API for flights search (JSON): https://test.api.amadeus.com/v2/shopping/flight-offers
     3. Airhex API for airline carrier logos: https://content.airhex.com/content/logos/airlines
 2. It uses UI Kit framework for styling (CSS).
@@ -64,18 +51,17 @@ The app is about 90% complete (as of Wednesday September 9th, 2020) and satisfie
         1. User enters the destination, check-in, check-out dates, and chooses either 1 or 2 adults for hotels search (default is 1).
         2. User can sort hotels search results by price or rating.
         3. User can save a search result item as a favorite. (It is stored in localStorage)
-        4. Search history is automatically stored in localStorage and loaded at revisit refresh.
+        4. Favorites are stored in localStorage and loaded at revisit & refresh.
     2. For flights search:
         1. User enters departure airport code and date, arrival airport code and return date (for roundtrip flights), travel class (optional) and chooses either 1 or 2 adults for flights search (default is 1).
         2. User can sort flights search results by price, departure time or arrival time.
         3. User can save a search item as a favorite. (It is stored in localStorage)
-        4. Search history is automatically stored in localStorage and loaded at revisit refresh.
+        4. Favorites are stored in localStorage and loaded at revisit & refresh.
 
 ## Challenges & Limitations
-1. Rapid API's hotels search limits fetch requests to 5 per second, aad hotel details require a separate request per hotel, which means that hotel details cannot be downloaded at once. To solve this, we had to download less details from a combined fetch, then get the details when the user clicks per hotel.
-2. Amadeus API is a testing API, and it requires an access token that expires every 30 minutes. So we have to renew it every 30 minutes when testing fetch requests. **It also means that the grader needs to notify Ahmad El Gamal before testing the app in order to get an active access token**.
-3. Airhex API put a watermark on the airline logos unless the request is paid. We tried contacting them for rates but no answer yet.
-4. Collaborating on GitHub was initially a challenge and we lost a lot of code, but eventually we figured out a better workflow and were able to succeed, thank God.
+1. Amadeus API is a testing API, and it requires an access token that expires every 30 minutes. So we have to renew it every 30 minutes when testing fetch requests.
+2. Airhex API put a watermark on the airline logos unless the request is paid. We contacted them and they only offer commercial licenses.
+3. Collaborating on GitHub was initially a challenge and we lost a lot of code, but eventually we figured out a better workflow and were able to succeed, thank God.
 
 ## Successes
 1. Collaboration and teamwork! The group was active on Slack, Zoom and GitHub.
@@ -83,7 +69,7 @@ The app is about 90% complete (as of Wednesday September 9th, 2020) and satisfie
 1. This project was an excellent opportunity to learn how to collaborate on GitHub.
 
 ## GitHub Pages Deployment URL
-The app is deployed at the following GitHub Pages URL: https://gtankha.github.io/bootcamptravel/.
+The app is deployed at the following GitHub Pages URL: https://gtankha.github.io/bootcamptravel/
 
 ## GitHub Repo URL
 https://github.com/gtankha/bootcamptravel/
@@ -98,7 +84,7 @@ This app is very simple to use. Just follow these steps:
 - Scroll through the list of search results
 - Pick your favorite hotel or flight
 - Click on the favorite icon to save it to memory (you may choose up to 5 flights and/or 5 hotels)
-- Revisit the website at any time to see your search history, your saved items, or make new searches!
+- Revisit the website at any time to see your favorite items, or make new searches!
 
 ## Screenshots:
 ![Landing Page](./assets/images/screen-shot-1.jpg)
@@ -107,6 +93,6 @@ This app is very simple to use. Just follow these steps:
 
 ![Flights Search](./assets/images/screen-shot-2.jpg)
 
-![Flights Search - Select One-way or Roundtrip](./assets/images/screen-shot-4.png)
+![Flights Search - Select One-way or Roundtrip](./assets/images/screen-shot-4.PNG)
 
-![Flights Search - Select Tavel Class](./assets/images/screen-shot-5.png)
+![Flights Search - Select Tavel Class](./assets/images/screen-shot-5.PNG)
