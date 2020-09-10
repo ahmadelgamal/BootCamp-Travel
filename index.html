@@ -219,15 +219,14 @@
     </div>
     <!-- ends search form container -->
 
-    <!-- begins past search container-->
+    <!-- begins past search (favorites) container-->
     <div
       id="past-search-container"
       class="uk-container uk-container-center uk-padding-small width-maxed"
     >
       <h3>Your saved favorites:</h3>
 
-      <!-- begins past search grid-->
-
+      <!-- begins buttons to select favorites by flights or hotels -->
       <div
         id="favorites-sub-menu"
         class="uk-flex uk-flex-center uk-padding-remove-horizontal margin-zero uk-margin-medium-bottom"
@@ -248,12 +247,14 @@
           Hotels
         </button>
       </div>
+      <!-- ends buttons to select favorites by flights or hotels -->
 
+      <!-- begins past search (favorites) grid-->
       <div
         id="past-search-grid"
         class="uk-grid uk-width-1-1 uk-border-rounded uk-background-muted uk-padding-remove-horizontal margin-zero"
       >
-        <!-- begins single past flights search, should be created dynamically with JS-->
+        <!-- begins single past flights search (favorite flights), should be created dynamically with JS-->
         <div
           class="flight uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero"
         >
@@ -277,9 +278,9 @@
             </button>
           </div>
         </div>
-        <!-- ends single past flights search-->
+        <!-- ends single past flights search (favorite flights) -->
 
-        <!-- begins single past hotels search -->
+        <!-- begins single past hotels search (favorite hotels) -->
         <div
           class="hotel uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero"
         >
@@ -306,11 +307,11 @@
             </button>
           </div>
         </div>
-        <!-- ends single past hotels search -->
+        <!-- ends single past hotels search (favorite hotels) -->
       </div>
-      <!-- ends past search grid-->
+      <!-- ends past search (favorites) grid-->
     </div>
-    <!-- ends past search container-->
+    <!-- ends past search (favorites) container-->
 
     <!-- begins overall flights container -->
     <div

@@ -44,8 +44,8 @@ const favoriteHotelsBtn = document.getElementById("favorite-hotels");
 const flightsGridEl = document.getElementById("flights-grid"); // constant that points to flights grid
 
 // variables that point to favorite items
-var favoriteFlights = document.querySelector(".flight");
-var favoriteHotels = document.querySelector(".hotel");
+var favoriteFlights = document.getElementsByClassName("flight");
+var favoriteHotels = document.getElementsByClassName("hotel");
 
 /* ---------- declares variables for user input for "flight offers search" amadeus api ---------- */
 var originCode = goingFromEl.value; // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
@@ -171,7 +171,7 @@ var getCarrierLogo = function (carrierCode) {
 /* ------------------------------------- BEGINS LOCALSTORAGE ------------------------------------ */
 /* ---------------------------                                        --------------------------- */
 
-/* ----------------------- saves search-form user-input to localStorage ------------------------ */
+/* ------------------------ saves search-form user-input to localStorage ------------------------ */
 var saveFlightFavorite = function () {
   // get today's date (date of search)
   var searchDate = new Date();
@@ -296,7 +296,7 @@ var createFavoritesElements = function (flightSearchLS) {
   }
 };
 
-/* ------------------ loads search history elements from data in localStorage ------------------- */
+/* ---------------------- loads flight favorites from data in localStorage ---------------------- */
 var loadFlightsFavorites = function () {
   // get existing search history from localStorage if it exists
   var flightSearchLS = JSON.parse(localStorage.getItem("flightSearchHistory"));
@@ -311,8 +311,35 @@ var loadFlightsFavorites = function () {
 /* ---------------------------------------------------------------------------------------------- */
 
 /* ---------------------------------------------------------------------------------------------- */
-/* --------------------------------------- BEGINS METHODS --------------------------------------- */
+/* -------------------------------------- BEGINS FUNCTIONS -------------------------------------- */
 /* ---------------------------                                        --------------------------- */
+/* ----------------------------------- display/hide functions ----------------------------------- */
+var showFavoriteFlights = function () {
+  if (favoriteFlights !== null) {
+    for (let i = 0; i < favoriteFlights.length; i++) {
+      favoriteFlights[i].style.display = "";
+    }
+  }
+  if (favoriteHotels !== null) {
+    for (let i = 0; i < favoriteHotels.length; i++) {
+      favoriteHotels[i].style.display = "none";
+    }
+  }
+};
+
+var showFavoriteHotels = function () {
+  if (favoriteFlights !== null) {
+    for (let i = 0; i < favoriteFlights.length; i++) {
+      favoriteFlights[i].style.display = "none";
+    }
+  }
+  if (favoriteHotels !== null) {
+    for (let i = 0; i < favoriteHotels.length; i++) {
+      favoriteHotels[i].style.display = "";
+    }
+  }
+};
+
 /* ------------------------------------- search-form handler ------------------------------------ */
 var searchFormHandler = function () {
   if (flightsTabEl.className === "uk-active") {
@@ -695,30 +722,14 @@ function compare(a, b) {
 // NOT DONE YET
 
 /* ---------------------------                                        --------------------------- */
-/* ---------------------------------------- ENDS METHODS ---------------------------------------- */
+/* --------------------------------------- ENDS FUNCTIONS --------------------------------------- */
 /* ---------------------------------------------------------------------------------------------- */
 
 /* ---------------------------------------------------------------------------------------------- */
 /* ------------------------------------- BEGINS LOAD EVENTS ------------------------------------- */
 /* ---------------------------                                        --------------------------- */
+loadFlightsFavorites();
 
-var showFavoriteFlights = function () {
-  if (favoriteFlights !== null) {
-    favoriteFlights.style.display = "";
-  }
-  if (favoriteHotels !== null) {
-    favoriteHotels.style.display = "none";
-  }
-};
-
-var showFavoriteHotels = function () {
-  if (favoriteFlights !== null) {
-    favoriteFlights.style.display = "none";
-  }
-  if (favoriteHotels !== null) {
-    favoriteHotels.style.display = "";
-  }
-};
 /* ---------------------------                                        --------------------------- */
 /* -------------------------------------- ENDS LOAD EVENTS -------------------------------------- */
 /* ---------------------------------------------------------------------------------------------- */
