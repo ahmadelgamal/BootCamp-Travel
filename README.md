@@ -59,9 +59,10 @@ The app is about 90% complete (as of Wednesday September 9th, 2020) and satisfie
         4. Favorites are stored in localStorage and loaded at revisit & refresh.
 
 ## Challenges & Limitations
-1. Amadeus API is a testing API, and it requires an access token that expires every 30 minutes. So we have to renew it every 30 minutes when testing fetch requests.
-2. Airhex API put a watermark on the airline logos unless the request is paid. We contacted them and they only offer commercial licenses.
-3. Collaborating on GitHub was initially a challenge and we lost a lot of code, but eventually we figured out a better workflow and were able to succeed, thank God.
+1. RapidAPI limits the fetch requests to 5/second and 500/month (for tha basic free account), which is not enough for testing purposes.
+2. Amadeus API is a testing API, and it requires an access token that expires every 30 minutes. So we have to renew it every 30 minutes when testing fetch requests.
+3. Airhex API put a watermark on the airline logos unless the request is paid. We contacted them and they only offer commercial licenses.
+4. Collaborating on GitHub was initially a challenge and we lost a lot of code, but eventually we figured out a better workflow and were able to succeed, thank God.
 
 ## Successes
 1. Collaboration and teamwork! The group was active on Slack, Zoom and GitHub.
