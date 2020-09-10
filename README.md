@@ -2,7 +2,7 @@
 **Bootcamp Travel** is group 7's project 1 at the University of California, Berkeley, extension, blended-online full-stack web-development part-time bootcamp.
 
 ## Purpose of App
-- As a frequent traveler
+- As a frequent traveler...
 - I want to be able to:
     - get quick quotes for airfare and lodging costs
     - and save my favorite results
@@ -11,11 +11,11 @@
     - and access my favorites list in the future
 
 ## Collaborators (Group Members)
-| Name | GitHub Page | Main Role |
-| ---- | ----------- | --------- |
-| Marco Evangelista | https://github.com/marcobjj | UI (`index.html`, `style.css`, `script.js`, `form-select.js`, UI Kit, and all other css and js, except for `hotel.js` and `flights.js`)
-| Gautam Tankha | https://github.com/gtankha | Hotel search (`hotel.js`) |
-| Ahmad El Gamal | https://github.com/ahmadelgamal | Flights search (`flights.js`)
+| Name | GitHub Page | Main Role | Files |
+| ---- | ----------- | --------- | ----- |
+| Gautam Tankha | https://github.com/gtankha | Project Manager & Hotel search | `hotel.js` |
+| Marco Evangelista | https://github.com/marcobjj | User Interface (Structure & Styling) | `index.html`, `style.css`, `script.js`, & `form-select.js` |
+| Ahmad El Gamal | https://github.com/ahmadelgamal | Flights search | `flights.js` |
 
 ## Project Requirements
 1. Must use at least two server-side APIs
@@ -30,10 +30,14 @@
 ## Project Deadline
 11:59PM on Sunday, September 13th, 2020.
 
-## Technology Used
+## Technologies Used
 1. HTML5
 2. CSS3
-3. JavaScript
+3. ES6 JavaScript
+4. JSON
+5. AJAX
+6. jQuery
+7. UI Kit (CSS Framework)
 
 ## Project Status
 The app is about 90% complete (as of Wednesday September 9th, 2020) and satisfies all the requirements (listed above) as follows:
@@ -97,11 +101,12 @@ This app is very simple to use. Just follow these steps:
 - Revisit the website at any time to see your search history, your saved items, or make new searches!
 
 ## Screenshots:
-...
+![Landing Page](./assets/images/screen-shot-1.jpg)
 
-### Main functions of hotel.js are as follows:
-1. **getIdhotel**: Obtains ID of the city to be used for hotel search.
-2. **getProperties**: Gets property ID information based on ID of city, # of adults, check-in date, check-out date, # of entries and pages to display and sorting order (rating or price).
-3. **displayPropertyInfo**: Gets detailed property information based on the ID information from getProperties. Hotel information includes the hotel name, locality, taglines, price, ratings etc..
-4. **setInitial**: Used for initial setup. Sets and displays hotel history results.
-5. **sortOrderFunction**: Assigns the sort order and display based on user choices.
+![Hotel Search](./assets/images/screen-shot-3.jpg)
+
+![Flights Search](./assets/images/screen-shot-2.jpg)
+
+![Flights Search - Select One-way or Roundtrip](./assets/images/screen-shot-4.png)
+
+![Flights Search - Select Tavel Class](./assets/images/screen-shot-5.png)
