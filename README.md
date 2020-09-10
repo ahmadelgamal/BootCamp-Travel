@@ -14,7 +14,7 @@
 | Name | GitHub Page | Main Role | Files |
 | ---- | ----------- | --------- | ----- |
 | Gautam Tankha | https://github.com/gtankha | Project Manager & Hotel search | `hotel.js` |
-| Marco Evangelista | https://github.com/marcobjj | User Interface (Structure & Styling) | `index.html`, `style.css`, `script.js`, & `form-select.js` |
+| Marco Evangelista | https://github.com/marcobjj | User Interface (Structure & Styling) | `index.html`, `style.css`, & `script.js` |
 | Ahmad El Gamal | https://github.com/ahmadelgamal | Flights search | `flights.js` |
 
 ## Technologies Used
