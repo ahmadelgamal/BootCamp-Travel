@@ -107,6 +107,11 @@ nav {
     max-width: 25%;
 }
 
+.height-maxed {
+
+    max-height: 55px;
+}
+
 .width-maxed {
     max-width: 1000px;
 }

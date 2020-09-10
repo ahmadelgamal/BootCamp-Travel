@@ -222,7 +222,7 @@ var getProperties = function (
 
       if (response.ok) {
         response.json().then(function (data6) {
-          $("#hotels-container").css("display", "flex"); // Unhide the document class
+          $("#hotels-container").css("display", ""); // Unhide the document class
 
           if (data6.data.body.searchResults.results.length !== 0) {
             var propId = [];
