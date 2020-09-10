@@ -287,9 +287,6 @@ var createFavoritesElements = function (flightSearchLS) {
       flightIconEl.innerHTML = "&#xf072;<br />Roundtrip";
     }
     flightIconContainerEl.appendChild(flightIconEl);
-
-    // make entire row clickable to refetch flight details
-    flightSearchHistoryEl.addEventListener("click", loadFlightSearchInput);
   }
 };
 
@@ -310,26 +307,6 @@ var loadFlightsFavorites = function () {
 /* ---------------------------------------------------------------------------------------------- */
 /* --------------------------------------- BEGINS METHODS --------------------------------------- */
 /* ---------------------------                                        --------------------------- */
-/* ------------------------------------- favorites handler -------------------------------------- */
-var favoriteFlightHandler = function () {
-  event.preventDefault();
-
-  loadFlightSearchInput();
-  // captureSearchForm();
-  // clears previous fetch from memory;
-  amadeusData = [];
-  // calls function in script.js to display id=flights-container (overall flights container)
-  showFlights();
-  // informs user that search is running
-  searchingMessage();
-  // clears data from previous search
-  flightsGridEl.innerHTML = "";
-  // clears error message from previous search
-  errorMessageEl.textContent = "";
-  saveUrl();
-  getFlightOffersSearch();
-};
-
 /* ------------------------------------- search-form handler ------------------------------------ */
 var searchFormHandler = function () {
   if (flightsTabEl.className === "uk-active") {
@@ -373,27 +350,6 @@ var captureSearchForm = function () {
   }
 };
 
-/* ------------------------- gets flight search input from localStorage ------------------------- */
-var loadFlightSearchInput = function () {
-  var flightSearchLS = JSON.parse(localStorage.getItem("flightSearchHistory"));
-
-  console.log(event.target);
-  // originCode = goingFromEl.value;
-  // destinationCode = goingToEl.value;
-  // departureDate = dateDepartureEl.value;
-  // // checks if user selects roundtrip or one-way
-  // if (tripSelectEl.options[tripSelectEl.selectedIndex].value === "Roundtrip") {
-  //   returnDate = dateReturnEl.value;
-  // } else {
-  //   returnDate = "";
-  // }
-  // numberOfAdults = numberOfAdultsEl.value.charAt(0);
-  // // if no class is selected, then "economy" is selected as default
-  // travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
-  // if (travelClass === "") {
-  //   travelClass = "ECONOMY";
-  // }
-};
 /* -------------------- saves api url depending on one-way or roundtrip input ------------------- */
 var saveUrl = function () {
   // full "flight offers search" api url for one-way
