@@ -52,7 +52,7 @@
       >
         <div class="uk-margin-small-top">
           <ul class="uk-flex-center" uk-tab>
-            <li class="uk-active" id="flights-tab">
+            <li id="flights-tab">
               <a id="flights-btn" href="#"
                 ><span class="fa">&#xf072; </span>Flights</a
               >
@@ -60,6 +60,11 @@
             <li id="hotels-tab">
               <a id="hotels-btn" href="#"
                 ><span class="fa">&#xf594; </span>Hotels</a
+              >
+            </li>
+            <li id="favorites-tab" class="uk-active">
+              <a id="favorites-btn" href="#"
+                ><span class="fa">&#xf004; </span></a
               >
             </li>
           </ul>
@@ -91,6 +96,21 @@
               id="going-to"
               type="text"
               placeholder="&#xf5af;  To:"
+            />
+          </div>
+        </div>
+
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical"
+        >
+          <!--arrival input with custom autocomplete (default browser autocomplete is turned off) -->
+          <div class="uk-form-controls relative">
+            <input
+              autocomplete="off"
+              class="uk-input uk-border-rounded fa"
+              id="hotel-city"
+              type="text"
+              placeholder="&#xf594;  To:"
             />
           </div>
         </div>
@@ -207,9 +227,31 @@
       id="past-search-container"
       class="uk-container uk-container-center uk-padding-small width-maxed"
     >
-      <h3>Your search history:</h3>
+      <h3>Your saved favorites:</h3>
 
       <!-- begins past search grid-->
+
+      <div
+        id="favorites-sub-menu"
+        class="uk-flex uk-flex-center uk-padding-remove-horizontal margin-zero uk-margin-medium-bottom"
+      >
+        <button
+          class="uk-button uk-button-small uk-margin-small-right uk-button-default uk-border-rounded dropdown xs-size-button"
+          id="favorite-flights"
+          type="button"
+        >
+          Flights
+        </button>
+
+        <button
+          class="uk-button uk-button-small uk-margin-small-left uk-button-default uk-border-rounded dropdown xs-size-button"
+          id="favorite-hotels"
+          type="button"
+        >
+          Hotels
+        </button>
+      </div>
+
       <div
         id="past-search-grid"
         class="uk-grid uk-width-1-1 uk-border-rounded uk-background-muted uk-padding-remove-horizontal margin-zero"
@@ -483,7 +525,7 @@
         </div>
       </div>
 
-      <!-- end of hotels menu container -->
+      <!-- ends favorites container -->
 
       <!-- this is the hotels container grid. All single hotel offers should be appended here with JS -->
       <div

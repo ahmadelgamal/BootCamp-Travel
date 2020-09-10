@@ -15,6 +15,19 @@ var showFlightsMenu = function () {
     "uk-margin-small uk-padding-small uk-padding-remove-vertical"
   );
 
+  var goingTo = document.querySelector("#going-to").parentElement.parentElement;
+  goingTo.setAttribute(
+    "class",
+    "uk-margin-small uk-padding-small uk-padding-remove-vertical"
+  );
+
+  var hotelCity = document.querySelector("#hotel-city").parentElement
+    .parentElement;
+  hotelCity.setAttribute(
+    "class",
+    "uk-margin-small uk-padding-small uk-padding-remove-vertical hide"
+  );
+
   var checkIn = document.querySelector("#check-in").parentElement.parentElement;
   checkIn.setAttribute(
     "class",
@@ -61,6 +74,18 @@ var showHotelsMenu = function () {
   goingFrom.setAttribute(
     "class",
     "uk-margin-small uk-padding-small uk-padding-remove-vertical hide"
+  );
+  var goingTo = document.querySelector("#going-to").parentElement.parentElement;
+  goingTo.setAttribute(
+    "class",
+    "uk-margin-small uk-padding-small uk-padding-remove-vertical hide"
+  );
+
+  var hotelCity = document.querySelector("#hotel-city").parentElement
+    .parentElement;
+  hotelCity.setAttribute(
+    "class",
+    "uk-margin-small uk-padding-small uk-padding-remove-vertical"
   );
 
   var checkIn = document.querySelector("#check-in").parentElement.parentElement;
@@ -236,6 +261,7 @@ function autocomplete(inp, arr) {
 /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
 autocomplete(document.getElementById("going-from"), mainCities);
 autocomplete(document.getElementById("going-to"), mainCities);
+autocomplete(document.getElementById("hotel-city"), mainCities);
 
 flightsBtn.addEventListener("click", flightsHandler);
 hotelsBtn.addEventListener("click", hotelsHandler);

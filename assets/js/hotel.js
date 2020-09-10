@@ -349,7 +349,7 @@ $("#form").on("submit", function (event) {
   if (hotelsTabEl.className === "uk-active") {
     event.preventDefault();
     // Read city value from form
-    city = $("#going-to").val();
+    city = $("#hotel-city").val();
     city = city.trim();
     var spc2 = city.split("");
     var spc3 = spc2[1].trim();
