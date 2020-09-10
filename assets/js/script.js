@@ -7,6 +7,8 @@ var flightsContainer = document.querySelector("#flights-container");
 var hotelsContainer = document.querySelector("#hotels-container");
 var searchContainer = document.querySelector("#past-search-container");
 
+var tempAutoCompleteValue = "";
+
 var showFlightsMenu = function () {
   var goingFrom = document.querySelector("#going-from").parentElement
     .parentElement;
@@ -166,6 +168,37 @@ var toggleTripHandler = function (event) {
   }
 };
 
+var tabKeyHandler = function(event){
+
+  if(event.which == 9 && document.activeElement.tagName == "INPUT"){
+
+    var input = document.activeElement;
+   console.log(document.activeElement.id);
+   if(input.id == "going-to" || input.id  == "going-from")
+   {
+
+    input.value = tempAutoCompleteValue;
+    closeAllLists(null, input);
+   }
+  }
+}
+
+var inputBlurHandler = function(event){
+
+  if(tempAutoCompleteValue == "") return;
+
+    var input = event.target;
+   console.log(input.value +"blur");
+   if(input.id == "going-to" || input.id  == "going-from" || input.id  == "hotel-city")
+   {
+
+    input.value = tempAutoCompleteValue;
+    tempAutoCompleteValue = "";
+    closeAllLists(null, input);
+   }
+  
+}
+
 var init = function () {
   showSearchHistory();
   showFlightsMenu();
@@ -186,7 +219,7 @@ function autocomplete(inp, arr) {
     var max = 0;
     var icon = 0;
     /*close any already open lists of autocompleted values*/
-    closeAllLists();
+    closeAllLists(null,inp);
     if (!val) {
       return false;
     }
@@ -219,6 +252,7 @@ function autocomplete(inp, arr) {
 
         if (this.id == "going-from") icon = "&#xf5b0; ";
         if (this.id == "going-to") icon = "&#xf5af; ";
+        if (this.id == "hotel-city") icon = "&#xf594; ";
         /*insert a input field that will hold the current array item's value:*/
         b.innerHTML +=
           "<input class='fa' type='hidden' value='" +
@@ -229,33 +263,47 @@ function autocomplete(inp, arr) {
           ", " +
           arr[i].country +
           "'>";
+        if(max == 1) tempAutoCompleteValue = b.getElementsByTagName("input")[0].value;
+
+          var test = b.getElementsByTagName("input");
+
+          for (var k = 0; k < test.length; k++)
+          {
+
+            console.log(test[k].value+k);
+          }
+
         /*execute a function when someone clicks on the item value (DIV element):*/
         b.addEventListener("click", function (e) {
           /*insert the value for the autocomplete text field:*/
           inp.value = this.getElementsByTagName("input")[0].value;
           /*close the list of autocompleted values
                     (or any other open lists of autocompleted values:*/
-          closeAllLists();
+          closeAllLists(null,inp);
         });
         a.appendChild(b);
       }
     }
   });
 
-  function closeAllLists(elmnt) {
-    /*close all autocomplete lists in the document,
-        except the one passed as an argument:*/
-    var x = document.getElementsByClassName("autocomplete-items");
-    for (var i = 0; i < x.length; i++) {
-      if (elmnt != x[i] && elmnt != inp) {
-        x[i].parentNode.removeChild(x[i]);
-      }
-    }
-  }
+ 
   /*execute a function when someone clicks in the document:*/
+  /*
   document.addEventListener("click", function (e) {
     closeAllLists(e.target);
   });
+  */
+}
+
+function closeAllLists(elmnt,inp) {
+  /*close all autocomplete lists in the document,
+      except the one passed as an argument:*/
+  var x = document.getElementsByClassName("autocomplete-items");
+  for (var i = 0; i < x.length; i++) {
+    if (elmnt != x[i] && elmnt != inp) {
+      x[i].parentNode.removeChild(x[i]);
+    }
+  }
 }
 
 /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
@@ -266,5 +314,8 @@ autocomplete(document.getElementById("hotel-city"), mainCities);
 flightsBtn.addEventListener("click", flightsHandler);
 hotelsBtn.addEventListener("click", hotelsHandler);
 tripSelector.addEventListener("change", toggleTripHandler);
+
+document.addEventListener("keydown",tabKeyHandler);
+document.querySelector("#form").addEventListener("blur",inputBlurHandler,true);
 
 init();
