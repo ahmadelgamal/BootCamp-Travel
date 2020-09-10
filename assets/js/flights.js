@@ -39,8 +39,13 @@ const sortFlightsByLowestPriceEl = document.querySelector(
 const searchingMessageEl = document.getElementById("searching-message"); // constant that points to searching message element
 const errorMessageEl = document.getElementById("error-message"); // constant that points to error message element
 const flightsPastSearchGridEl = document.getElementById("past-search-grid"); // constant that points to flights search history grid
+const favoriteFlightsBtn = document.getElementById("favorite-flights");
+const favoriteHotelsBtn = document.getElementById("favorite-hotels");
 const flightsGridEl = document.getElementById("flights-grid"); // constant that points to flights grid
-// const flightsFavoritesGridEl = document.getElementById("past-search-grid");
+
+// variables that point to favorite items
+var favoriteFlights = document.querySelector(".flight");
+var favoriteHotels = document.querySelector(".hotel");
 
 /* ---------- declares variables for user input for "flight offers search" amadeus api ---------- */
 var originCode = goingFromEl.value; // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
@@ -219,6 +224,7 @@ var createFavoritesElements = function (flightSearchLS) {
     // creates container element for each flight search item
     var flightSearchHistoryContainerEl = document.createElement("div");
     flightSearchHistoryContainerEl.classList.add(
+      "flight",
       "uk-grid",
       "uk-width-1-1",
       "uk-background-default",
@@ -695,7 +701,24 @@ function compare(a, b) {
 /* ---------------------------------------------------------------------------------------------- */
 /* ------------------------------------- BEGINS LOAD EVENTS ------------------------------------- */
 /* ---------------------------                                        --------------------------- */
-// loadFlightsSearchHistory();
+
+var showFavoriteFlights = function () {
+  if (favoriteFlights !== null) {
+    favoriteFlights.style.display = "";
+  }
+  if (favoriteHotels !== null) {
+    favoriteHotels.style.display = "none";
+  }
+};
+
+var showFavoriteHotels = function () {
+  if (favoriteFlights !== null) {
+    favoriteFlights.style.display = "none";
+  }
+  if (favoriteHotels !== null) {
+    favoriteHotels.style.display = "";
+  }
+};
 /* ---------------------------                                        --------------------------- */
 /* -------------------------------------- ENDS LOAD EVENTS -------------------------------------- */
 /* ---------------------------------------------------------------------------------------------- */
@@ -705,6 +728,8 @@ function compare(a, b) {
 /* ---------------------------                                        --------------------------- */
 searchFormEl.addEventListener("submit", searchFormHandler);
 favoritesTabEl.addEventListener("click", loadFlightsFavorites);
+favoriteFlightsBtn.addEventListener("click", showFavoriteFlights);
+favoriteHotelsBtn.addEventListener("click", showFavoriteHotels);
 // sorts search results by price
 // sortFlightsByPriceEl.addEventListener("onchange")
 /* ---------------------------                                        --------------------------- */
@@ -738,7 +763,3 @@ var accessTokenStatus = function () {
 /* ---------------------------                                        --------------------------- */
 /* ------------------------------------- ENDS TESTING CODE -------------------------------------- */
 /* ---------------------------------------------------------------------------------------------- */
-var logThis = function () {
-  event.preventDefault();
-  console.log("Yes!");
-};
