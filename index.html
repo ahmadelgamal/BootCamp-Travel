@@ -308,21 +308,23 @@
           class="uk-button uk-button-small uk-margin-small-right uk-button-default uk-border-rounded xs-size-button"
           type="button"
         >
-          Price
+          Price <span id="price-sorting-arrow">↑</span>
         </button>
 
         <button
+          id="sort-flight-arrival"
           class="uk-button uk-button-small uk-button-default uk-border-rounded xs-size-button"
           type="button"
         >
-          Arrival
+          Arrival <span id="arrival-sorting-arrow"></span>
         </button>
 
         <button
+          id="sort-flight-departure"
           class="uk-button uk-button-small uk-margin-small-left uk-button-default uk-border-rounded xs-size-button"
           type="button"
         >
-          Departure
+          Departure <span id="departure-sorting-arrow"></span>
         </button>
 
         <!-- end of flights menu container -->
@@ -339,9 +341,9 @@
       >
         <!-- THIS IS NOT AN ELEMENT - begins single flight (trip) container, must be generated dymanically with JS and then appended to the div above (id="flights-grid") -->
         <!-- begins outbound itinerary -->
-        <div
+        <!-- <div
           class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded margin-zero uk-margin-small-top"
-        >
+        > -->
           <!-- begins segment -->
           <!-- <div class="uk-width-1-2 uk-padding-remove-horizontal">
             <h4 class="black-ops">Delta Airlines</h4>
@@ -380,7 +382,7 @@
             </p>
           </div> -->
           <!-- ends segment -->
-        </div>
+        <!-- </div> -->
         <!-- ends outbound itinerary -->
 
         <!-- begins inbound itinerary -->
