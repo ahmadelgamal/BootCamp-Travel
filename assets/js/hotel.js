@@ -52,7 +52,7 @@ var displayPropertyInfo = function (
 
 
   $(newHotellay2).append(
-    '<div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s uk-background-cover" style="background-image:url('+ urlTh +')"> </div>'
+    '<div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s uk-background-cover responsive-height" style="background-image:url('+ urlTh +')"> </div>'
   );
   if ((newHotellay1.id)=="hotels-grid") {
   $(newHotellay2).append(

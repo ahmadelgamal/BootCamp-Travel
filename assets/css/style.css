@@ -131,4 +131,9 @@ nav h3 {
   .test-border {
     border: 0px;
   }
+  .responsive-height {
+
+    height:300px;
+
+  }
 }
