@@ -11,6 +11,7 @@
 /*jshint esversion: 6 */
 
 /* ---------------------------------------------------------------------------------------------- */
+/* -------------------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES --------------------- */
 /* ---------------------------                                        --------------------------- */
 
 /* ------------ declares constants to point to existing html elements in index.html ------------- */
@@ -64,7 +65,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "MHIGbu54QFOshKRonRglDeEQamjY"; // access token must be renewed for 30 minutes at a time
+const accessToken = "6wDahWrkOW4wHPZzqsieViIMdmiT"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
@@ -227,13 +228,12 @@ var saveFlightFavorite = function (favoriteFlightBtn) {
   localStorage.setItem("flightFavorites", JSON.stringify(flightSearchLS));
 };
 
-/* ------------------ deletes favorite item from localStorage when unselected ------------------- */
+/* ----------------- deletes favorite flight from localStorage when unselected ------------------ */
 var deleteFlightFavorite = function (favoriteFlightBtn) {
   // gets existing favorites from localStorage
   flightSearchLS = JSON.parse(localStorage.getItem("flightFavorites"));
 
   for (let i = 0; i < flightSearchLS.length; i++) {
-    debugger;
     if (elementsObjectArray.indexOfFlight === flightSearchLS[i].indexOfFlight) {
       flightSearchLS.splice(flightSearchLS[i], 1);
     }
