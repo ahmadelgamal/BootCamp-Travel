@@ -298,6 +298,17 @@ function autocomplete(inp, arr) {
 {
         /*insert a input field that will hold the current array item's value:*/
 
+        b.innerHTML =
+        "<strong>" + arr[i].iata + "</strong> ";
+      b.innerHTML +=
+        ", "+
+        arr[i].name+
+        ", "+
+        arr[i].city+
+        ", "+
+        arr[i].country;
+
+
         
         b.innerHTML +=
           "<input class='fa' type='hidden' value='" +
