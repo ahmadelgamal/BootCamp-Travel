@@ -62,7 +62,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "KuMw0F7pwsZ0myWyC7BU1eVBdqwZ"; // access token must be renewed for 30 minutes at a time
+const accessToken = "p7wsTqMsLqkDdS5JwJFP14CYh8CY"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
@@ -318,32 +318,6 @@ var loadFlightsFavorites = function () {
 /* -------------------------------------- BEGINS FUNCTIONS -------------------------------------- */
 /* ---------------------------                                        --------------------------- */
 /* ----------------------------------- display/hide functions ----------------------------------- */
-// var showFavoriteFlights = function () {
-//   if (favoriteFlights !== null) {
-//     for (let i = 0; i < favoriteFlights.length; i++) {
-//       favoriteFlights[i].style.display = "";
-//     }
-//   }
-//   if (favoriteHotels !== null) {
-//     for (let i = 0; i < favoriteHotels.length; i++) {
-//       favoriteHotels[i].style.display = "none";
-//     }
-//   }
-// };
-
-// var showFavoriteHotels = function () {
-//   if (favoriteFlights !== null) {
-//     for (let i = 0; i < favoriteFlights.length; i++) {
-//       favoriteFlights[i].style.display = "none";
-//     }
-//   }
-//   if (favoriteHotels !== null) {
-//     for (let i = 0; i < favoriteHotels.length; i++) {
-//       favoriteHotels[i].style.display = "";
-//     }
-//   }
-// };
-
 var showFavoriteFlights = function () {
   flightsFavoritesGridEl.style.display = "";
   hotelsFavoritesGridEl.style.display = "none";
@@ -549,6 +523,7 @@ var writeSegmentData = function (
   carrierLogoEl.alt = "airline logo";
   carrierLogoEl.style.width = "70";
   carrierLogoEl.style.height = "70";
+  carrierLogoEl.setAttribute("loading", "lazy");
   carrierLogoEl.src = getCarrierLogo(carrierCode); // gets carrier logo from airhex api
   segmentContainerEl.appendChild(carrierLogoEl);
 
