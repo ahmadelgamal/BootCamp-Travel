@@ -39,16 +39,14 @@ var displayPropertyInfo = function (
   // Add DOM elements to display the property
   var hotellayvar = "hotellay" + j.toString();
   $(newHotellay1).append(
-    '<div class = "uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal" id = "' +
+    '<div class = "uk-grid uk-border-rounded uk-width-1-1 uk-background-default uk-padding-remove-horizontal margin-zero" id = "' +
     hotellayvar +
     '">'
   );
   var newHotellay2 = document.getElementById(hotellayvar);
 
   $(newHotellay2).append(
-    '<div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s uk-background-muted"> <img class="uk-border-rounded" src=' +
-    urlTh +
-    "> </div>"
+    '<div class="uk-border-rounded uk-width-1-3@m uk-width1-1@s uk-background-cover" style="background-image:url('+ urlTh +')"> </div>'
   );
 
   $(newHotellay2).append(

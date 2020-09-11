@@ -174,7 +174,7 @@ var toggleTripHandler = function (event) {
 var tabKeyHandler = function (event) {
   if (event.which == 9 && document.activeElement.tagName == "INPUT") {
     var input = document.activeElement;
-    console.log(document.activeElement.id);
+   
     if (input.id == "going-to" || input.id == "going-from") {
       // input.value = tempAutoCompleteValue;
       closeAllLists(null, input);
@@ -213,7 +213,7 @@ var inputBlurHandler = function (event) {
   }
 
   var input = event.target;
-  console.log(input.value + "blur");
+
   if (
      input.id == "going-to" ||
     input.id == "going-from" ||
@@ -271,19 +271,34 @@ function autocomplete(inp, arr) {
         b.clasName = "auto-complete";
 
         /*make the matching letters bold:*/
-        b.innerHTML =
-          "<strong>" + arr[i].iata + "</strong> ";
-        b.innerHTML +=
 
-          arr[i].name +
-          ", "+
-          arr[i].city ;
-     
         if (this.id == "going-from") icon = "&#xf5b0; ";
         if (this.id == "going-to") icon = "&#xf5af; ";
-        if (this.id == "hotel-city") icon = "&#xf594; ";
+        if (this.id == "hotel-city") { icon = "&#xf594; "; 
 
+        b.innerHTML =
+          "<strong>" + arr[i].city + "</strong> ";
+        b.innerHTML +=
+          ", "+
+          arr[i].country 
+  
+          +" ("+arr[i].iata+")";
+      
+
+        b.innerHTML +=
+        "<input class='fa' type='hidden' value='" +
+        icon +
+        arr[i].city +
+        ", "+
+        arr[i].country +
+        "'>";
+
+      }
+      else
+{
         /*insert a input field that will hold the current array item's value:*/
+
+        
         b.innerHTML +=
           "<input class='fa' type='hidden' value='" +
           icon +
@@ -293,14 +308,15 @@ function autocomplete(inp, arr) {
           ", "+
           arr[i].city +
           "'>";
+    }
         if (max == 1)
           tempAutoCompleteValue = b.getElementsByTagName("input")[0].value;
 
         var test = b.getElementsByTagName("input");
 
-        for (var k = 0; k < test.length; k++) {
-          console.log(test[k].value + k);
-        }
+        // for (var k = 0; k < test.length; k++) {
+        //   console.log(test[k].value + k);
+        // }
 
         /*execute a function when someone clicks on the item value (DIV element):*/
         b.addEventListener("mousedown", function (e) {
