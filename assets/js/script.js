@@ -1,5 +1,6 @@
 var flightsBtn = document.querySelector("#flights-btn");
 var hotelsBtn = document.querySelector("#hotels-btn");
+var menuTabs = document.querySelector("#menu-tabs");
 
 var tripSelector = document.querySelector("#trip");
 
@@ -8,6 +9,8 @@ var hotelsContainer = document.querySelector("#hotels-container");
 var searchContainer = document.querySelector("#past-search-container");
 
 var tempAutoCompleteValue = "";
+
+var activeTab = "flights";
 
 var showFlightsMenu = function () {
   var goingFrom = document.querySelector("#going-from").parentElement
@@ -179,6 +182,31 @@ var tabKeyHandler = function (event) {
   }
 };
 
+var tabsHandler = function(event) {
+
+
+if (event.target.id == "flights-btn" || event.target.parentElement.id == "flights-btn") {
+  
+  activeTab = "flights";
+}
+
+if (event.target.id == "hotels-btn" || event.target.parentElement.id == "hotels-btn") {
+  
+  activeTab = "hotels";
+}
+
+if (event.target.id == "favorites-btn" || event.target.parentElement.id == "favorites-btn") {
+
+setTimeout(function (){
+document.querySelector("#"+activeTab+"-tab").className = "uk-active";
+
+document.querySelector("#favorites-tab").className = "";
+},300);
+
+}
+
+}
+
 var inputBlurHandler = function (event) {
   if (tempAutoCompleteValue == "") {
     return;
@@ -187,8 +215,8 @@ var inputBlurHandler = function (event) {
   var input = event.target;
   console.log(input.value + "blur");
   if (
-    // input.id == "going-to" ||
-    // input.id == "going-from" ||
+     input.id == "going-to" ||
+    input.id == "going-from" ||
     input.id == "hotel-city"
   ) {
     input.value = tempAutoCompleteValue;
@@ -230,10 +258,11 @@ function autocomplete(inp, arr) {
     this.parentNode.appendChild(a);
 
     /*for each item in the array...*/
-    for (i = 0; i < arr.length; i++) {
+  //  for (i = 0; i < arr.length; i++) {
+    for (i in arr) {
       /*check if the item starts with the same letters as the text field value:*/
       if (
-        arr[i].name.substr(0, val.length).toUpperCase() == val.toUpperCase()
+        arr[i].iata.substr(0, val.length).toUpperCase() == val.toUpperCase() ||  arr[i].city.substr(0, val.length).toUpperCase() == val.toUpperCase() 
       ) {
         if (max++ >= 4) break;
         /*create a DIV element for each matching element:*/
@@ -243,26 +272,26 @@ function autocomplete(inp, arr) {
 
         /*make the matching letters bold:*/
         b.innerHTML =
-          "<strong>" + arr[i].name.substr(0, val.length) + "</strong>";
+          "<strong>" + arr[i].iata + "</strong> ";
         b.innerHTML +=
-          arr[i].name.substr(val.length) +
-          ", " +
-          arr[i].subcountry +
-          ", " +
-          arr[i].country;
 
+          arr[i].name +
+          ", "+
+          arr[i].city ;
+     
         if (this.id == "going-from") icon = "&#xf5b0; ";
         if (this.id == "going-to") icon = "&#xf5af; ";
         if (this.id == "hotel-city") icon = "&#xf594; ";
+
         /*insert a input field that will hold the current array item's value:*/
         b.innerHTML +=
           "<input class='fa' type='hidden' value='" +
           icon +
+          arr[i].iata +
+          ", "+
           arr[i].name +
-          ", " +
-          arr[i].subcountry +
-          ", " +
-          arr[i].country +
+          ", "+
+          arr[i].city +
           "'>";
         if (max == 1)
           tempAutoCompleteValue = b.getElementsByTagName("input")[0].value;
@@ -306,12 +335,14 @@ function closeAllLists(elmnt, inp) {
 }
 
 /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-// autocomplete(document.getElementById("going-from"), mainCities);
-// autocomplete(document.getElementById("going-to"), mainCities);
-autocomplete(document.getElementById("hotel-city"), mainCities);
+autocomplete(document.getElementById("going-from"), mainAirports); 
+autocomplete(document.getElementById("going-to"), mainAirports);
+autocomplete(document.getElementById("hotel-city"), mainAirports);
 
 flightsBtn.addEventListener("click", flightsHandler);
 hotelsBtn.addEventListener("click", hotelsHandler);
+menuTabs.addEventListener("click",tabsHandler);
+
 tripSelector.addEventListener("change", toggleTripHandler);
 
 document.addEventListener("keydown", tabKeyHandler);
