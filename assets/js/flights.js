@@ -15,6 +15,7 @@
 /* ------------ declares constants to point to existing html elements in index.html ------------- */
 // constants that point to search form
 const flightsTabEl = document.getElementById("flights-tab");
+const favoritesTabEl = document.getElementById("favorites-tab");
 const searchFormEl = document.getElementById("form");
 const goingFromEl = document.getElementById("going-from");
 const goingToEl = document.getElementById("going-to");
@@ -38,7 +39,13 @@ const sortFlightsByLowestPriceEl = document.querySelector(
 const searchingMessageEl = document.getElementById("searching-message"); // constant that points to searching message element
 const errorMessageEl = document.getElementById("error-message"); // constant that points to error message element
 const flightsPastSearchGridEl = document.getElementById("past-search-grid"); // constant that points to flights search history grid
+const favoriteFlightsBtn = document.getElementById("favorite-flights");
+const favoriteHotelsBtn = document.getElementById("favorite-hotels");
 const flightsGridEl = document.getElementById("flights-grid"); // constant that points to flights grid
+
+// variables that point to favorite items
+var favoriteFlights = document.getElementsByClassName("flight");
+var favoriteHotels = document.getElementsByClassName("hotel");
 
 /* ---------- declares variables for user input for "flight offers search" amadeus api ---------- */
 var originCode = goingFromEl.value; // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
@@ -54,7 +61,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "O30SaKHhoiJuGZgVxHcxDhKzQpKG"; // access token must be renewed for 30 minutes at a time
+const accessToken = "wddxfUtcXdm0gZIVlfUiHjEbrqVo"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
@@ -86,7 +93,6 @@ var apiUrl;
 var amadeusData = [];
 
 // counters for writing api data to html
-var flightCounter;
 var intineraryCounter;
 var segmentCounter;
 var travelerCounter;
@@ -103,6 +109,7 @@ const airhexApiKey = "VDjfGgv8mxiTvvLLwGicD6V2eq";
 
 /* ---------------------------------- declares other variables ---------------------------------- */
 var toggleInterval; // timer for toggling "searching" message
+var flightFavoriteCounter = 0; // counter to id flight favorites
 
 /* ---------------------------                                        --------------------------- */
 /* --------------------- ENDS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ---------------------- */
@@ -125,7 +132,11 @@ var getFlightOffersSearch = function () {
     })
     .then(function (data) {
       amadeusData = data;
-      console.log(amadeusData);
+      clearInterval(toggleInterval); // stops toggling searching message
+      searchingMessageEl.innerHTML =
+        "There are " +
+        amadeusData.meta.count +
+        " flights available for your selected route!"; // displays number of matching search results
       writeData();
     })
     .catch(function (error) {
@@ -164,8 +175,8 @@ var getCarrierLogo = function (carrierCode) {
 /* ------------------------------------- BEGINS LOCALSTORAGE ------------------------------------ */
 /* ---------------------------                                        --------------------------- */
 
-/* ----------------------- saves search-form user-input to localStorage ------------------------ */
-var saveFlightSearch = function () {
+/* ------------------------ saves search-form user-input to localStorage ------------------------ */
+var saveFlightFavorite = function () {
   // get today's date (date of search)
   var searchDate = new Date();
   // converts it into ui design format
@@ -179,6 +190,8 @@ var saveFlightSearch = function () {
     dateOfSearch: searchDate,
     from: originCode,
     to: destinationCode,
+    travelClass: travelClass,
+    numberOfAdults: numberOfAdults,
     departs: departureDate,
     returns: returnDate,
   };
@@ -205,11 +218,17 @@ var saveFlightSearch = function () {
 };
 
 /* -------------------- creates search history elements on visit and refresh -------------------- */
-var createSearchHistoryElements = function (flightSearchLS) {
+var createFavoritesElements = function (flightSearchLS) {
+  showSearchHistory(); // calls function in script.js to show favorites
+
+  // clears previous favorites
+  flightsPastSearchGridEl.innerHTML = "";
+
   for (let i = 0; i < flightSearchLS.length; i++) {
     // creates container element for each flight search item
     var flightSearchHistoryContainerEl = document.createElement("div");
     flightSearchHistoryContainerEl.classList.add(
+      "flight",
       "uk-grid",
       "uk-width-1-1",
       "uk-background-default",
@@ -217,6 +236,8 @@ var createSearchHistoryElements = function (flightSearchLS) {
       "test-border",
       "margin-zero"
     );
+    flightSearchHistoryContainerEl.id =
+      "flight-favorite-" + flightFavoriteCounter;
     flightsPastSearchGridEl.appendChild(flightSearchHistoryContainerEl);
 
     // creates container element for left column
@@ -276,34 +297,17 @@ var createSearchHistoryElements = function (flightSearchLS) {
       flightIconEl.innerHTML = "&#xf072;<br />Roundtrip";
     }
     flightIconContainerEl.appendChild(flightIconEl);
-
-    // // adds button for event listener to make search history items clickable
-    // var flightHistorySelectBtn = document.createElement("button");
-    // flightHistorySelectBtn.classList.add(
-    //   "uk-button",
-    //   "uk-margin-large-top",
-    //   "uk-margin-remove-horizontal",
-    //   "uk-button-large",
-    //   "uk-button-primary",
-    //   "uk-border-rounded",
-    //   "hide"
-    // );
-    // flightHistorySelectBtn.innerHTML = "Select";
-    // flightIconContainerEl.appendChild(flightHistorySelectBtn);
-
-    // adds event listener to flightSearchHistoryContainerEl
-    // flightSearchHistoryContainerEl.onclick = console.log("clicked");
   }
 };
 
-/* ------------------ loads search history elements from data in localStorage ------------------- */
-var loadFlightsSearchHistory = function () {
+/* ---------------------- loads flight favorites from data in localStorage ---------------------- */
+var loadFlightsFavorites = function () {
   // get existing search history from localStorage if it exists
   var flightSearchLS = JSON.parse(localStorage.getItem("flightSearchHistory"));
 
   // if there is a search history, the following creates search history elements from data in localStorage
   if (flightSearchLS !== null) {
-    createSearchHistoryElements(flightSearchLS);
+    createFavoritesElements(flightSearchLS);
   }
 };
 /* ---------------------------                                        --------------------------- */
@@ -311,8 +315,34 @@ var loadFlightsSearchHistory = function () {
 /* ---------------------------------------------------------------------------------------------- */
 
 /* ---------------------------------------------------------------------------------------------- */
-/* --------------------------------------- BEGINS METHODS --------------------------------------- */
+/* -------------------------------------- BEGINS FUNCTIONS -------------------------------------- */
 /* ---------------------------                                        --------------------------- */
+/* ----------------------------------- display/hide functions ----------------------------------- */
+var showFavoriteFlights = function () {
+  if (favoriteFlights !== null) {
+    for (let i = 0; i < favoriteFlights.length; i++) {
+      favoriteFlights[i].style.display = "";
+    }
+  }
+  if (favoriteHotels !== null) {
+    for (let i = 0; i < favoriteHotels.length; i++) {
+      favoriteHotels[i].style.display = "none";
+    }
+  }
+};
+
+var showFavoriteHotels = function () {
+  if (favoriteFlights !== null) {
+    for (let i = 0; i < favoriteFlights.length; i++) {
+      favoriteFlights[i].style.display = "none";
+    }
+  }
+  if (favoriteHotels !== null) {
+    for (let i = 0; i < favoriteHotels.length; i++) {
+      favoriteHotels[i].style.display = "";
+    }
+  }
+};
 
 /* ------------------------------------- search-form handler ------------------------------------ */
 var searchFormHandler = function () {
@@ -462,23 +492,157 @@ var convertTime = function (timeToConvert) {
 
 /* -------------------- converts price from fetch to comma separated format --------------------- */
 var convertPrice = function (priceToConvert) {
-  var convertedPrice = priceToConvert.toString();
-  convertedPrice = convertedPrice.split("");
+  if (typeof priceToConvert !== "string") {
+    var stringPrice = priceToConvert.toFixed(2);
+  } else {
+    var stringPrice = priceToConvert;
+  }
+  var convertedPrice = stringPrice.split("");
   if (convertedPrice.length > 6) {
-    convertedPrice.splice(convertedPrice[convertedPrice.length - 7], 0, ",");
+    convertedPrice.splice(convertedPrice.length - 6, 0, ",");
     convertedPrice = convertedPrice.join("");
   } else {
-    convertedPrice = priceToConvert;
+    convertedPrice = stringPrice;
   }
   return convertedPrice;
 };
 
+/* -------------------- gets and writes segment data from Amadeus API --------------------- */
+var writeSegmentData = function (
+  itineraryContainerEl,
+  segmentCount,
+  carriersCodeList,
+  locationsCityCodeList
+) {
+  /* ----- creates segment container in index.html ----- */
+  var segmentContainerEl = document.createElement("div");
+  segmentContainerEl.classList.add(
+    "uk-width-1-2",
+    "uk-padding-remove-horizontal"
+  );
+  itineraryContainerEl.appendChild(segmentContainerEl);
+
+  /* ----- carrier (ariline) name ----- */
+  var carrierCode =
+    amadeusData.data[flightCounter].itineraries[intineraryCounter].segments[
+      segmentCounter
+    ].carrierCode;
+  var carrierFull = carriersCodeList[carrierCode];
+  var carrierFullEl = document.createElement("h4");
+  carrierFullEl.className = "black-ops";
+  carrierFullEl.textContent = carrierFull;
+  segmentContainerEl.appendChild(carrierFullEl);
+
+  /* ----- carrier (ariline) logo ----- */
+  var carrierLogoEl = document.createElement("img");
+  carrierLogoEl.className = "frame";
+  carrierLogoEl.alt = "airline logo";
+  carrierLogoEl.style.width = "70";
+  carrierLogoEl.style.height = "70";
+  carrierLogoEl.src = getCarrierLogo(carrierCode); // gets carrier logo from airhex api
+  segmentContainerEl.appendChild(carrierLogoEl);
+
+  /* ----- flight details container ----- */
+  var flightDetailsEl = document.createElement("p");
+  // appends flight details to itinerary
+  segmentContainerEl.appendChild(flightDetailsEl);
+
+  // city data
+  // NEED TO DECLARE departureCityFull & arrivalCityFulls
+  var citySpanEl = document.createElement("span");
+  // citySpanEl.innerHTML = departureCityFull + " to " + arrivalCityFull + "<br />";
+  citySpanEl.innerHTML = "Test City 1" + " to " + "Test City 2" + "<br />";
+  flightDetailsEl.appendChild(citySpanEl);
+
+  // airport data
+  var departureCityCode =
+    amadeusData.data[flightCounter].itineraries[intineraryCounter].segments[
+      segmentCounter
+    ].departure.iataCode;
+  var arrivalCityCode =
+    amadeusData.data[flightCounter].itineraries[intineraryCounter].segments[
+      segmentCounter
+    ].arrival.iataCode;
+  var airportSpanEl = document.createElement("span");
+  airportSpanEl.classList.add("fa", "stronger", "margin-small-left");
+  airportSpanEl.innerHTML = departureCityCode + " &#xf072; " + arrivalCityCode;
+  flightDetailsEl.appendChild(airportSpanEl);
+
+  // departure and arrival times
+  var departureTime =
+    amadeusData.data[flightCounter].itineraries[intineraryCounter].segments[
+      segmentCounter
+    ].departure.at;
+  var arrivalTime =
+    amadeusData.data[flightCounter].itineraries[intineraryCounter].segments[
+      segmentCounter
+    ].arrival.at;
+  var timeSpanEl = document.createElement("span");
+  timeSpanEl.innerHTML =
+    "<br />" +
+    convertTime(departureTime) +
+    " to " +
+    convertTime(arrivalTime) +
+    "<br />";
+  flightDetailsEl.appendChild(timeSpanEl);
+
+  /* ----- flight number ----- */
+  var flightNumber =
+    amadeusData.data[flightCounter].itineraries[intineraryCounter].segments[
+      segmentCounter
+    ].number;
+  var flightNumberEl = document.createElement("span");
+  flightNumberEl.className = "black-ops";
+  flightNumberEl.innerHTML = "<br /> Flight #: " + flightNumber + "<br />";
+  flightDetailsEl.appendChild(flightNumberEl);
+};
+
+/* ----------------------- writes price data elements to index.html ------------------------ */
+var writePriceData = function () {
+  /* ----- price container ----- */
+  var priceContainerEl = document.createElement("div");
+  priceContainerEl.classList.add(
+    "uk-border-rounded",
+    "uk-width-1-1",
+    "uk-padding-small",
+    "uk-margin-small-top",
+    "price-flights"
+  );
+  flightsGridEl.appendChild(priceContainerEl);
+
+  // more details
+  var saveEl = document.createElement("span");
+  saveEl.classList.add("black-ops", "stronger", "uk-text-emphasis");
+  saveEl.innerHTML = "Save to Favorites";
+  priceContainerEl.appendChild(saveEl);
+
+  var grandTotalPrice = amadeusData.data[flightCounter].price.grandTotal;
+  var priceEl = document.createElement("h2");
+  priceEl.classList.add("uk-margin-remove-vertical", "black-ops");
+  priceEl.innerHTML = "$" + convertPrice(grandTotalPrice);
+  priceContainerEl.appendChild(priceEl);
+
+  // creates button for each element to click on to save flight search favorite
+  var saveBtn = document.createElement("button");
+  saveBtn.classList.add(
+    "uk-button",
+    "uk-button-large",
+    "uk-button-primary",
+    "uk-border-rounded",
+    "uk-padding-remove-vertical",
+    "xs-size-button",
+    "hide"
+  );
+  saveBtn.innerHTML = "Select";
+  priceContainerEl.appendChild(saveBtn);
+
+  // saves flight search favorite to localStorage
+  priceContainerEl.addEventListener("click", saveFlightFavorite);
+};
+
 /* ---------------- writes data from "flight offers search" amadeus api to html ----------------- */
 var writeData = function (data) {
-  // if fetch was successful, then save search user input to localStorage
-  saveFlightSearch();
-  sortAmadeusData = amadeusData.data;
-  console.log(sortAmadeusData.sort(compare));
+  // sortAmadeusData = amadeusData.data;
 
   // dictionary of codes. used to convert codes to full names
   var carriersCodeList = amadeusData.dictionaries.carriers;
@@ -487,13 +651,9 @@ var writeData = function (data) {
   // number of flights available matching user input
   var flightCount = amadeusData.meta.count;
 
-  clearInterval(toggleInterval); // stops toggling searching message
-  searchingMessageEl.innerHTML =
-    "There are " + flightCount + " flights available for your selected route!"; // displays number of matching search results
-
-  // each flight details
+  // each flight (trip) details
   for (flightCounter = 0; flightCounter < flightCount; flightCounter++) {
-    // gets number of itineraries
+    // gets number of itineraries (usually 1 for outbound and 1 for inbound)
     var intineraryCount = amadeusData.data[flightCounter].itineraries.length;
 
     // loops through number of itineraries to create a container element for each
@@ -513,7 +673,7 @@ var writeData = function (data) {
       );
       flightsGridEl.appendChild(itineraryContainerEl);
 
-      // number of segments for each flight. it is also "number of stops" for "trip"
+      // number of segments for each itinerary. it is also "number of stops".
       var segmentCount =
         amadeusData.data[flightCounter].itineraries[intineraryCounter].segments
           .length;
@@ -524,173 +684,30 @@ var writeData = function (data) {
         segmentCounter < segmentCount;
         segmentCounter++
       ) {
-        // essential details
-        var carrierCode =
-          amadeusData.data[flightCounter].itineraries[intineraryCounter]
-            .segments[segmentCounter].carrierCode;
-        var carrierFull = carriersCodeList[carrierCode];
-        var flightNumber =
-          amadeusData.data[flightCounter].itineraries[intineraryCounter]
-            .segments[segmentCounter].number;
-        var departureCityCode =
-          amadeusData.data[flightCounter].itineraries[intineraryCounter]
-            .segments[segmentCounter].departure.iataCode;
-        var arrivalCityCode =
-          amadeusData.data[flightCounter].itineraries[intineraryCounter]
-            .segments[segmentCounter].arrival.iataCode;
-        var departureTime =
-          amadeusData.data[flightCounter].itineraries[intineraryCounter]
-            .segments[segmentCounter].departure.at;
-        var arrivalTime =
-          amadeusData.data[flightCounter].itineraries[intineraryCounter]
-            .segments[segmentCounter].arrival.at;
-        var travelerPricingsCount =
-          amadeusData.data[flightCounter].travelerPricings.length;
-        var cabin = [];
-        for (
-          travelerCounter = 0;
-          travelerCounter < travelerPricingsCount;
-          travelerCounter++
-        ) {
-          cabin.push(
-            amadeusData.data[flightCounter].travelerPricings[travelerCounter]
-              .fareDetailsBySegment[segmentCounter].cabin
-          );
-        }
-        var grandTotalPrice = amadeusData.data[flightCounter].price.grandTotal;
-
-        // more details
-        var departureTerminal =
-          amadeusData.data[flightCounter].itineraries[intineraryCounter]
-            .segments[segmentCounter].departure.terminal;
-        var arrivalTerminal =
-          amadeusData.data[flightCounter].itineraries[intineraryCounter]
-            .segments[segmentCounter].arrival.terminal;
-        var flightDuration =
-          amadeusData.data[flightCounter].itineraries[intineraryCounter]
-            .segments[segmentCounter].duration;
-        var airClass = [];
-        for (
-          travelerCounter = 0;
-          travelerCounter < travelerPricingsCount;
-          travelerCounter++
-        ) {
-          airClass.push(
-            amadeusData.data[flightCounter].travelerPricings[travelerCounter]
-              .fareDetailsBySegment[segmentCounter].class
-          );
-        }
-
-        // optional details
-        var departureCountryCode =
-          locationsCityCodeList[departureCityCode].countryCode;
-        var arrivalCountryCode =
-          locationsCityCodeList[arrivalCityCode].countryCode;
-
-        /* ----- writes segment data to index.html ----- */
-        var segmentContainerEl = document.createElement("div");
-        segmentContainerEl.classList.add(
-          "uk-width-1-2",
-          "uk-padding-remove-horizontal"
+        writeSegmentData(
+          itineraryContainerEl,
+          segmentCount,
+          carriersCodeList,
+          locationsCityCodeList
         );
-        itineraryContainerEl.appendChild(segmentContainerEl);
-
-        /* ----- carrier (ariline) name ----- */
-        var carrierFullEl = document.createElement("h4");
-        carrierFullEl.className = "black-ops";
-        carrierFullEl.textContent = carrierFull;
-        segmentContainerEl.appendChild(carrierFullEl);
-
-        /* ----- carrier (ariline) logo ----- */
-        var carrierLogoEl = document.createElement("img");
-        carrierLogoEl.className = "frame";
-        carrierLogoEl.alt = "airline logo";
-        carrierLogoEl.style.width = "70";
-        carrierLogoEl.style.height = "70";
-        carrierLogoEl.src = getCarrierLogo(carrierCode); // gets carrier logo from airhex api
-        segmentContainerEl.appendChild(carrierLogoEl);
-
-        /* ----- flight details ----- */
-        var flightDetailsEl = document.createElement("p");
-        // appends flight details to itinerary
-        segmentContainerEl.appendChild(flightDetailsEl);
-
-        // city data
-        // NEED TO DECLARE departureCityFull & arrivalCityFulls
-        var citySpanEl = document.createElement("span");
-        // citySpanEl.innerHTML = departureCityFull + " to " + arrivalCityFull + "<br />";
-        citySpanEl.innerHTML =
-          "Test City 1" + " to " + "Test City 2" + "<br />";
-        segmentContainerEl.appendChild(citySpanEl);
-
-        // airport data
-        var airportSpanEl = document.createElement("span");
-        airportSpanEl.classList.add("fa", "stronger", "margin-small-left");
-        airportSpanEl.innerHTML =
-          departureCityCode + " &#xf072; " + arrivalCityCode;
-        segmentContainerEl.appendChild(airportSpanEl);
-
-        // departure and arrival times
-        var timeSpanEl = document.createElement("span");
-        timeSpanEl.innerHTML =
-          "<br />" +
-          convertTime(departureTime) +
-          " to " +
-          convertTime(arrivalTime) +
-          "<br />";
-        segmentContainerEl.appendChild(timeSpanEl);
-
-        /* ----- flight number ----- */
-        var flightNumberEl = document.createElement("span");
-        flightNumberEl.className = "black-ops";
-        flightNumberEl.innerHTML =
-          "<br /> Flight #: " + flightNumber + "<br />";
-        segmentContainerEl.appendChild(flightNumberEl);
       }
     }
-    /* ----- price container ----- */
-    var priceContainerEl = document.createElement("div");
-    priceContainerEl.classList.add(
-      "uk-border-rounded",
-      "uk-width-1-1",
-      "uk-padding-small",
-      "uk-margin-small-top",
-      "price-flights"
-    );
-    flightsGridEl.appendChild(priceContainerEl);
-
-    // more details
-    var saveEl = document.createElement("span");
-    saveEl.classList.add("black-ops", "stronger", "uk-text-emphasis");
-    saveEl.innerHTML = "Reserve";
-    priceContainerEl.appendChild(saveEl);
-
-    var priceEl = document.createElement("h2");
-    priceEl.classList.add("uk-margin-remove-vertical", "black-ops");
-    priceEl.innerHTML = "$" + convertPrice(grandTotalPrice);
-    priceContainerEl.appendChild(priceEl);
-
-    var saveBtn = document.createElement("button");
-    saveBtn.classList.add(
-      "uk-button",
-      "uk-button-large",
-      "uk-button-primary",
-      "uk-border-rounded",
-      "uk-padding-remove-vertical",
-      "xs-size-button",
-      "hide"
-    );
-    saveBtn.innerHTML = "Select";
-    priceContainerEl.appendChild(saveBtn);
+    writePriceData();
   }
 };
 
+/* ------------------ triggers sorting of search results according to price --------------------- */
+function sortData() {
+  event.preventDefault;
+  console.log("clicked");
+  var sortedAmadeusData = amadeusData;
+  sortedAmadeusData.sort(compare);
+  console.log(sortedAmadeusData);
+}
+
 /* ------------------------- sorts search results according to price ---------------------------- */
-// var sortData = function () {
-// if (sortFlightsByLowestPriceEl.className === "active") {
 function compare(a, b) {
-  // console.log(a.copyAmadeusData.price.grandTotal);
-  // console.log(b.copyAmadeusData.price.grandTotal);
+  // if (sortFlightsByLowestPriceEl.className === "active") {
 
   const priceA = a.price.grandTotal;
   const priceB = b.price.grandTotal;
@@ -703,10 +720,8 @@ function compare(a, b) {
   }
 
   return comparison * -1;
+  // }
 }
-
-// }
-// };
 
 /* --------------------- sorts search results according to arrival time ------------------------- */
 // NOT DONE YET
@@ -715,13 +730,14 @@ function compare(a, b) {
 // NOT DONE YET
 
 /* ---------------------------                                        --------------------------- */
-/* ---------------------------------------- ENDS METHODS ---------------------------------------- */
+/* --------------------------------------- ENDS FUNCTIONS --------------------------------------- */
 /* ---------------------------------------------------------------------------------------------- */
 
 /* ---------------------------------------------------------------------------------------------- */
 /* ------------------------------------- BEGINS LOAD EVENTS ------------------------------------- */
 /* ---------------------------                                        --------------------------- */
-loadFlightsSearchHistory();
+loadFlightsFavorites();
+
 /* ---------------------------                                        --------------------------- */
 /* -------------------------------------- ENDS LOAD EVENTS -------------------------------------- */
 /* ---------------------------------------------------------------------------------------------- */
@@ -730,9 +746,11 @@ loadFlightsSearchHistory();
 /* ------------------------------------ BEGINS EVENT HANDLERS ----------------------------------- */
 /* ---------------------------                                        --------------------------- */
 searchFormEl.addEventListener("submit", searchFormHandler);
+favoritesTabEl.addEventListener("click", loadFlightsFavorites);
+favoriteFlightsBtn.addEventListener("click", showFavoriteFlights);
+favoriteHotelsBtn.addEventListener("click", showFavoriteHotels);
 
-// sorts search results by price
-// sortFlightsByPriceEl.addEventListener("onchange")
+sortFlightsByPriceEl.addEventListener("onchange", sortData); // sorts search results by price
 /* ---------------------------                                        --------------------------- */
 /* ------------------------------------ ENDS EVENT HANDLERS ------------------------------------- */
 /* ---------------------------------------------------------------------------------------------- */

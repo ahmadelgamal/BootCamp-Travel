@@ -32,10 +32,7 @@
 
   <body>
     <!-- begins navbar / topbar -->
-    <nav
-      class="uk-navbar-container"
-      uk-navbar
-    >
+    <nav class="uk-navbar-container" uk-navbar>
       <div class="uk-navbar-center">
         <h3><span class="fa">&#xf19c;</span> Bootcamp Travel</h3>
       </div>
@@ -222,15 +219,14 @@
     </div>
     <!-- ends search form container -->
 
-    <!-- begins past search container-->
+    <!-- begins past search (favorites) container-->
     <div
       id="past-search-container"
       class="uk-container uk-container-center uk-padding-small width-maxed"
     >
       <h3>Your saved favorites:</h3>
 
-      <!-- begins past search grid-->
-
+      <!-- begins buttons to select favorites by flights or hotels -->
       <div
         id="favorites-sub-menu"
         class="uk-flex uk-flex-center uk-padding-remove-horizontal margin-zero uk-margin-medium-bottom"
@@ -251,14 +247,16 @@
           Hotels
         </button>
       </div>
+      <!-- ends buttons to select favorites by flights or hotels -->
 
+      <!-- begins past search (favorites) grid-->
       <div
         id="past-search-grid"
         class="uk-grid uk-width-1-1 uk-border-rounded uk-background-muted uk-padding-remove-horizontal margin-zero"
       >
-        <!-- begins single past flights search, should be created dynamically with JS-->
-        <!-- <div
-          class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero"
+        <!-- begins single past flights search (favorite flights), should be created dynamically with JS-->
+        <div
+          class="flight uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero"
         >
           <div class="uk-width-1-2 uk-padding-remove-horizontal">
             <p>Searched on 09.01.2020</p>
@@ -279,12 +277,12 @@
               Select
             </button>
           </div>
-        </div> -->
-        <!-- ends single past flights search-->
+        </div>
+        <!-- ends single past flights search (favorite flights) -->
 
-        <!-- begins single past hotels search -->
+        <!-- begins single past hotels search (favorite hotels) -->
         <div
-          class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero"
+          class="hotel uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero"
         >
           <div class="uk-width-1-2 uk-padding-remove-horizontal">
             <p>Searched on 09.01.2020</p>
@@ -309,11 +307,11 @@
             </button>
           </div>
         </div>
-        <!-- ends single past hotels search -->
+        <!-- ends single past hotels search (favorite hotels) -->
       </div>
-      <!-- ends past search grid-->
+      <!-- ends past search (favorites) grid-->
     </div>
-    <!-- ends past search container-->
+    <!-- ends past search (favorites) container-->
 
     <!-- begins overall flights container -->
     <div
@@ -325,18 +323,18 @@
         id="flights-sub-menu"
         class="uk-flex uk-flex-center uk-padding-remove-horizontal margin-zero"
       >
-        <button
+        <button id="sort-flight-price"
           class="uk-button uk-button-small uk-margin-small-right uk-button-default uk-border-rounded dropdown xs-size-button"
           type="button"
         >
           Price
         </button>
-        <div uk-dropdown>
+        <!-- <div uk-dropdown>
           <ul id="sort-flight-price" class="uk-nav uk-dropdown-nav stronger">
             <li class="active" id="lowest-flight-price">Lowest</li>
             <li id="highest-flight-price">Highest</li>
           </ul>
-        </div>
+        </div> -->
 
         <button
           class="uk-button uk-button-small uk-button-default uk-border-rounded dropdown xs-size-button"
