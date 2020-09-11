@@ -183,21 +183,65 @@ var getProperties = function (
               // for (k = 0; k < 1000000000; k++) { }; // Meant to throttle API call to maintain less that 5 calls in a second
               var propIde = [];
               propIde[i] = data6.data.body.searchResults.results[i].id;
-              var urlThumb =
-                data6.data.body.searchResults.results[i].thumbnailUrl;
-              var starRating =
-                data6.data.body.searchResults.results[i].starRating;
-              if (starRating == "undefined" || starRating == undefined) {
-                starRating = "No ratings available";
+             
+              if ((typeof data6.data.body.searchResults.results[i].thumbnailUrl) == "undefined"){
+                var url4 = "https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png";
               }
-              var url3 = urlThumb.split("_");
-              var url4 = url3[0] + "_y.jpg"; // URL for property image
-              var propertyName =
-                data6.data.body.searchResults.results[i].name;
-              var address = data6.data.body.searchResults.results[i].address.streetAddress + "<br>" + data6.data.body.searchResults.results[i].address.locality + ", " + data6.data.body.searchResults.results[i].address.region + " " + data6.data.body.searchResults.results[i].address.postalCode + "<br>" + data6.data.body.searchResults.results[i].address.countryName
-              var totalGuestReviews = data6.data.body.searchResults.results[i].guestReviews.total;
-              var neighbourhoodName = data6.data.body.searchResults.results[i].neighbourhood;
-              var price = data6.data.body.searchResults.results[i].ratePlan.price.current;
+              else {
+                var urlThumb =
+                data6.data.body.searchResults.results[i].thumbnailUrl;
+                var url3 = urlThumb.split("_");
+                var url4 = url3[0] + "_y.jpg"; // URL for property image
+              }
+
+              if ((typeof data6.data.body.searchResults.results[i].starRating) == "undefined") {
+                var starRating = "No ratings available";
+              }
+              else {
+                var starRating =
+                data6.data.body.searchResults.results[i].starRating;
+              }
+          
+              if ((typeof data6.data.body.searchResults.results[i].guestReviews) == "undefined") {
+                var totalGuestReviews = "Missing Information About Guest";
+              }
+              else {
+                var totalGuestReviews = data6.data.body.searchResults.results[i].guestReviews.total;
+              }
+
+              if ((typeof data6.data.body.searchResults.results[i].name == "undefined")) {
+                var propertyName = "Missing Property Information";
+              }
+              else {
+                var propertyName =
+              data6.data.body.searchResults.results[i].name;
+              }
+              
+              if (((typeof data6.data.body.searchResults.results[i].address.streetAddress) || (typeof data6.data.body.searchResults.results[i].address.locality) || (typeof data6.data.body.searchResults.results[i].address.region) || (typeof data6.data.body.searchResults.results[i].address.postalCode) || (typeof data6.data.body.searchResults.results[i].address.countryName)) == "undefined") {
+
+                var address= "Missing Address Information"
+
+              }
+              else {
+
+                var address = data6.data.body.searchResults.results[i].address.streetAddress + "<br>" + data6.data.body.searchResults.results[i].address.locality + ", " + data6.data.body.searchResults.results[i].address.region + " " + data6.data.body.searchResults.results[i].address.postalCode + "<br>" + data6.data.body.searchResults.results[i].address.countryName;
+
+              }
+
+              if ((typeof data6.data.body.searchResults.results[i].neighbourhood)== "undefined") {
+                var neighbourhoodName = "Missing Neighbourhood Information";
+              }
+              else {
+                var neighbourhoodName = data6.data.body.searchResults.results[i].neighbourhood;
+              }
+
+              if ((typeof data6.data.body.searchResults.results[i].ratePlan.price == "undefined")) {
+                price = "Missing Price Information";
+              }
+              else {
+                var price = data6.data.body.searchResults.results[i].ratePlan.price.current;
+              }
+            
 
               displayPropertyInfo(
                 propIde[i],
