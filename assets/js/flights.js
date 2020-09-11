@@ -64,7 +64,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "Ah9CimNA8EGkY2IcwX031xAKwwYN"; // access token must be renewed for 30 minutes at a time
+const accessToken = "UM7rLHGFtrVbEtx7mwVybJZIG6Vk"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
@@ -173,47 +173,49 @@ var saveFlightFavorite = function () {
   if (favoriteFlightBtn.style.backgroundColor !== "rgb(255, 165, 0)") {
     favoriteFlightBtn.style.backgroundColor = "rgb(255, 165, 0)"; // change background color of favorite to orange
 
-    // add to localStorage
-    // get today's date (date of search)
-    var searchDate = new Date();
-    // converts it into ui design format
-    var dd = String(searchDate.getDate()).padStart(2, "0");
-    var mm = String(searchDate.getMonth() + 1).padStart(2, "0"); //January is 0!
-    var yyyy = searchDate.getFullYear();
-    searchDate = mm + "/" + dd + "/" + yyyy;
+    // takes out the "flight-xx" class name from the classNames list
+    var indexOfFlight = favoriteFlightBtn.className.split(" ");
+    indexOfFlight = indexOfFlight[0];
 
-    // declares an object to hold user input into flight search form
-    var currentFlightSearch = {
-      searchDate: searchDate,
-      originCode: originCode,
-      destinationCode: destinationCode,
-      travelClass: travelClass,
-      numberOfAdults: numberOfAdults,
-      departureDate: departureDate,
-      returnDate: returnDate,
-    };
-
-    console.log(currentFlightSearch);
+    var outboundHTML = document.querySelector("." + indexOfFlight);
+    var priceHTML = favoriteFlightBtn;
+    if (document.querySelectorAll("." + indexOfFlight).length === 3) {
+      var inboundHTML = document.querySelector(
+        "." + indexOfFlight + ":nth-child(2)"
+      );
+      console.log(inboundHTML);
+      elementsObjectArray = {
+        outbound: outboundHTML.innerHTML,
+        inbound: inboundHTML.innerHTML,
+        price: priceHTML.innerHTML,
+      };
+    } else {
+      elementsObjectArray = {
+        outbound: outboundHTML.innerHTML,
+        inbound: "",
+        price: priceHTML.innerHTML,
+      };
+    }
 
     // declares an array to be used for localStorage
     var flightSearchLS = [];
-    // get existing search history from localStorage if it exists
-    flightSearchLS = JSON.parse(localStorage.getItem("flightSearchHistory"));
+    // gets existing favorites from localStorage if it exists
+    flightSearchLS = JSON.parse(localStorage.getItem("flightFavorites"));
 
-    // if there was no search history, then it is set to current flight search
+    // if there was no favorites, then it is set to current flight favorite
     if (flightSearchLS === null) {
-      flightSearchLS = [currentFlightSearch];
-      // otherwise, if there is a search history, then the current search is added on top of the list
+      flightSearchLS = [elementsObjectArray];
+      // otherwise, if there is a favorite, then the current favorite is added on top of the list
     } else {
-      flightSearchLS.unshift(currentFlightSearch);
+      flightSearchLS.unshift(elementsObjectArray);
     }
 
-    // limits search history to five searches
+    // limits favorite flights to five
     if (flightSearchLS.length === 6) {
       flightSearchLS.splice(5, 1);
     }
 
-    localStorage.setItem("flightSearchHistory", JSON.stringify(flightSearchLS));
+    localStorage.setItem("flightFavorites", JSON.stringify(flightSearchLS));
   } else {
     favoriteFlightBtn.style.backgroundColor = ""; // return background color to default if unselected
     // deleteFavoriteFlight();
@@ -229,83 +231,47 @@ var createFavoritesElements = function (flightSearchLS) {
 
   for (let i = 0; i < flightSearchLS.length; i++) {
     // creates container element for each flight search item
-    var flightSearchHistoryContainerEl = document.createElement("div");
-    flightSearchHistoryContainerEl.classList.add(
+    var outboundContainerEl = document.createElement("div");
+    outboundContainerEl.classList.add(
       "uk-grid",
       "uk-width-1-1",
       "uk-background-default",
       "uk-border-rounded",
-      "test-border",
-      "margin-zero"
+      "margin-zero",
+      "uk-margin-small-top"
     );
-    flightSearchHistoryContainerEl.id =
-      "flight-favorite-" + flightFavoriteCounter;
-    flightsFavoritesGridEl.appendChild(flightSearchHistoryContainerEl);
+    outboundContainerEl.innerHTML = flightSearchLS[i].outbound;
+    flightsFavoritesGridEl.appendChild(outboundContainerEl);
 
-    // creates container element for left column
-    var flightSearchHistoryEl = document.createElement("div");
-    flightSearchHistoryEl.classList.add(
-      "uk-width-1-2",
-      "uk-padding-remove-horizontal"
-    );
-    flightSearchHistoryContainerEl.appendChild(flightSearchHistoryEl);
-
-    var searchedOnEl = document.createElement("p");
-    searchedOnEl.innerHTML = "Searched on " + flightSearchLS[i].searchDate;
-    flightSearchHistoryEl.appendChild(searchedOnEl);
-
-    var routeEl = document.createElement("h4");
-    routeEl.innerHTML =
-      "<span class='fa'>" +
-      flightSearchLS[i].originCode +
-      " &#xf072; " +
-      flightSearchLS[i].destinationCode +
-      "</span>";
-    flightSearchHistoryEl.appendChild(routeEl);
-
-    var tripDateEl = document.createElement("p");
-    tripDateEl.className = "fa";
-    if (flightSearchLS[i].returnDate === "") {
-      tripDateEl.innerHTML = "&#xf783; " + flightSearchLS[i].departureDate + "<br />";
-    } else {
-      tripDateEl.innerHTML =
-        "&#xf783; " +
-        flightSearchLS[i].departureDate +
-        "<br />" +
-        "&#xf783; " +
-        flightSearchLS[i].returnDate;
-    }
-    flightSearchHistoryEl.appendChild(tripDateEl);
-
-    // creates container element for right-column
-    var flightIconContainerEl = document.createElement("div");
-    flightIconContainerEl.classList.add(
+    var inboundContainerEl = document.createElement("div");
+    inboundContainerEl.classList.add(
+      "uk-grid",
+      "uk-width-1-1",
+      "uk-background-default",
       "uk-border-rounded",
-      "uk-width-1-2",
-      "uk-padding-small",
-      "price"
+      "margin-zero",
+      "uk-margin-small-top"
     );
-    flightSearchHistoryContainerEl.appendChild(flightIconContainerEl);
+    inboundContainerEl.innerHTML = flightSearchLS[i].inbound;
+    flightsFavoritesGridEl.appendChild(inboundContainerEl);
 
-    var flightIconEl = document.createElement("h3");
-    flightIconEl.classList.add(
-      "uk-margin-remove-vertical",
-      "uk-text-center",
-      "fa"
+    var priceContainerEl = document.createElement("div");
+    priceContainerEl.classList.add(
+      "uk-border-rounded",
+      "uk-width-1-1",
+      "uk-padding-small",
+      "uk-margin-small-top",
+      "price-flights"
     );
-    if (flightSearchLS[i].returnDate === "") {
-      flightIconEl.innerHTML = "&#xf072;<br />One-way";
-    } else {
-      flightIconEl.innerHTML = "&#xf072;<br />Roundtrip";
-    }
-    flightIconContainerEl.appendChild(flightIconEl);
+    priceContainerEl.innerHTML = flightSearchLS[i].price;
+    flightsFavoritesGridEl.appendChild(priceContainerEl);
   }
 };
 
 /* ---------------------- loads flight favorites from data in localStorage ---------------------- */
 var loadFlightsFavorites = function () {
   // get existing search history from localStorage if it exists
-  var flightSearchLS = JSON.parse(localStorage.getItem("flightSearchHistory"));
+  var flightSearchLS = JSON.parse(localStorage.getItem("flightFavorites"));
 
   // if there is a search history, the following creates search history elements from data in localStorage
   if (flightSearchLS !== null) {
@@ -609,7 +575,7 @@ var writePriceData = function () {
   // more details
   var saveEl = document.createElement("span");
   saveEl.classList.add("black-ops", "stronger", "uk-text-emphasis");
-  saveEl.innerHTML = "Save to Favorites";
+  saveEl.innerHTML = "Favorite";
   priceContainerEl.appendChild(saveEl);
 
   var grandTotalPrice = amadeusData.data[flightCounter].price.grandTotal;
