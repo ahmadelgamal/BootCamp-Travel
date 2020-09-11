@@ -137,7 +137,7 @@ var getFlightOffersSearch = function () {
       clearInterval(toggleInterval); // stops toggling searching message
       searchingMessageEl.textContent = ""; // clears searching message
       errorMessageEl.textContent =
-        "There was an error in this search. Please change the dates or cities.";
+        "Error!. Please check the dates and airport codes.";
     });
 };
 
