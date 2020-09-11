@@ -9,7 +9,6 @@
 /* ---------------------------------------------------------------------------------------------- */
 
 /* ---------------------------------------------------------------------------------------------- */
-/* --------------------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES -------------------- */
 /* ---------------------------                                        --------------------------- */
 
 /* ------------ declares constants to point to existing html elements in index.html ------------- */
@@ -26,13 +25,13 @@ const travelClassEl = document.getElementById("travel-class"); // ECONOMY, PREMI
 const numberOfAdultsEl = document.getElementById("guests-select");
 
 // constants that point to sorting flight search elements
+/* --------------------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES -------------------- */
 // this time I'm using querySelector for a change :)
+const sortFlightsMenuEl = document.querySelector("#flights-sub-menu");
 const sortFlightsByPriceEl = document.querySelector("#sort-flight-price");
-const sortFlightsByHighestPriceEl = document.querySelector(
-  "#highest-flight-price"
-);
+const sortFlightsByArrivalEl = document.querySelector("#sort-flight-arrival");
 const sortFlightsByLowestPriceEl = document.querySelector(
-  "#lowest-flight-price"
+  "#sort-flight-departure"
 );
 
 // constants that point to other flight search elements
@@ -62,7 +61,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "p7wsTqMsLqkDdS5JwJFP14CYh8CY"; // access token must be renewed for 30 minutes at a time
+const accessToken = "l73MGw5QHw8QzAcAzU3q6yoAcY1A"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
@@ -326,6 +325,14 @@ var showFavoriteFlights = function () {
 var showFavoriteHotels = function () {
   flightsFavoritesGridEl.style.display = "none";
   hotelsFavoritesGridEl.style.display = "";
+};
+
+var hideFlightSortingMenu = function () {
+  if (flightsGridEl.textContent.trim() == "") {
+    sortFlightsMenuEl.style.display = "none";
+  } else {
+    sortFlightsMenuEl.style.display = "";
+  }
 };
 
 /* ------------------------------------- search-form handler ------------------------------------ */
@@ -629,6 +636,9 @@ var writePriceData = function () {
 var writeData = function (data) {
   // sortAmadeusData = amadeusData.data;
 
+  // shows flights sorting menu
+  sortFlightsMenuEl.style.display = "";
+
   // dictionary of codes. used to convert codes to full names
   var carriersCodeList = amadeusData.dictionaries.carriers;
   var locationsCityCodeList = amadeusData.dictionaries.locations;
@@ -731,6 +741,7 @@ loadFlightsFavorites();
 /* ------------------------------------ BEGINS EVENT HANDLERS ----------------------------------- */
 /* ---------------------------                                        --------------------------- */
 searchFormEl.addEventListener("submit", searchFormHandler);
+flightsTabEl.addEventListener("click", hideFlightSortingMenu);
 favoritesTabEl.addEventListener("click", loadFlightsFavorites);
 favoriteFlightsBtn.addEventListener("click", showFavoriteFlights);
 favoriteHotelsBtn.addEventListener("click", showFavoriteHotels);
