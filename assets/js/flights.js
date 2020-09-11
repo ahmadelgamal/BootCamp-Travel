@@ -65,7 +65,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "IEhqYHDDRCKRj79Ngygh4iIb95qw"; // access token must be renewed for 30 minutes at a time
+const accessToken = "hlSepXSfWfhP0fNgkWAYCNk8hAgc"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /*  declares required query variables for "flight offers search" amadeus api  */
@@ -433,50 +433,29 @@ var searchingMessage = function () {
 var convertTime = function (timeToConvert) {
   // first change time to proper format
   var convertedTime = timeToConvert.split("");
-  convertedTime.splice(0, 11);
-  convertedTime.splice(5, 3);
+  convertedTime = convertedTime.slice(11, 16);
 
-  var timeDesignation;
+  var minutes = convertedTime.slice(2,5);
+  minutes = minutes.join("");
 
-  // then add am or pm and change the numbers accordingly (for example, 18 become 6pm)
-  // if 0x:xx, it's am
-  if (convertedTime[0] === 0) {
-    timeDesignation = "am";
-    // if 00:xx, it's 12:xxam
-    if (convertedTime[1] === 0) {
-      convertedTime[0] = "1";
-      convertedTime[1] = "2";
-    }
-    // if 10:xx or 11:xx, it's am
-  } else if (convertedTime[0] == 1 && convertedTime[1] < 2) {
-    timeDesignation = "am";
-    // if 12:xx, it's 12:xxpm
-  } else if (convertedTime[0] == 1 && convertedTime[1] == 2) {
-    timeDesignation = "pm";
-    // if 1x:xx (other than 10, 11, or 12) or 2x:xx, it's pm
-  } else {
-    timeDesignation = "pm";
-    if (
-      convertedTime[0] == 1 ||
-      (convertedTime[0] == 2 && convertedTime[1] > 1)
-    ) {
-      convertedTime[0] -= 1;
-      convertedTime[1] -= 2;
-    } else {
-      var index1 = parseInt(convertedTime[1]) + 8;
-      convertedTime[1] = index1;
-      convertedTime.splice(0, 1);
-    }
+  var hour = convertedTime.slice(0, 2);
+  hour = hour.join("");
+  hour = parseInt(hour);
+
+  if (hour === 00) {
+    hour = 12;
+    var timeDesignation = "am";
+  } else if (hour < 12) {
+    var timeDesignation = "am";
+  } else if (hour === 12) {
+    var timeDesignation = "pm";
+  }
+  else {
+    hour = hour - 12;
+    var timeDesignation = "pm";
   }
 
-  if (convertedTime[0] === 0) {
-    convertedTime.splice(0, 1);
-  }
-
-  convertedTime = convertedTime.join("");
-
-  convertedTime = convertedTime.concat(timeDesignation);
-  // return converted time
+  convertedTime = hour + minutes + timeDesignation;
   return convertedTime;
 };
 
