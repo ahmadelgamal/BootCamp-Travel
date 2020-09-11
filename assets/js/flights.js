@@ -132,7 +132,11 @@ var getFlightOffersSearch = function () {
     })
     .then(function (data) {
       amadeusData = data;
-      // console.log(amadeusData);
+      clearInterval(toggleInterval); // stops toggling searching message
+      searchingMessageEl.innerHTML =
+        "There are " +
+        amadeusData.meta.count +
+        " flights available for your selected route!"; // displays number of matching search results
       writeData();
     })
     .catch(function (error) {
@@ -647,10 +651,6 @@ var writeData = function (data) {
 
   // number of flights available matching user input
   var flightCount = amadeusData.meta.count;
-
-  clearInterval(toggleInterval); // stops toggling searching message
-  searchingMessageEl.innerHTML =
-    "There are " + flightCount + " flights available for your selected route!"; // displays number of matching search results
 
   // each flight (trip) details
   for (flightCounter = 0; flightCounter < flightCount; flightCounter++) {
