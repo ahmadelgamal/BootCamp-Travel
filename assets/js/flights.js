@@ -64,7 +64,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "TuK8CgL3KOpbBdPy9niZKWufJVsL"; // access token must be renewed for 30 minutes at a time
+const accessToken = "Ah9CimNA8EGkY2IcwX031xAKwwYN"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
@@ -168,44 +168,56 @@ var getCarrierLogo = function (carrierCode) {
 
 /* ------------------------ saves search-form user-input to localStorage ------------------------ */
 var saveFlightFavorite = function () {
-  // get today's date (date of search)
-  var searchDate = new Date();
-  // converts it into ui design format
-  var dd = String(searchDate.getDate()).padStart(2, "0");
-  var mm = String(searchDate.getMonth() + 1).padStart(2, "0"); //January is 0!
-  var yyyy = searchDate.getFullYear();
-  searchDate = mm + "/" + dd + "/" + yyyy;
+  var favoriteFlightBtn = event.target.closest(".price-flights");
 
-  // declares an object to hold user input into flight search form
-  var currentFlightSearch = {
-    dateOfSearch: searchDate,
-    from: originCode,
-    to: destinationCode,
-    travelClass: travelClass,
-    numberOfAdults: numberOfAdults,
-    departs: departureDate,
-    returns: returnDate,
-  };
+  if (favoriteFlightBtn.style.backgroundColor !== "rgb(255, 165, 0)") {
+    favoriteFlightBtn.style.backgroundColor = "rgb(255, 165, 0)"; // change background color of favorite to orange
 
-  // declares an array to be used for localStorage
-  var flightSearchLS = [];
-  // get existing search history from localStorage if it exists
-  flightSearchLS = JSON.parse(localStorage.getItem("flightSearchHistory"));
+    // add to localStorage
+    // get today's date (date of search)
+    var searchDate = new Date();
+    // converts it into ui design format
+    var dd = String(searchDate.getDate()).padStart(2, "0");
+    var mm = String(searchDate.getMonth() + 1).padStart(2, "0"); //January is 0!
+    var yyyy = searchDate.getFullYear();
+    searchDate = mm + "/" + dd + "/" + yyyy;
 
-  // if there was no search history, then it is set to current flight search
-  if (flightSearchLS === null) {
-    flightSearchLS = [currentFlightSearch];
-    // otherwise, if there is a search history, then the current search is added on top of the list
+    // declares an object to hold user input into flight search form
+    var currentFlightSearch = {
+      searchDate: searchDate,
+      originCode: originCode,
+      destinationCode: destinationCode,
+      travelClass: travelClass,
+      numberOfAdults: numberOfAdults,
+      departureDate: departureDate,
+      returnDate: returnDate,
+    };
+
+    console.log(currentFlightSearch);
+
+    // declares an array to be used for localStorage
+    var flightSearchLS = [];
+    // get existing search history from localStorage if it exists
+    flightSearchLS = JSON.parse(localStorage.getItem("flightSearchHistory"));
+
+    // if there was no search history, then it is set to current flight search
+    if (flightSearchLS === null) {
+      flightSearchLS = [currentFlightSearch];
+      // otherwise, if there is a search history, then the current search is added on top of the list
+    } else {
+      flightSearchLS.unshift(currentFlightSearch);
+    }
+
+    // limits search history to five searches
+    if (flightSearchLS.length === 6) {
+      flightSearchLS.splice(5, 1);
+    }
+
+    localStorage.setItem("flightSearchHistory", JSON.stringify(flightSearchLS));
   } else {
-    flightSearchLS.unshift(currentFlightSearch);
+    favoriteFlightBtn.style.backgroundColor = ""; // return background color to default if unselected
+    // deleteFavoriteFlight();
   }
-
-  // limits search history to five searches
-  if (flightSearchLS.length === 6) {
-    flightSearchLS.splice(5, 1);
-  }
-
-  localStorage.setItem("flightSearchHistory", JSON.stringify(flightSearchLS));
 };
 
 /* -------------------- creates search history elements on visit and refresh -------------------- */
@@ -239,29 +251,29 @@ var createFavoritesElements = function (flightSearchLS) {
     flightSearchHistoryContainerEl.appendChild(flightSearchHistoryEl);
 
     var searchedOnEl = document.createElement("p");
-    searchedOnEl.innerHTML = "Searched on " + flightSearchLS[i].dateOfSearch;
+    searchedOnEl.innerHTML = "Searched on " + flightSearchLS[i].searchDate;
     flightSearchHistoryEl.appendChild(searchedOnEl);
 
     var routeEl = document.createElement("h4");
     routeEl.innerHTML =
       "<span class='fa'>" +
-      flightSearchLS[i].from +
+      flightSearchLS[i].originCode +
       " &#xf072; " +
-      flightSearchLS[i].to +
+      flightSearchLS[i].destinationCode +
       "</span>";
     flightSearchHistoryEl.appendChild(routeEl);
 
     var tripDateEl = document.createElement("p");
     tripDateEl.className = "fa";
-    if (flightSearchLS[i].returns === "") {
-      tripDateEl.innerHTML = "&#xf783; " + flightSearchLS[i].departs + "<br />";
+    if (flightSearchLS[i].returnDate === "") {
+      tripDateEl.innerHTML = "&#xf783; " + flightSearchLS[i].departureDate + "<br />";
     } else {
       tripDateEl.innerHTML =
         "&#xf783; " +
-        flightSearchLS[i].departs +
+        flightSearchLS[i].departureDate +
         "<br />" +
         "&#xf783; " +
-        flightSearchLS[i].returns;
+        flightSearchLS[i].returnDate;
     }
     flightSearchHistoryEl.appendChild(tripDateEl);
 
@@ -281,7 +293,7 @@ var createFavoritesElements = function (flightSearchLS) {
       "uk-text-center",
       "fa"
     );
-    if (flightSearchLS[i].returns === "") {
+    if (flightSearchLS[i].returnDate === "") {
       flightIconEl.innerHTML = "&#xf072;<br />One-way";
     } else {
       flightIconEl.innerHTML = "&#xf072;<br />Roundtrip";
@@ -585,6 +597,7 @@ var writePriceData = function () {
   /* ----- price container ----- */
   var priceContainerEl = document.createElement("div");
   priceContainerEl.classList.add(
+    "flight-" + flightCounter, // used to store favorites in localStorage
     "uk-border-rounded",
     "uk-width-1-1",
     "uk-padding-small",
@@ -650,6 +663,7 @@ var writeData = function (data) {
     ) {
       var itineraryContainerEl = document.createElement("div");
       itineraryContainerEl.classList.add(
+        "flight-" + flightCounter,
         "uk-grid",
         "uk-width-1-1",
         "uk-background-default",
