@@ -61,7 +61,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "i7TbLLOe7oZC2sjUPFWiA9URN2oW"; // access token must be renewed for 30 minutes at a time
+const accessToken = "wddxfUtcXdm0gZIVlfUiHjEbrqVo"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
@@ -643,7 +643,6 @@ var writePriceData = function () {
 /* ---------------- writes data from "flight offers search" amadeus api to html ----------------- */
 var writeData = function (data) {
   // sortAmadeusData = amadeusData.data;
-  // console.log(sortAmadeusData.sort(compare));
 
   // dictionary of codes. used to convert codes to full names
   var carriersCodeList = amadeusData.dictionaries.carriers;
@@ -697,6 +696,15 @@ var writeData = function (data) {
   }
 };
 
+/* ------------------ triggers sorting of search results according to price --------------------- */
+function sortData() {
+  event.preventDefault;
+  console.log("clicked");
+  var sortedAmadeusData = amadeusData;
+  sortedAmadeusData.sort(compare);
+  console.log(sortedAmadeusData);
+}
+
 /* ------------------------- sorts search results according to price ---------------------------- */
 function compare(a, b) {
   // if (sortFlightsByLowestPriceEl.className === "active") {
@@ -741,8 +749,8 @@ searchFormEl.addEventListener("submit", searchFormHandler);
 favoritesTabEl.addEventListener("click", loadFlightsFavorites);
 favoriteFlightsBtn.addEventListener("click", showFavoriteFlights);
 favoriteHotelsBtn.addEventListener("click", showFavoriteHotels);
-// sorts search results by price
-// sortFlightsByPriceEl.addEventListener("onchange")
+
+sortFlightsByPriceEl.addEventListener("onchange", sortData); // sorts search results by price
 /* ---------------------------                                        --------------------------- */
 /* ------------------------------------ ENDS EVENT HANDLERS ------------------------------------- */
 /* ---------------------------------------------------------------------------------------------- */
