@@ -64,7 +64,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "gTQW1kPA5pS2L4l0PYDGp0thWbNR"; // access token must be renewed for 30 minutes at a time
+const accessToken = "MHIGbu54QFOshKRonRglDeEQamjY"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
@@ -183,8 +183,7 @@ var flightFavoriteHandler = function () {
 /* --------------------------------- gets favorite flight data ---------------------------------- */
 var getFavoriteFlightData = function (favoriteFlightBtn) {
   // takes out the "flight-xx" class name from the classNames list
-  var indexOfFlight = favoriteFlightBtn.className.split(" ");
-  indexOfFlight = indexOfFlight[0];
+  var indexOfFlight = favoriteFlightBtn.className.split(" ")[0];
 
   var outboundHTML = document.querySelector("." + indexOfFlight);
   var priceHTML = favoriteFlightBtn;
@@ -230,17 +229,12 @@ var saveFlightFavorite = function (favoriteFlightBtn) {
 
 /* ------------------ deletes favorite item from localStorage when unselected ------------------- */
 var deleteFlightFavorite = function (favoriteFlightBtn) {
-  // gets existing favorites from localStorage if it exists
+  // gets existing favorites from localStorage
   flightSearchLS = JSON.parse(localStorage.getItem("flightFavorites"));
 
-  console.log(elementsObjectArray.indexOfFlight);
-
   for (let i = 0; i < flightSearchLS.length; i++) {
-    console.log(flightSearchLS[i].indexOfFlight);
-    if (
-      elementsObjectArray.indexOfFlight.trim() ===
-      flightSearchLS[i].indexOfFlight.trim()
-    ) {
+    debugger;
+    if (elementsObjectArray.indexOfFlight === flightSearchLS[i].indexOfFlight) {
       flightSearchLS.splice(flightSearchLS[i], 1);
     }
   }
@@ -289,7 +283,10 @@ var createFavoritesElements = function (flightSearchLS) {
       "uk-margin-small-top",
       "price-flights"
     );
+    // priceContainerEl.style.backgroundColor = "rgb(255, 165, 0)";
+    // saves flight search favorite to localStorage
     priceContainerEl.innerHTML = flightSearchLS[i].price;
+    // priceContainerEl.addEventListener("click", flightFavoriteHandler);
     flightsFavoritesGridEl.appendChild(priceContainerEl);
   }
 };
