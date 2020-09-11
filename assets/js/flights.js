@@ -8,6 +8,8 @@
 /* ----------------------------- GAUTAM TANKHA & MARCO EVANGELISTA ------------------------------ */
 /* ---------------------------------------------------------------------------------------------- */
 
+/*jshint esversion: 6 */
+
 /* ---------------------------------------------------------------------------------------------- */
 /* ---------------------------                                        --------------------------- */
 
@@ -28,10 +30,15 @@ const numberOfAdultsEl = document.getElementById("guests-select");
 /* --------------------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES -------------------- */
 // this time I'm using querySelector for a change :)
 const sortFlightsMenuEl = document.querySelector("#flights-sub-menu");
-const sortFlightsByPriceEl = document.querySelector("#sort-flight-price");
-const sortFlightsByArrivalEl = document.querySelector("#sort-flight-arrival");
-const sortFlightsByLowestPriceEl = document.querySelector(
+const sortFlightsByPriceBtn = document.querySelector("#sort-flight-price");
+const priceSortingArrow = document.querySelector("#price-sorting-arrow");
+const sortFlightsByArrivalBtn = document.querySelector("#sort-flight-arrival");
+const arrivalSortingArrow = document.querySelector("#arrival-sorting-arrow");
+const sortFlightsByDepartureBtn = document.querySelector(
   "#sort-flight-departure"
+);
+const departureSortingArrow = document.querySelector(
+  "#departure-sorting-arrow"
 );
 
 // constants that point to other flight search elements
@@ -42,10 +49,6 @@ const hotelsFavoritesGridEl = document.getElementById("hotel-favorites-grid"); /
 const favoriteFlightsBtn = document.getElementById("favorite-flights");
 const favoriteHotelsBtn = document.getElementById("favorite-hotels");
 const flightsGridEl = document.getElementById("flights-grid"); // constant that points to flights grid
-
-// variables that point to favorite items
-// var favoriteFlights = document.getElementsByClassName("flight");
-// var favoriteHotels = document.getElementsByClassName("hotel");
 
 /* ---------- declares variables for user input for "flight offers search" amadeus api ---------- */
 var originCode = goingFromEl.value; // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
@@ -61,7 +64,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "l73MGw5QHw8QzAcAzU3q6yoAcY1A"; // access token must be renewed for 30 minutes at a time
+const accessToken = "TuK8CgL3KOpbBdPy9niZKWufJVsL"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
@@ -75,15 +78,6 @@ const queryReturnDate = "&returnDate="; // required for roundtrip flights
 const queryTravelClass = "&travelClass="; // ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
 const queryCurrency = "&currencyCode="; // default is EUR, so needed for USD
 
-/* ---------- declares optional query variables for "flight offers search" amadeus api ---------- */
-const queryChildren = "&children="; // for travelers between 2 and 12 on date of departure with own separate seat
-const queryInfants = "&infants="; // for travelers 2 or less on date of departure. infants sit on lap of adult (# of infants must not exceed # of adults)
-const nonStop = "&nonStop="; // boolean
-const maxPrice = "&maxPrice="; // max price per traveler. no decimals
-const max = "&max="; // maximum number of flight options (default is 250)
-const includedAirlineCodes = "&includedAirlineCodes="; // multiple airlines allowed, separate with comma (no spaces). cannot be combined with excludedAirlineCodes
-const excludedAirlineCodes = "&excludedAirlineCodes="; // multiple airlines allowed, separate with comma (no spaces). cannot be combined with includedAirlineCodes
-
 /* -------------------------- declares variables for amadeus api urls --------------------------- */
 var oneWayFlightOffersSearchApiUrl;
 var roundTripFlightOffersSearchApiUrl;
@@ -95,7 +89,6 @@ var amadeusData = [];
 // counters for writing api data to html
 var intineraryCounter;
 var segmentCounter;
-var travelerCounter;
 
 /* --------------------------- declares constants for airhex api urls --------------------------- */
 const airhexHost = "https://content.airhex.com/content/logos/airlines";
@@ -103,7 +96,6 @@ const carrierLogoWidth = 70; // requested logo width in pixels
 const carrierLogoHeight = 70; // requested logo height in pixels
 const carrierLogoType = "s"; // Type of a logo: r - for rectangular, s - for square and t - for tail logo
 const carrierLogoFormat = ".png"; // can change to .svg
-const carrierLogoProportions = "?proportions=keep"; // keeps proportions of logo image
 const queryairhexApi = "?md5apikey=";
 const airhexApiKey = "VDjfGgv8mxiTvvLLwGicD6V2eq";
 
@@ -149,7 +141,7 @@ var getFlightOffersSearch = function () {
 
 /* ------------------------- gets airline carrier's logo from airhex api ------------------------ */
 var getCarrierLogo = function (carrierCode) {
-  logoApiUrl =
+  var logoApiUrl =
     airhexHost +
     "_" +
     carrierCode +
@@ -160,7 +152,6 @@ var getCarrierLogo = function (carrierCode) {
     "_" +
     carrierLogoType +
     carrierLogoFormat +
-    // carrierLogoProportions +
     queryairhexApi +
     airhexApiKey;
 
@@ -328,7 +319,7 @@ var showFavoriteHotels = function () {
 };
 
 var hideFlightSortingMenu = function () {
-  if (flightsGridEl.textContent.trim() == "") {
+  if (flightsGridEl.textContent.trim() === "") {
     sortFlightsMenuEl.style.display = "none";
   } else {
     sortFlightsMenuEl.style.display = "";
@@ -498,7 +489,7 @@ var convertPrice = function (priceToConvert) {
   return convertedPrice;
 };
 
-/* -------------------- gets and writes segment data from Amadeus API --------------------- */
+/* ----------------------- gets and writes segment data from Amadeus API ------------------------ */
 var writeSegmentData = function (
   itineraryContainerEl,
   segmentCount,
@@ -589,7 +580,7 @@ var writeSegmentData = function (
   flightDetailsEl.appendChild(flightNumberEl);
 };
 
-/* ----------------------- writes price data elements to index.html ------------------------ */
+/* -------------------------- writes price data elements to index.html -------------------------- */
 var writePriceData = function () {
   /* ----- price container ----- */
   var priceContainerEl = document.createElement("div");
@@ -691,39 +682,46 @@ var writeData = function (data) {
   }
 };
 
-/* ------------------ triggers sorting of search results according to price --------------------- */
-function sortData() {
-  event.preventDefault;
-  console.log("clicked");
-  var sortedAmadeusData = amadeusData;
-  sortedAmadeusData.sort(compare);
-  console.log(sortedAmadeusData);
-}
-
-/* ------------------------- sorts search results according to price ---------------------------- */
-function compare(a, b) {
-  // if (sortFlightsByLowestPriceEl.className === "active") {
-
-  const priceA = a.price.grandTotal;
-  const priceB = b.price.grandTotal;
-
-  let comparison = 0;
-  if (priceA > priceB) {
-    comparison = 1;
-  } else if (priceA < priceB) {
-    comparison = -1;
+/* ----------------------------- changes direction of sorting arrow ----------------------------- */
+var changeArrowDirection = function (arrowDirection) {
+  if (arrowDirection.textContent.trim() === "↑") {
+    arrowDirection.textContent = "↓";
+  } else {
+    arrowDirection.textContent = "↑";
   }
+};
 
-  return comparison * -1;
+/* ----------------- removes sorting arrows from two other sorting buttons ---------------------- */
+var removeOtherArrows = function (arrowOne, arrowTwo) {
+  arrowOne.textContent = "";
+  arrowTwo.textContent = "";
+};
+
+/* ------------------------------ sorts search results by price --------------------------------- */
+var sortByPrice = function () {
+  changeArrowDirection(priceSortingArrow);
+  removeOtherArrows(arrivalSortingArrow, departureSortingArrow);
+
+  // for (let i = 0; i < amadeusData.data.length; i++) {
+  //   amadeusData.data[i].price.sort(function (a, b) {
+  //     return a.price.grandTotal - b.price.grandTotal;
+  //   });
   // }
-}
+
+  // console.log(amadeusData);
+};
 
 /* --------------------- sorts search results according to arrival time ------------------------- */
-// NOT DONE YET
-
+var sortByArrival = function () {
+  changeArrowDirection(arrivalSortingArrow);
+  removeOtherArrows(priceSortingArrow, departureSortingArrow);
+};
 /* -------------------- sorts search results according to departure time ------------------------ */
-// NOT DONE YET
-
+/* ------------------ triggers sorting of search results according to price --------------------- */
+var sortByDeparture = function () {
+  changeArrowDirection(departureSortingArrow);
+  removeOtherArrows(priceSortingArrow, arrivalSortingArrow);
+};
 /* ---------------------------                                        --------------------------- */
 /* --------------------------------------- ENDS FUNCTIONS --------------------------------------- */
 /* ---------------------------------------------------------------------------------------------- */
@@ -746,7 +744,9 @@ favoritesTabEl.addEventListener("click", loadFlightsFavorites);
 favoriteFlightsBtn.addEventListener("click", showFavoriteFlights);
 favoriteHotelsBtn.addEventListener("click", showFavoriteHotels);
 
-sortFlightsByPriceEl.addEventListener("onchange", sortData); // sorts search results by price
+sortFlightsByPriceBtn.addEventListener("click", sortByPrice); // sorts search results by price
+sortFlightsByArrivalBtn.addEventListener("click", sortByArrival); // sorts search results by Arrival Time
+sortFlightsByDepartureBtn.addEventListener("click", sortByDeparture); // sorts search results by Departure Time
 /* ---------------------------                                        --------------------------- */
 /* ------------------------------------ ENDS EVENT HANDLERS ------------------------------------- */
 /* ---------------------------------------------------------------------------------------------- */
@@ -770,6 +770,7 @@ var accessTokenStatus = function () {
     })
     .catch(function (error) {
       console.log("Catch-all error for check status of access token.");
+      console.log(error);
     });
 };
 
