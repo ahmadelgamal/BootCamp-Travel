@@ -1,20 +1,20 @@
-/* ---------------------------------------------------------------------------------------------- */
-/* --------------------------------------- UCB EXTENSION ---------------------------------------- */
-/* -------------------- BLENDED ONLINE | FULL STACK WEB DEVELOPMENT BOOTCAMP -------------------- */
-/* ---------------------------- PROJECT 1 GROUP 7 | BOOTCAMP TRAVEL ----------------------------- */
-/* --------------------------------- THIS FILE WAS DEVELOPED BY --------------------------------- */
-/* --------------------------------------- AHMAD EL GAMAL --------------------------------------- */
-/* ------------------------------------ OTHER GROUP MEMBERS ------------------------------------- */
-/* ----------------------------- GAUTAM TANKHA & MARCO EVANGELISTA ------------------------------ */
-/* ---------------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* ----------------------------- UCB EXTENSION ------------------------------ */
+/* ---------- BLENDED ONLINE | FULL STACK WEB DEVELOPMENT BOOTCAMP ---------- */
+/* ------------------ PROJECT 1 GROUP 7 | BOOTCAMP TRAVEL ------------------- */
+/* ----------------------- THIS FILE WAS DEVELOPED BY ----------------------- */
+/* ----------------------------- AHMAD EL GAMAL ----------------------------- */
+/* -------------------------- OTHER GROUP MEMBERS --------------------------- */
+/* ------------------- GAUTAM TANKHA & MARCO EVANGELISTA -------------------- */
+/* -------------------------------------------------------------------------- */
 
 /*jshint esversion: 6 */
 
-/* ---------------------------------------------------------------------------------------------- */
-/* -------------------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES --------------------- */
-/* ---------------------------                                        --------------------------- */
+/* -------------------------------------------------------------------------- */
+/* ---------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ----------- */
+/* ---------------------------                    --------------------------- */
 
-/* ------------ declares constants to point to existing html elements in index.html ------------- */
+/* -- declares constants to point to existing html elements in index.html --- */
 // constants that point to search form
 const flightsTabEl = document.getElementById("flights-tab");
 const favoritesTabEl = document.getElementById("favorites-tab");
@@ -28,7 +28,7 @@ const travelClassEl = document.getElementById("travel-class"); // ECONOMY, PREMI
 const numberOfAdultsEl = document.getElementById("guests-select");
 
 // constants that point to sorting flight search elements
-/* --------------------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES -------------------- */
+/* ----------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ---------- */
 // this time I'm using querySelector for a change :)
 const sortFlightsMenuEl = document.querySelector("#flights-sub-menu");
 const sortFlightsByPriceBtn = document.querySelector("#sort-flight-price");
@@ -51,7 +51,7 @@ const favoriteFlightsBtn = document.getElementById("favorite-flights");
 const favoriteHotelsBtn = document.getElementById("favorite-hotels");
 const flightsGridEl = document.getElementById("flights-grid"); // constant that points to flights grid
 
-/* ---------- declares variables for user input for "flight offers search" amadeus api ---------- */
+/*  declares variables for user input for "flight offers search" amadeus api  */
 var originCode = goingFromEl.value; // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
 var destinationCode = goingToEl.value; // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
 var departureDate = dateDepartureEl.value; // Format: YYYY-MM-DD
@@ -61,37 +61,38 @@ var travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
 
 const currencyCode = "USD"; // sets currency in fetch request to USD (default in amadeus is euro)
 
-/* ------------------ declares common constants & variables of amadeus apis url ----------------- */
+/* -------- declares common constants & variables of amadeus apis url ------- */
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "6wDahWrkOW4wHPZzqsieViIMdmiT"; // access token must be renewed for 30 minutes at a time
+const accessToken = "IEhqYHDDRCKRj79Ngygh4iIb95qw"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
-/* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
+/*  declares required query variables for "flight offers search" amadeus api  */
 const queryOrigin = "?originLocationCode=";
 const queryDestination = "&destinationLocationCode=";
 const queryDepartureDate = "&departureDate=";
 const queryNumberOfAdults = "&adults=";
 
-/* --------- declares important query variables for "flight offers search" amadeus api ---------- */
+/* declares important query variables for "flight offers search" amadeus api  */
 const queryReturnDate = "&returnDate="; // required for roundtrip flights
 const queryTravelClass = "&travelClass="; // ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
 const queryCurrency = "&currencyCode="; // default is EUR, so needed for USD
 
-/* -------------------------- declares variables for amadeus api urls --------------------------- */
+/* ---------------- declares variables for amadeus api urls ----------------- */
 var oneWayFlightOffersSearchApiUrl;
 var roundTripFlightOffersSearchApiUrl;
 var apiUrl;
 
 //declares array to store fetched data from amadeus
 var amadeusData = [];
+// var elementsObject;
 
 // counters for writing api data to html
 var intineraryCounter;
 var segmentCounter;
 
-/* --------------------------- declares constants for airhex api urls --------------------------- */
+/* ----------------- declares constants for airhex api urls ----------------- */
 const airhexHost = "https://content.airhex.com/content/logos/airlines";
 const carrierLogoWidth = 70; // requested logo width in pixels
 const carrierLogoHeight = 70; // requested logo height in pixels
@@ -100,19 +101,19 @@ const carrierLogoFormat = ".png"; // can change to .svg
 const queryairhexApi = "?md5apikey=";
 const airhexApiKey = "VDjfGgv8mxiTvvLLwGicD6V2eq";
 
-/* ---------------------------------- declares other variables ---------------------------------- */
+/* ------------------------ declares other variables ------------------------ */
 var toggleInterval; // timer for toggling "searching" message
 var flightFavoriteCounter = 0; // counter to id flight favorites
 
-/* ---------------------------                                        --------------------------- */
-/* --------------------- ENDS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ---------------------- */
-/* ---------------------------------------------------------------------------------------------- */
+/* ---------------------------                    --------------------------- */
+/* ----------- ENDS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ------------ */
+/* -------------------------------------------------------------------------- */
 
-/* ---------------------------------------------------------------------------------------------- */
-/* -------------------------------------- BEGINS FETCH APIS ------------------------------------- */
-/* ---------------------------                                        --------------------------- */
+/* -------------------------------------------------------------------------- */
+/* ---------------------------- BEGINS FETCH APIS --------------------------- */
+/* ---------------------------                    --------------------------- */
 
-/* ------------- gets flight search results from "flight offers search" amadeus api ------------- */
+/* --- gets flight search results from "flight offers search" amadeus api --- */
 var getFlightOffersSearch = function () {
   fetch(apiUrl, {
     method: "GET",
@@ -140,7 +141,7 @@ var getFlightOffersSearch = function () {
     });
 };
 
-/* ------------------------- gets airline carrier's logo from airhex api ------------------------ */
+/* --------------- gets airline carrier's logo from airhex api -------------- */
 var getCarrierLogo = function (carrierCode) {
   var logoApiUrl =
     airhexHost +
@@ -159,97 +160,103 @@ var getCarrierLogo = function (carrierCode) {
   return logoApiUrl;
 };
 
-/* ---------------------------                                        --------------------------- */
-/* -------------------------------------- ENDS FETCH APIS --------------------------------------- */
-/* ---------------------------------------------------------------------------------------------- */
+/* ---------------------------                    --------------------------- */
+/* ---------------------------- ENDS FETCH APIS ----------------------------- */
+/* -------------------------------------------------------------------------- */
 
-/* ---------------------------------------------------------------------------------------------- */
-/* ------------------------------------- BEGINS LOCALSTORAGE ------------------------------------ */
-/* ---------------------------                                        --------------------------- */
+/* -------------------------------------------------------------------------- */
+/* --------------------------- BEGINS LOCALSTORAGE -------------------------- */
+/* ---------------------------                    --------------------------- */
 
-/* ---------------------------- handler for favorite flight buttons ----------------------------- */
+/* ------------------ handler for favorite flight buttons ------------------- */
 var flightFavoriteHandler = function () {
   var favoriteFlightBtn = event.target.closest(".price-flights");
-  getFavoriteFlightData(favoriteFlightBtn);
 
   if (favoriteFlightBtn.style.backgroundColor !== "rgb(255, 165, 0)") {
     favoriteFlightBtn.style.backgroundColor = "rgb(255, 165, 0)"; // change background color of favorite to orange
+    getFavoriteFlightData(favoriteFlightBtn);
     saveFlightFavorite(favoriteFlightBtn);
   } else {
     favoriteFlightBtn.style.backgroundColor = ""; // return background color to default if unselected
+    getFavoriteFlightData(favoriteFlightBtn);
     deleteFlightFavorite(favoriteFlightBtn);
   }
 };
 
-/* --------------------------------- gets favorite flight data ---------------------------------- */
+/* ----------------------- gets favorite flight data ------------------------ */
 var getFavoriteFlightData = function (favoriteFlightBtn) {
   // takes out the "flight-xx" class name from the classNames list
-  var indexOfFlight = favoriteFlightBtn.className.split(" ")[0];
+  var flightIndex = favoriteFlightBtn.className.split(" ")[0];
 
-  var outboundHTML = document.querySelector("." + indexOfFlight);
+  var outboundHTML = document.querySelector("." + flightIndex);
   var priceHTML = favoriteFlightBtn;
-  if (document.querySelectorAll("." + indexOfFlight).length === 3) {
-    elementsObjectArray = {
-      indexOfFlight: indexOfFlight,
+  if (document.querySelectorAll("." + flightIndex).length === 3) {
+    favoriteObject = {
+      flightIndex: flightIndex,
       outbound: outboundHTML.innerHTML,
       inbound: outboundHTML.nextSibling.innerHTML,
       price: priceHTML.innerHTML,
     };
   } else {
-    elementsObjectArray = {
-      indexOfFlight: indexOfFlight,
+    favoriteObject = {
+      flightIndex: flightIndex,
       outbound: outboundHTML.innerHTML,
       inbound: "",
       price: priceHTML.innerHTML,
     };
   }
-  return elementsObjectArray;
+  return favoriteObject;
 };
-/* --------------------------- saves favorite flight to localStorage ---------------------------- */
+/* ----------------- saves favorite flight to localStorage ------------------ */
 var saveFlightFavorite = function (favoriteFlightBtn) {
   // declares an array to be used for localStorage
-  var flightSearchLS = [];
+  var favoriteFlightsLS = [];
   // gets existing favorites from localStorage if it exists
-  flightSearchLS = JSON.parse(localStorage.getItem("flightFavorites"));
+  favoriteFlightsLS = JSON.parse(localStorage.getItem("favoriteFlights"));
 
   // if there was no favorites, then it is set to current flight favorite
-  if (flightSearchLS === null) {
-    flightSearchLS = [elementsObjectArray];
+  if (favoriteFlightsLS === null) {
+    favoriteFlightsLS = [favoriteObject];
     // otherwise, if there is a favorite, then the current favorite is added on top of the list
   } else {
-    flightSearchLS.unshift(elementsObjectArray);
+    for (let i = 0; i < favoriteFlightsLS.length; i++) {
+      if (favoriteObject.flightIndex === favoriteFlightsLS[i].flightIndex) {
+        favoriteFlightsLS.splice(favoriteFlightsLS[i], 1);
+      }
+    }
+    favoriteFlightsLS.unshift(favoriteObject);
   }
 
   // limits favorite flights to five
-  if (flightSearchLS.length === 6) {
-    flightSearchLS.splice(5, 1);
+  if (favoriteFlightsLS.length === 6) {
+    favoriteFlightsLS.splice(5, 1);
   }
 
-  localStorage.setItem("flightFavorites", JSON.stringify(flightSearchLS));
+  localStorage.setItem("favoriteFlights", JSON.stringify(favoriteFlightsLS));
 };
 
-/* ----------------- deletes favorite flight from localStorage when unselected ------------------ */
+/* ------- deletes favorite flight from localStorage when unselected -------- */
 var deleteFlightFavorite = function (favoriteFlightBtn) {
   // gets existing favorites from localStorage
-  flightSearchLS = JSON.parse(localStorage.getItem("flightFavorites"));
+  var favoriteFlightsLS = JSON.parse(localStorage.getItem("favoriteFlights"));
 
-  for (let i = 0; i < flightSearchLS.length; i++) {
-    if (elementsObjectArray.indexOfFlight === flightSearchLS[i].indexOfFlight) {
-      flightSearchLS.splice(flightSearchLS[i], 1);
+  for (let i = 0; i < favoriteFlightsLS.length; i++) {
+    if (favoriteObject.flightIndex === favoriteFlightsLS[i].flightIndex) {
+      favoriteFlightsLS.splice(favoriteFlightsLS[i], 1);
     }
   }
 
-  localStorage.setItem("flightFavorites", JSON.stringify(flightSearchLS));
+  localStorage.setItem("favoriteFlights", JSON.stringify(favoriteFlightsLS));
 };
 
-/* ------------------- creates favorite flight elements on visit and refresh -------------------- */
-var createFavoritesElements = function (flightSearchLS) {
+/* --------- creates favorite flight elements on visit and refresh ---------- */
+var createFavoritesElements = function (favoriteFlightsLS) {
   showSearchHistory(); // calls function in script.js to show favorites
 
   // clears previous favorites
   flightsFavoritesGridEl.innerHTML = "";
 
-  for (let i = 0; i < flightSearchLS.length; i++) {
+  for (let i = 0; i < favoriteFlightsLS.length; i++) {
     // creates container element for each flight search item
     var outboundContainerEl = document.createElement("div");
     outboundContainerEl.classList.add(
@@ -260,7 +267,7 @@ var createFavoritesElements = function (flightSearchLS) {
       "margin-zero",
       "uk-margin-small-top"
     );
-    outboundContainerEl.innerHTML = flightSearchLS[i].outbound;
+    outboundContainerEl.innerHTML = favoriteFlightsLS[i].outbound;
     flightsFavoritesGridEl.appendChild(outboundContainerEl);
 
     var inboundContainerEl = document.createElement("div");
@@ -272,7 +279,7 @@ var createFavoritesElements = function (flightSearchLS) {
       "margin-zero",
       "uk-margin-small-top"
     );
-    inboundContainerEl.innerHTML = flightSearchLS[i].inbound;
+    inboundContainerEl.innerHTML = favoriteFlightsLS[i].inbound;
     flightsFavoritesGridEl.appendChild(inboundContainerEl);
 
     var priceContainerEl = document.createElement("div");
@@ -285,30 +292,30 @@ var createFavoritesElements = function (flightSearchLS) {
     );
     // priceContainerEl.style.backgroundColor = "rgb(255, 165, 0)";
     // saves flight search favorite to localStorage
-    priceContainerEl.innerHTML = flightSearchLS[i].price;
+    priceContainerEl.innerHTML = favoriteFlightsLS[i].price;
     // priceContainerEl.addEventListener("click", flightFavoriteHandler);
     flightsFavoritesGridEl.appendChild(priceContainerEl);
   }
 };
 
-/* ---------------------- loads flight favorites from data in localStorage ---------------------- */
+/* ------------ loads flight favorites from data in localStorage ------------ */
 var loadFlightsFavorites = function () {
   // get existing search history from localStorage if it exists
-  var flightSearchLS = JSON.parse(localStorage.getItem("flightFavorites"));
+  var favoriteFlightsLS = JSON.parse(localStorage.getItem("favoriteFlights"));
 
   // if there is a search history, the following creates search history elements from data in localStorage
-  if (flightSearchLS !== null) {
-    createFavoritesElements(flightSearchLS);
+  if (favoriteFlightsLS !== null) {
+    createFavoritesElements(favoriteFlightsLS);
   }
 };
-/* ---------------------------                                        --------------------------- */
-/* -------------------------------------- ENDS LOCALSTORAGE ------------------------------------- */
-/* ---------------------------------------------------------------------------------------------- */
+/* ---------------------------                    --------------------------- */
+/* ---------------------------- ENDS LOCALSTORAGE --------------------------- */
+/* -------------------------------------------------------------------------- */
 
-/* ---------------------------------------------------------------------------------------------- */
-/* -------------------------------------- BEGINS FUNCTIONS -------------------------------------- */
-/* ---------------------------                                        --------------------------- */
-/* ----------------------------------- display/hide functions ----------------------------------- */
+/* -------------------------------------------------------------------------- */
+/* ---------------------------- BEGINS FUNCTIONS ---------------------------- */
+/* ---------------------------                    --------------------------- */
+/* ------------------------- display/hide functions ------------------------- */
 var showFavoriteFlights = function () {
   flightsFavoritesGridEl.style.display = "";
   hotelsFavoritesGridEl.style.display = "none";
@@ -327,7 +334,7 @@ var hideFlightSortingMenu = function () {
   }
 };
 
-/* ------------------------------------- search-form handler ------------------------------------ */
+/* --------------------------- search-form handler -------------------------- */
 var searchFormHandler = function () {
   if (flightsTabEl.className === "uk-active") {
     // prevents the search-form submit from triggering a refresh of index.html
@@ -349,7 +356,7 @@ var searchFormHandler = function () {
   }
 };
 
-/* ----------------------------- gets current values in search form ----------------------------- */
+/* ------------------- gets current values in search form ------------------- */
 var captureSearchForm = function () {
   // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
   originCode = goingFromEl.value.toUpperCase();
@@ -370,7 +377,7 @@ var captureSearchForm = function () {
   }
 };
 
-/* -------------------- saves api url depending on one-way or roundtrip input ------------------- */
+/* ---------- saves api url depending on one-way or roundtrip input --------- */
 var saveUrl = function () {
   // full "flight offers search" api url for one-way
   oneWayFlightOffersSearchApiUrl =
@@ -402,7 +409,7 @@ var saveUrl = function () {
   }
 };
 
-/* ------------------------- displays "searching" message during search ------------------------- */
+/* --------------- displays "searching" message during search --------------- */
 var searchingMessage = function () {
   toggleInterval = setInterval(toggleMessage, 500);
 
@@ -422,7 +429,7 @@ var searchingMessage = function () {
   }
 };
 
-/* ------------------------- converts time from fetch to ui time format ------------------------- */
+/* --------------- converts time from fetch to ui time format --------------- */
 var convertTime = function (timeToConvert) {
   // first change time to proper format
   var convertedTime = timeToConvert.split("");
@@ -473,7 +480,7 @@ var convertTime = function (timeToConvert) {
   return convertedTime;
 };
 
-/* -------------------- converts price from fetch to comma separated format --------------------- */
+/* ---------- converts price from fetch to comma separated format ----------- */
 var convertPrice = function (priceToConvert) {
   if (typeof priceToConvert !== "string") {
     var stringPrice = priceToConvert.toFixed(2);
@@ -490,7 +497,7 @@ var convertPrice = function (priceToConvert) {
   return convertedPrice;
 };
 
-/* ----------------------- gets and writes segment data from Amadeus API ------------------------ */
+/* ------------- gets and writes segment data from Amadeus API -------------- */
 var writeSegmentData = function (
   itineraryContainerEl,
   segmentCount,
@@ -581,7 +588,7 @@ var writeSegmentData = function (
   flightDetailsEl.appendChild(flightNumberEl);
 };
 
-/* -------------------------- writes price data elements to index.html -------------------------- */
+/* ---------------- writes price data elements to index.html ---------------- */
 var writePriceData = function () {
   /* ----- price container ----- */
   var priceContainerEl = document.createElement("div");
@@ -625,7 +632,7 @@ var writePriceData = function () {
   priceContainerEl.addEventListener("click", flightFavoriteHandler);
 };
 
-/* ---------------- writes data from "flight offers search" amadeus api to html ----------------- */
+/* ------ writes data from "flight offers search" amadeus api to html ------- */
 var writeData = function (data) {
   // sortAmadeusData = amadeusData.data;
 
@@ -685,7 +692,7 @@ var writeData = function (data) {
   }
 };
 
-/* ----------------------------- changes direction of sorting arrow ----------------------------- */
+/* ------------------- changes direction of sorting arrow ------------------- */
 var changeArrowDirection = function (arrowDirection) {
   if (arrowDirection.textContent.trim() === "↑") {
     arrowDirection.textContent = "↓";
@@ -694,13 +701,13 @@ var changeArrowDirection = function (arrowDirection) {
   }
 };
 
-/* ----------------- removes sorting arrows from two other sorting buttons ---------------------- */
+/* ------- removes sorting arrows from two other sorting buttons ------------ */
 var removeOtherArrows = function (arrowOne, arrowTwo) {
   arrowOne.textContent = "";
   arrowTwo.textContent = "";
 };
 
-/* ------------------------------ sorts search results by price --------------------------------- */
+/* -------------------- sorts search results by price ----------------------- */
 var sortByPrice = function () {
   changeArrowDirection(priceSortingArrow);
   removeOtherArrows(arrivalSortingArrow, departureSortingArrow);
@@ -714,20 +721,20 @@ var sortByPrice = function () {
   // console.log(amadeusData);
 };
 
-/* --------------------- sorts search results according to arrival time ------------------------- */
+/* ----------- sorts search results according to arrival time --------------- */
 var sortByArrival = function () {
   changeArrowDirection(arrivalSortingArrow);
   removeOtherArrows(priceSortingArrow, departureSortingArrow);
 };
-/* -------------------- sorts search results according to departure time ------------------------ */
-/* ------------------ triggers sorting of search results according to price --------------------- */
+/* ---------- sorts search results according to departure time -------------- */
+/* -------- triggers sorting of search results according to price ----------- */
 var sortByDeparture = function () {
   changeArrowDirection(departureSortingArrow);
   removeOtherArrows(priceSortingArrow, arrivalSortingArrow);
 };
-/* ---------------------------                                        --------------------------- */
-/* --------------------------------------- ENDS FUNCTIONS --------------------------------------- */
-/* ---------------------------------------------------------------------------------------------- */
+/* -----------------                                        ----------------- */
+/* ----------------------------- ENDS FUNCTIONS ----------------------------- */
+/* -------------------------------------------------------------------------- */
 
 /* ---------------------------------------------------------------------------------------------- */
 /* ------------------------------------- BEGINS LOAD EVENTS ------------------------------------- */
