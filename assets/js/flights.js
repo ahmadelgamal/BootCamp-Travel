@@ -38,14 +38,15 @@ const sortFlightsByLowestPriceEl = document.querySelector(
 // constants that point to other flight search elements
 const searchingMessageEl = document.getElementById("searching-message"); // constant that points to searching message element
 const errorMessageEl = document.getElementById("error-message"); // constant that points to error message element
-const flightsPastSearchGridEl = document.getElementById("past-search-grid"); // constant that points to flights search history grid
+const flightsFavoritesGridEl = document.getElementById("flight-favorites-grid"); // constant that points to flights search history grid
+const hotelsFavoritesGridEl = document.getElementById("hotel-favorites-grid"); // constant that points to flights search history grid
 const favoriteFlightsBtn = document.getElementById("favorite-flights");
 const favoriteHotelsBtn = document.getElementById("favorite-hotels");
 const flightsGridEl = document.getElementById("flights-grid"); // constant that points to flights grid
 
 // variables that point to favorite items
-var favoriteFlights = document.getElementsByClassName("flight");
-var favoriteHotels = document.getElementsByClassName("hotel");
+// var favoriteFlights = document.getElementsByClassName("flight");
+// var favoriteHotels = document.getElementsByClassName("hotel");
 
 /* ---------- declares variables for user input for "flight offers search" amadeus api ---------- */
 var originCode = goingFromEl.value; // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
@@ -61,7 +62,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "GZNA0vsI6ANoVG83xmBJe5JTG1o8"; // access token must be renewed for 30 minutes at a time
+const accessToken = "KuMw0F7pwsZ0myWyC7BU1eVBdqwZ"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /* ---------- declares required query variables for "flight offers search" amadeus api ---------- */
@@ -222,13 +223,12 @@ var createFavoritesElements = function (flightSearchLS) {
   showSearchHistory(); // calls function in script.js to show favorites
 
   // clears previous favorites
-  flightsPastSearchGridEl.innerHTML = "";
+  flightsFavoritesGridEl.innerHTML = "";
 
   for (let i = 0; i < flightSearchLS.length; i++) {
     // creates container element for each flight search item
     var flightSearchHistoryContainerEl = document.createElement("div");
     flightSearchHistoryContainerEl.classList.add(
-      "flight",
       "uk-grid",
       "uk-width-1-1",
       "uk-background-default",
@@ -238,7 +238,7 @@ var createFavoritesElements = function (flightSearchLS) {
     );
     flightSearchHistoryContainerEl.id =
       "flight-favorite-" + flightFavoriteCounter;
-    flightsPastSearchGridEl.appendChild(flightSearchHistoryContainerEl);
+    flightsFavoritesGridEl.appendChild(flightSearchHistoryContainerEl);
 
     // creates container element for left column
     var flightSearchHistoryEl = document.createElement("div");
@@ -318,30 +318,40 @@ var loadFlightsFavorites = function () {
 /* -------------------------------------- BEGINS FUNCTIONS -------------------------------------- */
 /* ---------------------------                                        --------------------------- */
 /* ----------------------------------- display/hide functions ----------------------------------- */
+// var showFavoriteFlights = function () {
+//   if (favoriteFlights !== null) {
+//     for (let i = 0; i < favoriteFlights.length; i++) {
+//       favoriteFlights[i].style.display = "";
+//     }
+//   }
+//   if (favoriteHotels !== null) {
+//     for (let i = 0; i < favoriteHotels.length; i++) {
+//       favoriteHotels[i].style.display = "none";
+//     }
+//   }
+// };
+
+// var showFavoriteHotels = function () {
+//   if (favoriteFlights !== null) {
+//     for (let i = 0; i < favoriteFlights.length; i++) {
+//       favoriteFlights[i].style.display = "none";
+//     }
+//   }
+//   if (favoriteHotels !== null) {
+//     for (let i = 0; i < favoriteHotels.length; i++) {
+//       favoriteHotels[i].style.display = "";
+//     }
+//   }
+// };
+
 var showFavoriteFlights = function () {
-  if (favoriteFlights !== null) {
-    for (let i = 0; i < favoriteFlights.length; i++) {
-      favoriteFlights[i].style.display = "";
-    }
-  }
-  if (favoriteHotels !== null) {
-    for (let i = 0; i < favoriteHotels.length; i++) {
-      favoriteHotels[i].style.display = "none";
-    }
-  }
+  flightsFavoritesGridEl.style.display = "";
+  hotelsFavoritesGridEl.style.display = "none";
 };
 
 var showFavoriteHotels = function () {
-  if (favoriteFlights !== null) {
-    for (let i = 0; i < favoriteFlights.length; i++) {
-      favoriteFlights[i].style.display = "none";
-    }
-  }
-  if (favoriteHotels !== null) {
-    for (let i = 0; i < favoriteHotels.length; i++) {
-      favoriteHotels[i].style.display = "";
-    }
-  }
+  flightsFavoritesGridEl.style.display = "none";
+  hotelsFavoritesGridEl.style.display = "";
 };
 
 /* ------------------------------------- search-form handler ------------------------------------ */
@@ -369,9 +379,9 @@ var searchFormHandler = function () {
 /* ----------------------------- gets current values in search form ----------------------------- */
 var captureSearchForm = function () {
   // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
-  originCode = goingFromEl.value;
+  originCode = goingFromEl.value.toUpperCase();
   // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
-  destinationCode = goingToEl.value;
+  destinationCode = goingToEl.value.toUpperCase();
   departureDate = dateDepartureEl.value;
   // checks if user selects roundtrip or one-way
   if (tripSelectEl.options[tripSelectEl.selectedIndex].value === "Roundtrip") {
