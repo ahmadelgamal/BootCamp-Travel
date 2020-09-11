@@ -161,7 +161,9 @@ var getProperties = function (
   pgSize,
   adultNumber
 ) {
-
+  console.log ("I am here first");
+  $("#hotels-container").append(
+    '<div class = "temporary"> <p>Searching... </p> </div>');
   var url6 =
     "https://cors-anywhere.herokuapp.com/https://hotels4.p.rapidapi.com/properties/list?currency=" +
     currency +
@@ -204,8 +206,7 @@ var getProperties = function (
             if ($(".temporary")) {
               $(".temporary").empty();
             }
-            $("#hotels-container").append(
-              '<div class = "temporary"> <p>Searching... </p> </div>');
+       
             for (i = 0; i < propId.length; i++) {
               // the if statements account for any information on the server that might be undefined 
               var propIde = [];
@@ -294,6 +295,7 @@ var getProperties = function (
           }
         });
       }
+      console.log ("I am here");
       $(".temporary").empty();
     })
 
@@ -411,6 +413,7 @@ $("#form").on("submit", function (event) {
 
     $("#hotels-grid").empty(); // Empties previous display
     $("#hotel-favorites-grid").empty();
+    $(".temporary").empty();
     // $(".temporary").empty();
 
     // Read city value from form
