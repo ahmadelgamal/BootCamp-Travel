@@ -86,9 +86,12 @@ var displayPropertyInfo = function (
       reviewRating + '</span>' +
       '<span> /5 Rating ( </span>' + '<span id = "totalGuestReviews">' +
       totalGuestReviews + '</span>' +
-      '<span> Reviews)</span></div> <div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price"> <h2 class="uk-margin-remove-vertical">' +
+      '<span> Reviews)</span></div> <div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price"> <p> Check-In: ' + checkindate + '<br> Check-Out: ' + checkoutdate + '<br> Adults: ' + numberofadults + '</p> <h2 class="uk-margin-remove-vertical">' +
       pricee +
-      '</h2> <b>per Night</b>' + '<br> <p> Check-In: ' + checkindate + '<br> Check-Out: ' + checkoutdate + '<br> Adults: ' + numberofadults + '</p> </div>  </div>'
+      '</h2> <b>per Night</b> <button class="reserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded" style ="background-color: red" id="' +
+      identity +
+      '">Remove Selection </button> </div> </div>'+
+      '</h2> <b>per Night</b>' +  '</div>  </div>'
     );
   }
  
@@ -289,10 +292,7 @@ var getProperties = function (
                 price
               );
               if (hotels != "") {
-                console.log ("yeeeee");
-                console.log ("hotel:  "+ hotels.length);
                 for (k = 0; k < hotels.length; k++) {
-                  console.log ("i:  " + k);
                   if (hotels[k].IdCity == propIde[i]) {
                       $("#"+propIde[i]).css("background", "red");
                       $("#"+propIde[i]).html("Remove Selection");
