@@ -379,7 +379,7 @@ function autocompleteCities(inp, arr) {
       if (
         arr[i].name.substr(0, val.length).toUpperCase() == val.toUpperCase() 
       ) {
-        if (max++ >= 4) break;
+        if (max++ >= 12) break;
         /*create a DIV element for each matching element:*/
         b = document.createElement("DIV");
 
