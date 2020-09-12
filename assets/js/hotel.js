@@ -5,7 +5,7 @@ var checkOutDt = ""; // Check-out date
 var id = 0;
 var urls = []; // URLs of the images
 var maxHistoryLength = 5; // History length
-var urlKey = "083f233336mshc03be33994e1ed0p1698afjsnc157beab7f7c"; // URL Key
+var urlKey = "5d5909e26bmshfb2a825f7b2cf74p1f485ajsna344ade586d8"; // URL Key
 var newHotellay = document.getElementById("hotels-grid"); // Get parent element of HTML document from search
 var newInitlay = document.getElementById("hotel-favorites-grid");// Get parent element of HTML document during initalization
 var pageNumber = 1; // # of pages to display
@@ -90,7 +90,7 @@ var displayPropertyInfo = function (
       pricee +
       '</h2> <b>per Night</b> <button class="unreserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-danger uk-border-rounded"  id="' +
       identity +
-      '">Remove Selection </button> </div> </div>'+
+      '">Remove</button> </div> </div>'+
        '</div>  </div>'
     );
   }
@@ -165,7 +165,7 @@ var getProperties = function (
   pgSize,
   adultNumber
 ) {
-  console.log("I am here first");
+
   $("#hotels-container").append(
     '<div class = "temporary"> <p>Searching... </p> </div>');
   var url6 =
@@ -291,12 +291,12 @@ var getProperties = function (
                 neighbourhoodName,
                 price
               );
-              if (hotels != "") {
+              if (hotels != null) {
                 for (k = 0; k < hotels.length; k++) {
                   if (hotels[k].IdCity == propIde[i]) {
                     
                     //  $("#"+propIde[i]).css("background", "red");
-                      $("#"+propIde[i]).html("Remove Selection");
+                      $("#"+propIde[i]).html("Remove");
                       $("#"+propIde[i]).removeClass("reserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded").addClass("unreserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-danger uk-border-rounded");
                   }
                 }
@@ -309,7 +309,7 @@ var getProperties = function (
           }
         });
       }
-      console.log("I am here");
+    
       $(".temporary").empty();
     })
 
@@ -447,7 +447,7 @@ $("#form").on("submit", function (event) {
 
     // Read city value from form
     city = $("#hotel-city").val();
-    console.log(city);
+    
 
     if (city == "") {
       $("#hotels-container").append(
@@ -548,8 +548,8 @@ $(document).on("click", ".reserve", function () {
     .parent()
     .find("h6");
   var address = addressEl[0].innerText;
- // $(this).css("background", "red");
-  $(this).html("Remove Selection");
+
+  $(this).html("Remove");
   $(this).removeClass("reserve uk-button-primaryuk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded").addClass("unreserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-danger uk-border-rounded");
   hotels = JSON.parse(localStorage.getItem("hotels"));
 
@@ -694,7 +694,7 @@ $(document).on("click", "#hotels-tab", function () {
 $(document).on("click", ".unreserve", function () {
   var propval = this.getAttribute("id");
   var inFavorites = ($(this).parent().parent().parent().attr("id")).includes("hotel-favorites-grid"); // Check if the request is coming from favorites or a search. 
-  console.log ("fav or not:  " + inFavorites);
+  
   unReserve(propval);
 
   if (inFavorites){  // if request is coming from the favorite tag, then delete the favorite when user chooses to remove
@@ -706,9 +706,7 @@ $(document).on("click", ".unreserve", function () {
   hotels = JSON.parse(localStorage.getItem("hotels"));
   // Display favorites
   if (hotels != null) {
-    console.log("I am here 1");
     for (i = 0; i < hotels.length; i++) {
-      console.log("I am here 2");
       displayPropertyInfo(
         newInitlay,
         hotels[i].IdCity,
