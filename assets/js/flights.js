@@ -65,7 +65,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "hlSepXSfWfhP0fNgkWAYCNk8hAgc"; // access token must be renewed for 30 minutes at a time
+const accessToken = "V2F3rrmtqB3vAiPmITkZmZgJC7Hn"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /*  declares required query variables for "flight offers search" amadeus api  */
@@ -131,7 +131,7 @@ var getFlightOffersSearch = function () {
         "There are " +
         amadeusData.meta.count +
         " flights available for your selected route!"; // displays number of matching search results
-      writeData();
+      writeData(amadeusData);
     })
     .catch(function (error) {
       clearInterval(toggleInterval); // stops toggling searching message
@@ -168,7 +168,18 @@ var getCarrierLogo = function (carrierCode) {
 /* --------------------------- BEGINS LOCALSTORAGE -------------------------- */
 /* ---------------------------                    --------------------------- */
 
-/* ------------------ handler for favorite flight buttons ------------------- */
+/* ------------------ handler for favorite flight buttons in favorites grid ------------------- */
+var OldFlightFavoriteHandler = function () {
+  var favoriteFlightBtn = event.target.closest(".price-flights");
+  favoriteFlightBtn.style.backgroundColor = "#ff0000"; // turns background color to red
+  setTimeout(function () {
+    getFavoriteFlightData(favoriteFlightBtn);
+    deleteFlightFavorite(favoriteFlightBtn);
+    loadFlightsFavorites();
+  }, 2000); // leaves favorite on screen for 2 seconds before deleting it.
+};
+
+/* -------- handler for favorite flight buttons in flights grid ------------- */
 var flightFavoriteHandler = function () {
   var favoriteFlightBtn = event.target.closest(".price-flights");
 
@@ -217,13 +228,14 @@ var saveFlightFavorite = function (favoriteFlightBtn) {
   // if there was no favorites, then it is set to current flight favorite
   if (favoriteFlightsLS === null) {
     favoriteFlightsLS = [favoriteObject];
-    // otherwise, if there is a favorite, then the current favorite is added on top of the list
   } else {
+    // checks if it's already in favorites, then it deletes the existing one in order not to duplicate
     for (let i = 0; i < favoriteFlightsLS.length; i++) {
       if (favoriteObject.flightIndex === favoriteFlightsLS[i].flightIndex) {
         favoriteFlightsLS.splice(favoriteFlightsLS[i], 1);
       }
     }
+    // otherwise, if there is a favorite, then the current favorite is added on top of the list
     favoriteFlightsLS.unshift(favoriteObject);
   }
 
@@ -260,6 +272,7 @@ var createFavoritesElements = function (favoriteFlightsLS) {
     // creates container element for each flight search item
     var outboundContainerEl = document.createElement("div");
     outboundContainerEl.classList.add(
+      favoriteFlightsLS[i].flightIndex,
       "uk-grid",
       "uk-width-1-1",
       "uk-background-default",
@@ -272,6 +285,7 @@ var createFavoritesElements = function (favoriteFlightsLS) {
 
     var inboundContainerEl = document.createElement("div");
     inboundContainerEl.classList.add(
+      favoriteFlightsLS[i].flightIndex,
       "uk-grid",
       "uk-width-1-1",
       "uk-background-default",
@@ -284,17 +298,18 @@ var createFavoritesElements = function (favoriteFlightsLS) {
 
     var priceContainerEl = document.createElement("div");
     priceContainerEl.classList.add(
+      favoriteFlightsLS[i].flightIndex,
       "uk-border-rounded",
       "uk-width-1-1",
       "uk-padding-small",
       "uk-margin-small-top",
       "price-flights"
     );
-    // priceContainerEl.style.backgroundColor = "rgb(255, 165, 0)";
-    // saves flight search favorite to localStorage
+    priceContainerEl.style.backgroundColor = "rgb(255, 165, 0)";
     priceContainerEl.innerHTML = favoriteFlightsLS[i].price;
-    // priceContainerEl.addEventListener("click", flightFavoriteHandler);
     flightsFavoritesGridEl.appendChild(priceContainerEl);
+    // deletes favorite flight from localStorage
+    priceContainerEl.addEventListener("click", OldFlightFavoriteHandler);
   }
 };
 
@@ -347,8 +362,6 @@ var searchFormHandler = function () {
     showFlights();
     // informs user that search is running
     searchingMessage();
-    // clears data from previous search
-    flightsGridEl.innerHTML = "";
     // clears error message from previous search
     errorMessageEl.textContent = "";
     saveUrl();
@@ -430,12 +443,12 @@ var searchingMessage = function () {
 };
 
 /* --------------- converts time from fetch to ui time format --------------- */
-var convertTime = function (timeToConvert) {
+var convertTimeUI = function (timeToConvert) {
   // first change time to proper format
   var convertedTime = timeToConvert.split("");
   convertedTime = convertedTime.slice(11, 16);
 
-  var minutes = convertedTime.slice(2,5);
+  var minutes = convertedTime.slice(2, 5);
   minutes = minutes.join("");
 
   var hour = convertedTime.slice(0, 2);
@@ -449,8 +462,7 @@ var convertTime = function (timeToConvert) {
     var timeDesignation = "am";
   } else if (hour === 12) {
     var timeDesignation = "pm";
-  }
-  else {
+  } else {
     hour = hour - 12;
     var timeDesignation = "pm";
   }
@@ -478,6 +490,7 @@ var convertPrice = function (priceToConvert) {
 
 /* ------------- gets and writes segment data from Amadeus API -------------- */
 var writeSegmentData = function (
+  data,
   itineraryContainerEl,
   segmentCount,
   carriersCodeList,
@@ -493,7 +506,7 @@ var writeSegmentData = function (
 
   /* ----- carrier (ariline) name ----- */
   var carrierCode =
-    amadeusData.data[flightCounter].itineraries[intineraryCounter].segments[
+    data.data[flightCounter].itineraries[intineraryCounter].segments[
       segmentCounter
     ].carrierCode;
   var carrierFull = carriersCodeList[carrierCode];
@@ -526,11 +539,11 @@ var writeSegmentData = function (
 
   // airport data
   var departureCityCode =
-    amadeusData.data[flightCounter].itineraries[intineraryCounter].segments[
+    data.data[flightCounter].itineraries[intineraryCounter].segments[
       segmentCounter
     ].departure.iataCode;
   var arrivalCityCode =
-    amadeusData.data[flightCounter].itineraries[intineraryCounter].segments[
+    data.data[flightCounter].itineraries[intineraryCounter].segments[
       segmentCounter
     ].arrival.iataCode;
   var airportSpanEl = document.createElement("span");
@@ -540,25 +553,25 @@ var writeSegmentData = function (
 
   // departure and arrival times
   var departureTime =
-    amadeusData.data[flightCounter].itineraries[intineraryCounter].segments[
+    data.data[flightCounter].itineraries[intineraryCounter].segments[
       segmentCounter
     ].departure.at;
   var arrivalTime =
-    amadeusData.data[flightCounter].itineraries[intineraryCounter].segments[
+    data.data[flightCounter].itineraries[intineraryCounter].segments[
       segmentCounter
     ].arrival.at;
   var timeSpanEl = document.createElement("span");
   timeSpanEl.innerHTML =
     "<br />" +
-    convertTime(departureTime) +
+    convertTimeUI(departureTime) +
     " to " +
-    convertTime(arrivalTime) +
+    convertTimeUI(arrivalTime) +
     "<br />";
   flightDetailsEl.appendChild(timeSpanEl);
 
   /* ----- flight number ----- */
   var flightNumber =
-    amadeusData.data[flightCounter].itineraries[intineraryCounter].segments[
+    data.data[flightCounter].itineraries[intineraryCounter].segments[
       segmentCounter
     ].number;
   var flightNumberEl = document.createElement("span");
@@ -568,7 +581,7 @@ var writeSegmentData = function (
 };
 
 /* ---------------- writes price data elements to index.html ---------------- */
-var writePriceData = function () {
+var writePriceData = function (data) {
   /* ----- price container ----- */
   var priceContainerEl = document.createElement("div");
   priceContainerEl.classList.add(
@@ -587,7 +600,7 @@ var writePriceData = function () {
   saveEl.innerHTML = "Favorite";
   priceContainerEl.appendChild(saveEl);
 
-  var grandTotalPrice = amadeusData.data[flightCounter].price.grandTotal;
+  var grandTotalPrice = data.data[flightCounter].price.grandTotal;
   var priceEl = document.createElement("h2");
   priceEl.classList.add("uk-margin-remove-vertical", "black-ops");
   priceEl.innerHTML = "$" + convertPrice(grandTotalPrice);
@@ -613,22 +626,23 @@ var writePriceData = function () {
 
 /* ------ writes data from "flight offers search" amadeus api to html ------- */
 var writeData = function (data) {
-  // sortAmadeusData = amadeusData.data;
+  // clears data from previous search
+  flightsGridEl.innerHTML = "";
 
   // shows flights sorting menu
   sortFlightsMenuEl.style.display = "";
 
   // dictionary of codes. used to convert codes to full names
-  var carriersCodeList = amadeusData.dictionaries.carriers;
-  var locationsCityCodeList = amadeusData.dictionaries.locations;
+  var carriersCodeList = data.dictionaries.carriers;
+  var locationsCityCodeList = data.dictionaries.locations;
 
   // number of flights available matching user input
-  var flightCount = amadeusData.meta.count;
+  var flightCount = data.meta.count;
 
   // each flight (trip) details
   for (flightCounter = 0; flightCounter < flightCount; flightCounter++) {
     // gets number of itineraries (usually 1 for outbound and 1 for inbound)
-    var intineraryCount = amadeusData.data[flightCounter].itineraries.length;
+    var intineraryCount = data.data[flightCounter].itineraries.length;
 
     // loops through number of itineraries to create a container element for each
     for (
@@ -650,8 +664,7 @@ var writeData = function (data) {
 
       // number of segments for each itinerary. it is also "number of stops".
       var segmentCount =
-        amadeusData.data[flightCounter].itineraries[intineraryCounter].segments
-          .length;
+        data.data[flightCounter].itineraries[intineraryCounter].segments.length;
 
       /* ----- allocates data from fetch into variables ----- */
       for (
@@ -660,6 +673,7 @@ var writeData = function (data) {
         segmentCounter++
       ) {
         writeSegmentData(
+          data,
           itineraryContainerEl,
           segmentCount,
           carriersCodeList,
@@ -667,7 +681,7 @@ var writeData = function (data) {
         );
       }
     }
-    writePriceData();
+    writePriceData(data);
   }
 };
 
@@ -691,22 +705,32 @@ var sortByPrice = function () {
   changeArrowDirection(priceSortingArrow);
   removeOtherArrows(arrivalSortingArrow, departureSortingArrow);
 
-  // for (let i = 0; i < amadeusData.data.length; i++) {
-  //   amadeusData.data[i].price.sort(function (a, b) {
-  //     return a.price.grandTotal - b.price.grandTotal;
-  //   });
-  // }
+  var reversedArray = amadeusData.data.reverse();
+  amadeusData.data = reversedArray;
 
-  // console.log(amadeusData);
+  writeData(amadeusData);
 };
 
 /* ----------- sorts search results according to arrival time --------------- */
 var sortByArrival = function () {
   changeArrowDirection(arrivalSortingArrow);
   removeOtherArrows(priceSortingArrow, departureSortingArrow);
+
+  // for (let i = 0; i < amadeusData.data.length; i++) {
+  //   amadeusData.data[i].price.sort(function (a, b) {
+  //     return a.price - b.price;
+  //   });
+  // }
+
+  // var departureTimeArray = amadeusData.data[flightCounter].itineraries[
+  //   intineraryCounter
+  // ].segments[segmentCounter].departure.at;
+
+  // amadeusData.data = sortedArray;
+
+  // writeData(amadeusData);
 };
 /* ---------- sorts search results according to departure time -------------- */
-/* -------- triggers sorting of search results according to price ----------- */
 var sortByDeparture = function () {
   changeArrowDirection(departureSortingArrow);
   removeOtherArrows(priceSortingArrow, arrivalSortingArrow);
@@ -715,18 +739,18 @@ var sortByDeparture = function () {
 /* ----------------------------- ENDS FUNCTIONS ----------------------------- */
 /* -------------------------------------------------------------------------- */
 
-/* ---------------------------------------------------------------------------------------------- */
-/* ------------------------------------- BEGINS LOAD EVENTS ------------------------------------- */
-/* ---------------------------                                        --------------------------- */
+/* -------------------------------------------------------------------------- */
+/* -------------- ------------- BEGINS LOAD EVENTS --------------------------- */
+/* -----------------                                        ----------------- */
 loadFlightsFavorites();
 
-/* ---------------------------                                        --------------------------- */
-/* -------------------------------------- ENDS LOAD EVENTS -------------------------------------- */
-/* ---------------------------------------------------------------------------------------------- */
+/* -----------------                                        ----------------- */
+/* ---------------------------- ENDS LOAD EVENTS ---------------------------- */
+/* -------------------------------------------------------------------------- */
 
-/* ---------------------------------------------------------------------------------------------- */
-/* ------------------------------------ BEGINS EVENT HANDLERS ----------------------------------- */
-/* ---------------------------                                        --------------------------- */
+/* -------------------------------------------------------------------------- */
+/* -------------------------- BEGINS EVENT HANDLERS ------------------------- */
+/* -----------------                                        ----------------- */
 searchFormEl.addEventListener("submit", searchFormHandler);
 flightsTabEl.addEventListener("click", hideFlightSortingMenu);
 favoritesTabEl.addEventListener("click", loadFlightsFavorites);
@@ -736,15 +760,15 @@ favoriteHotelsBtn.addEventListener("click", showFavoriteHotels);
 sortFlightsByPriceBtn.addEventListener("click", sortByPrice); // sorts search results by price
 sortFlightsByArrivalBtn.addEventListener("click", sortByArrival); // sorts search results by Arrival Time
 sortFlightsByDepartureBtn.addEventListener("click", sortByDeparture); // sorts search results by Departure Time
-/* ---------------------------                                        --------------------------- */
-/* ------------------------------------ ENDS EVENT HANDLERS ------------------------------------- */
-/* ---------------------------------------------------------------------------------------------- */
+/* -----------------                                        ----------------- */
+/* -------------------------- ENDS EVENT HANDLERS --------------------------- */
+/* -------------------------------------------------------------------------- */
 
-/* ---------------------------------------------------------------------------------------------- */
-/* ------------------------------------ BEGINS TESTING CODE ------------------------------------- */
-/* ---------------------------                                        --------------------------- */
+/* -------------------------------------------------------------------------- */
+/* -------------------------- BEGINS TESTING CODE --------------------------- */
+/* -----------------                                        ----------------- */
 /*  CODE BELOW IS NOT PART OF THE APP. IT IS ONLY USED FOR TESTING PURPOSES   */
-/* -------------------------- begins amadeus credentials status check --------------------------- */
+/* ---------------- begins amadeus credentials status check ----------------- */
 
 // checks status of access token. expires every 30 minutes
 var accessTokenStatus = function () {
@@ -765,6 +789,6 @@ var accessTokenStatus = function () {
 
 // UNCOMMENT function below to check on status of access token
 // accessTokenStatus();
-/* ---------------------------                                        --------------------------- */
-/* ------------------------------------- ENDS TESTING CODE -------------------------------------- */
-/* ---------------------------------------------------------------------------------------------- */
+/* -----------------                                        ----------------- */
+/* --------------------------- ENDS TESTING CODE ---------------------------- */
+/* -------------------------------------------------------------------------- */
