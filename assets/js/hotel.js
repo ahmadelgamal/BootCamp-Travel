@@ -72,6 +72,7 @@ var displayPropertyInfo = function (
       identity +
       '">Favorites</button> </div> </div>'
     );
+  
   }
   else {
     $(newHotellay2).append(
@@ -90,7 +91,7 @@ var displayPropertyInfo = function (
       '</h2> <b>per Night</b>' + '<br> <p> Check-In: ' + checkindate + '<br> Check-Out: ' + checkoutdate + '<br> Adults: ' + numberofadults + '</p> </div>  </div>'
     );
   }
-
+ 
 }
 
 /* -------------------- OBTAIN ID FOR CITY REQUIRED FOR PROPERTY SEARCH-------------------- */
@@ -161,7 +162,7 @@ var getProperties = function (
   pgSize,
   adultNumber
 ) {
-  console.log ("I am here first");
+  console.log("I am here first");
   $("#hotels-container").append(
     '<div class = "temporary"> <p>Searching... </p> </div>');
   var url6 =
@@ -206,7 +207,7 @@ var getProperties = function (
             if ($(".temporary")) {
               $(".temporary").empty();
             }
-       
+
             for (i = 0; i < propId.length; i++) {
               // the if statements account for any information on the server that might be undefined 
               var propIde = [];
@@ -287,6 +288,18 @@ var getProperties = function (
                 neighbourhoodName,
                 price
               );
+              if (hotels != "") {
+                console.log ("yeeeee");
+                console.log ("hotel:  "+ hotels.length);
+                for (k = 0; k < hotels.length; k++) {
+                  console.log ("i:  " + k);
+                  if (hotels[k].IdCity == propIde[i]) {
+                      $("#"+propIde[i]).css("background", "red");
+                      $("#"+propIde[i]).html("Remove Selection");
+                      $("#"+propIde[i]).removeClass("reserve").addClass("unreserve");
+                  }
+                }
+              }
             }
           } else {
             $("#hotels-container").append(
@@ -295,7 +308,7 @@ var getProperties = function (
           }
         });
       }
-      console.log ("I am here");
+      console.log("I am here");
       $(".temporary").empty();
     })
 
@@ -400,6 +413,23 @@ var SortOrderFunction = function (sortSelect) {
     }
   }
 };
+
+/*--------------------- CHECK FOR EXISTING FAVORITES ------------------*/
+
+var unReserve = function (propval) {
+hotels = JSON.parse(localStorage.getItem("hotels"));
+console.log (hotels);
+if (hotels != "") {
+  for (i = 0; i < hotels.length; i++) {
+  
+
+    if (hotels[i].IdCity == propval) {
+        hotels.splice(i,1);
+    }
+  }
+}
+
+}
 
 /* -------------------- PULL LOCAL STORAGE-------------------- */
 
@@ -519,8 +549,9 @@ $(document).on("click", ".reserve", function () {
     .parent()
     .find("h6");
   var address = addressEl[0].innerText;
-
-
+  $(this).css("background", "red");
+  $(this).html("Remove Selection");
+  $(this).removeClass("reserve").addClass("unreserve");
   hotels = JSON.parse(localStorage.getItem("hotels"));
 
   //sets initial values if null
@@ -655,3 +686,14 @@ $(document).on("click", "#hotels-tab", function () {
 }
 );
 
+/* -------------------- PROCESS REQUEST FOR DELETING FAVORITES------------------ */
+
+
+$(document).on("click", ".unreserve", function () {
+  var propval = this.getAttribute("id");
+  unReserve(propval);
+  $(this).css("background", "DodgerBlue");
+$(this).html("FAVORITES");
+$(this).removeClass("unreserve").addClass("reserve");
+localStorage.setItem("hotels", JSON.stringify(hotels));
+});
