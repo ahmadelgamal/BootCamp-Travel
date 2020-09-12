@@ -65,7 +65,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "V2F3rrmtqB3vAiPmITkZmZgJC7Hn"; // access token must be renewed for 30 minutes at a time
+const accessToken = "1NEhppsOTKNJOEiz845cfYI2xDwh"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /*  declares required query variables for "flight offers search" amadeus api  */
@@ -125,7 +125,7 @@ var getFlightOffersSearch = function () {
       return response.json();
     })
     .then(function (data) {
-      amadeusData = data;
+      amadeusData = JSON.parse(JSON.stringify(data));
       clearInterval(toggleInterval); // stops toggling searching message
       searchingMessageEl.innerHTML =
         "There are " +
@@ -705,10 +705,19 @@ var sortByPrice = function () {
   changeArrowDirection(priceSortingArrow);
   removeOtherArrows(arrivalSortingArrow, departureSortingArrow);
 
-  var reversedArray = amadeusData.data.reverse();
-  amadeusData.data = reversedArray;
+  // creates a disconnected copy of the data object
+  var sortedData = JSON.parse(JSON.stringify(amadeusData));
 
-  writeData(amadeusData);
+  if (priceSortingArrow.textContent === "↑") {
+    // resets the data to its original order (sorted by price up)
+    sortedData = JSON.parse(JSON.stringify(amadeusData));
+  } else if (priceSortingArrow.textContent === "↓") {
+    // reverses the default sort order to become price down
+    var reversedArray = sortedData.data.reverse();
+    sortedData.data = reversedArray;
+  }
+
+  writeData(sortedData);
 };
 
 /* ----------- sorts search results according to arrival time --------------- */
