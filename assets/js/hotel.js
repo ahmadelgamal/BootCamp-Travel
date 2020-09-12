@@ -88,7 +88,7 @@ var displayPropertyInfo = function (
       totalGuestReviews + '</span>' +
       '<span> Reviews)</span></div> <div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price"> <p> Check-In: ' + checkindate + '<br> Check-Out: ' + checkoutdate + '<br> Adults: ' + numberofadults + '</p> <h2 class="uk-margin-remove-vertical">' +
       pricee +
-      '</h2> <b>per Night</b> <button class="reserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-danger uk-border-rounded"  id="' +
+      '</h2> <b>per Night</b> <button class="unreserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-danger uk-border-rounded"  id="' +
       identity +
       '">Remove Selection </button> </div> </div>'+
        '</div>  </div>'
@@ -421,7 +421,6 @@ var unReserve = function (propval) {
 hotels = JSON.parse(localStorage.getItem("hotels"));
 if (hotels != "") {
   for (i = 0; i < hotels.length; i++) {
-  
 
     if (hotels[i].IdCity == propval) {
         hotels.splice(i,1);
@@ -637,6 +636,8 @@ $(document).on("click", "#sort-hotel-rating", function () {
 /* -------------------- PROCESS REQUEST FOR CLICKING ON FAVORITES------------------ */
 
 $(document).on("click", "#favorites-btn", function () {
+  
+  
   $("#hotels-grid").empty();
   $("#hotel-favorites-grid").empty();
   hotels = JSON.parse(localStorage.getItem("hotels"));
@@ -661,6 +662,7 @@ $(document).on("click", "#favorites-btn", function () {
       );
     }
   }
+
 });
 $(document).on("click", "#hotels-tab", function () {
 
@@ -691,9 +693,46 @@ $(document).on("click", "#hotels-tab", function () {
 
 $(document).on("click", ".unreserve", function () {
   var propval = this.getAttribute("id");
+  var inFavorites = ($(this).parent().parent().parent().attr("id")).includes("hotel-favorites-grid"); // Check if the request is coming from favorites or a search. 
+  console.log ("fav or not:  " + inFavorites);
   unReserve(propval);
-  //$(this).css("background", "DodgerBlue");
+
+  if (inFavorites){  // if request is coming from the favorite tag, then delete the favorite when user chooses to remove
+  localStorage.setItem("hotels", JSON.stringify(hotels));
+  //$(this).css("background", "DodgerBlue"); ---- REMOVE
+
+  $("#hotels-grid").empty();
+  $("#hotel-favorites-grid").empty();
+  hotels = JSON.parse(localStorage.getItem("hotels"));
+  // Display favorites
+  if (hotels != null) {
+    console.log("I am here 1");
+    for (i = 0; i < hotels.length; i++) {
+      console.log("I am here 2");
+      displayPropertyInfo(
+        newInitlay,
+        hotels[i].IdCity,
+        hotels[i].ChkInDate,
+        hotels[i].ChkOutDate,
+        hotels[i].NumAdults,
+        hotels[i].Currcy,
+        i,
+        hotels[i].UrlThumbNl,
+        hotels[i].rating,
+        hotels[i].hotelName,
+        hotels[i].address,
+        hotels[i].guestReviews,
+        hotels[i].neighborhood,
+        hotels[i].price
+      );
+    }
+  }
+} 
+else {  // If request is coming from a search, then you can toggle the button to add or delete the favorite
+localStorage.setItem("hotels", JSON.stringify(hotels));
 $(this).html("FAVORITES");
 $(this).removeClass("unreserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-danger uk-border-rounded").addClass("reserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded");
-localStorage.setItem("hotels", JSON.stringify(hotels));
+
+}
+
 });
