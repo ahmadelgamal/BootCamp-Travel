@@ -34,8 +34,8 @@ const errorMessageEl = document.getElementById("error-message"); // constant tha
 const flightsGridEl = document.getElementById("flights-grid"); // constant that points to flights grid
 const flightsFavoritesGridEl = document.getElementById("flight-favorites-grid"); // constant that points to flights search history grid
 const hotelsFavoritesGridEl = document.getElementById("hotel-favorites-grid"); // constant that points to flights search history grid
-const favoriteFlightsBtn = document.getElementById("favorite-flights");
-const favoriteHotelsBtn = document.getElementById("favorite-hotels");
+const filterFavoritesByFlightsBtn = document.getElementById("favorite-flights");
+const filterFavoritesByHotelsBtn = document.getElementById("favorite-hotels");
 
 /*  declares variables for user input for "flight offers search" amadeus api  */
 var originCode;
@@ -125,14 +125,14 @@ var favoritesBtnHandler = function (event) {
   }
 };
 
-/* ------------- handler for show favorite flights only button -------------- */
-var favoriteFlightsBtnHandler = function () {
+/* ------------ handler for filtering favorites by flights only ------------- */
+var filterByFlightsHandler = function () {
   flightsFavoritesGridEl.style.display = "";
   hotelsFavoritesGridEl.style.display = "none";
 };
 
-/* -------------- handler for show favorite hotels only button -------------- */
-var favoriteHotelsBtnHandler = function () {
+/* ------------- handler for filtering favorites by hotels only ------------- */
+var filterByHotelsHandler = function () {
   flightsFavoritesGridEl.style.display = "none";
   hotelsFavoritesGridEl.style.display = "";
 };
@@ -172,7 +172,7 @@ var sortByPriceHandler = function () {
   createFlightElements(sortedData);
 };
 
-/* handler for sorting flight search results by arrival time of last segment of outbound itinerary */
+/* ------- handler for sorting flight search results by arrival time -------- */
 var sortByArrivalHandler = function () {
   changeArrowDirection(arrivalSortingArrow);
   removeOtherArrows(priceSortingArrow, departureSortingArrow);
@@ -180,7 +180,7 @@ var sortByArrivalHandler = function () {
   createFlightElements(dataCopy);
 };
 
-/* handler for sorting flight search results by departure of first segment of outbound itinerary */
+/* ------- handler for sorting flight search results by departure time -------*/
 var sortByDepartureHandler = function () {
   changeArrowDirection(departureSortingArrow);
   removeOtherArrows(priceSortingArrow, arrivalSortingArrow);
@@ -467,7 +467,7 @@ var convertPrice = function (priceToConvert) {
   return convertedPrice;
 };
 
-/* -------------------- sorts search results by price ----------------------- */
+/* ---------------- sorts flight search results by price -------------------- */
 var sortByPrice = function () {
   // creates a disconnected copy of the data object
   var sortedData = JSON.parse(JSON.stringify(amadeusData));
@@ -484,7 +484,7 @@ var sortByPrice = function () {
   return sortedData;
 };
 
-/* ----------- sorts search results according to arrival time --------------- */
+/* sorts flight search results by arrival time of last segment of outbound itinerary */
 var sortByArrival = function () {
   // creates a disconnected copy of the data object
   var dataCopy = JSON.parse(JSON.stringify(amadeusData));
@@ -521,7 +521,7 @@ var sortByArrival = function () {
   return dataCopy;
 };
 
-/* ---------- sorts search results according to departure time -------------- */
+/* sorts flight search results by departure time of 1st segment of outbound itinerary */
 var sortByDeparture = function () {
   // creates a disconnected copy of the data object
   var dataCopy = JSON.parse(JSON.stringify(amadeusData));
@@ -855,8 +855,8 @@ startInitialSettings(); // loads initial settings for initial visit and refresh
 searchFormEl.addEventListener("submit", searchFormHandler);
 flightsTabEl.addEventListener("click", flightsTabHandler);
 favoritesBtn.addEventListener("click", favoritesBtnHandler);
-favoriteFlightsBtn.addEventListener("click", favoriteFlightsBtnHandler);
-favoriteHotelsBtn.addEventListener("click", favoriteHotelsBtnHandler);
+filterFavoritesByFlightsBtn.addEventListener("click", filterByFlightsHandler);
+filterFavoritesByHotelsBtn.addEventListener("click", filterByHotelsHandler);
 sortFlightsByPriceBtn.addEventListener("click", sortByPriceHandler);
 sortFlightsByArrivalBtn.addEventListener("click", sortByArrivalHandler);
 sortFlightsByDepartureBtn.addEventListener("click", sortByDepartureHandler);
