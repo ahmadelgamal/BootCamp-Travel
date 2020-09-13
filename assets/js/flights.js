@@ -29,8 +29,8 @@ const departureSortingArrow = document.querySelector(
 );
 
 // constants that point to other flight search elements
-const searchingMessageEl = document.getElementById("searching-message"); // constant that points to searching message element
-const errorMessageEl = document.getElementById("error-message"); // constant that points to error message element
+const searchingMessageEl = document.getElementById("flights-searching-message"); // constant that points to searching message element
+const errorMessageEl = document.getElementById("flights-error-message"); // constant that points to error message element
 const flightsGridEl = document.getElementById("flights-grid"); // constant that points to flights grid
 const flightsFavoritesGridEl = document.getElementById("flight-favorites-grid"); // constant that points to flights search history grid
 const hotelsFavoritesGridEl = document.getElementById("hotel-favorites-grid"); // constant that points to flights search history grid
@@ -51,7 +51,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "2q0GEyyXigKheoYgJfuEy1eQa85N"; // access token must be renewed for 30 minutes at a time
+const accessToken = "IvWqB7OfaLK9UFpirpOwmKdHQRR6"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /*  declares required query variables for "flight offers search" amadeus api  */
