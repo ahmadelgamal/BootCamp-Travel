@@ -51,7 +51,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "XcZxwjHsdyE2P1ABQ4w41F2qh5Sl"; // access token must be renewed for 30 minutes at a time
+const accessToken = "a2l9mAG4fUHIPMjs5VezTTQAGdmd"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /*  declares required query variables for "flight offers search" amadeus api  */
@@ -70,14 +70,21 @@ var oneWayFlightOffersSearchApiUrl;
 var roundTripFlightOffersSearchApiUrl;
 var apiUrl;
 
-/* ----------------- declares constants for airhex api urls ----------------- */
-const airhexHost = "https://content.airhex.com/content/logos/airlines";
-const carrierLogoWidth = 70; // requested logo width in pixels
-const carrierLogoHeight = 70; // requested logo height in pixels
-const carrierLogoType = "s"; // Type of a logo: r - for rectangular, s - for square and t - for tail logo
-const carrierLogoFormat = ".png"; // can change to .svg
-const queryairhexApi = "?md5apikey=";
-const airhexApiKey = "VDjfGgv8mxiTvvLLwGicD6V2eq";
+/* ---------------- declares constants for daisycon api urls ---------------- */
+const daisyConHost = "https://daisycon.io/images/airline/?";
+const carrierLogoWidth = "width=300"; // requested logo width in pixels
+const carrierLogoHeight = "height=150"; // requested logo height in pixels
+const backgroundColor = "color=ffffff"; // Type of a logo: r - for rectangular, s - for square and t - for tail logo
+const queryIata = "&iata="; // can change to .svg
+
+// /* ----------------- declares constants for airhex api urls ----------------- */
+// const airhexHost = "https://content.airhex.com/content/logos/airlines";
+// const carrierLogoWidth = 70; // requested logo width in pixels
+// const carrierLogoHeight = 70; // requested logo height in pixels
+// const carrierLogoType = "s"; // Type of a logo: r - for rectangular, s - for square and t - for tail logo
+// const carrierLogoFormat = ".png"; // can change to .svg
+// const queryairhexApi = "?md5apikey=";
+// const airhexApiKey = "VDjfGgv8mxiTvvLLwGicD6V2eq";
 
 /* ------------------------ declares other variables ------------------------ */
 var amadeusData = []; //declares array to store copy of fetched data from amadeus
@@ -260,24 +267,39 @@ var fetchFlightOffersSearch = function () {
     });
 };
 
-/* --------------- gets airline carrier's logo from airhex api -------------- */
-var fetchCarrierLogo = function (carrierCode) {
+/* -------------- gets airline carrier's logo from daisycon api ------------- */
+var fetchCarrierLogoDaisycon = function (carrierCode) {
   var logoApiUrl =
-    airhexHost +
-    "_" +
-    carrierCode +
-    "_" +
+    daisyConHost +
     carrierLogoWidth +
-    "_" +
+    "&" +
     carrierLogoHeight +
-    "_" +
-    carrierLogoType +
-    carrierLogoFormat +
-    queryairhexApi +
-    airhexApiKey;
+    backgroundColor +
+    queryIata +
+    carrierCode;
 
   return logoApiUrl;
 };
+
+// /* --------------- gets airline carrier's logo from airhex api -------------- */
+// can choose between airhex or daisycon by replacing the function name (optional: and commenting/uncommenting functions and variables)
+// var fetchCarrierLogoAirhex = function (carrierCode) {
+//   var logoApiUrl =
+//     airhexHost +
+//     "_" +
+//     carrierCode +
+//     "_" +
+//     carrierLogoWidth +
+//     "_" +
+//     carrierLogoHeight +
+//     "_" +
+//     carrierLogoType +
+//     carrierLogoFormat +
+//     queryairhexApi +
+//     airhexApiKey;
+
+//   return logoApiUrl;
+// };
 /* ------------------------ ENDS FETCH API FUNCTIONS ------------------------ */
 
 /* ---------------------- BEGINS LOCALSTORAGE FUNCTIONS --------------------- */
@@ -583,7 +605,7 @@ var createSegmentElements = function (
   carrierLogoEl.style.width = "70";
   carrierLogoEl.style.height = "70";
   carrierLogoEl.setAttribute("loading", "lazy");
-  carrierLogoEl.src = fetchCarrierLogo(carrierCode); // gets carrier logo from airhex api
+  carrierLogoEl.src = fetchCarrierLogoDaisycon(carrierCode); // gets carrier logo from api
   segmentContainerEl.appendChild(carrierLogoEl);
 
   /* ----- flight details container ----- */
