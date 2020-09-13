@@ -38,8 +38,8 @@ const favoriteFlightsBtn = document.getElementById("favorite-flights");
 const favoriteHotelsBtn = document.getElementById("favorite-hotels");
 
 /*  declares variables for user input for "flight offers search" amadeus api  */
-var originCode = goingFromEl.value; // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
-var destinationCode = goingToEl.value; // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
+var originCode;
+var destinationCode;
 var departureDate = dateDepartureEl.value; // Format: YYYY-MM-DD
 var returnDate = dateReturnEl.value; // Format: YYYY-MM-DD
 var numberOfAdults = numberOfAdultsEl.value.charAt(0);
@@ -51,7 +51,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "CD0KzlKHmZu7iTnFHI3IvAAPrA5h"; // access token must be renewed for 30 minutes at a time
+const accessToken = "XcZxwjHsdyE2P1ABQ4w41F2qh5Sl"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /*  declares required query variables for "flight offers search" amadeus api  */
@@ -150,10 +150,8 @@ var hideFlightSortingMenu = function () {
 /* -------------------- BEGINS DATA COLLECTION FUNCTIONS -------------------- */
 /* ------------------- gets current values in search form ------------------- */
 var collectSearchForm = function () {
-  // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
-  originCode = goingFromEl.value.toUpperCase();
-  // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
-  destinationCode = goingToEl.value.toUpperCase();
+  originCode = goingFromEl.value.slice(2, 5);
+  destinationCode = goingToEl.value.slice(2, 5);
   departureDate = dateDepartureEl.value;
   // checks if user selects roundtrip or one-way
   if (tripSelectEl.options[tripSelectEl.selectedIndex].value === "Roundtrip") {
@@ -194,6 +192,12 @@ var collectFavoriteFlightData = function (favoriteFlightBtn) {
   }
   return favoriteFlightObject;
 };
+
+/* ---------------- uses iata airport code to get city name ----------------- */
+var collectCity = function (iataAirport) {
+  return mainAirports[iataAirport].city;
+};
+
 /* --------------------- ENDS DATA COLLECTION FUNCTIONS --------------------- */
 
 /* ----------------------- BEGINS FETCH API FUNCTIONS ----------------------- */
@@ -588,13 +592,6 @@ var createSegmentElements = function (
   segmentContainerEl.appendChild(flightDetailsEl);
 
   // city data
-  // NEED TO DECLARE departureCityFull & arrivalCityFulls
-  var citySpanEl = document.createElement("span");
-  // citySpanEl.innerHTML = departureCityFull + " to " + arrivalCityFull + "<br />";
-  citySpanEl.innerHTML = "Test City 1" + " to " + "Test City 2" + "<br />";
-  flightDetailsEl.appendChild(citySpanEl);
-
-  // airport data
   var departureCityCode =
     data.data[flightCounter].itineraries[intineraryCounter].segments[
       segmentCounter
@@ -603,6 +600,15 @@ var createSegmentElements = function (
     data.data[flightCounter].itineraries[intineraryCounter].segments[
       segmentCounter
     ].arrival.iataCode;
+  var citySpanEl = document.createElement("span");
+  citySpanEl.innerHTML =
+    collectCity(departureCityCode) +
+    " to " +
+    collectCity(arrivalCityCode) +
+    "<br />";
+  flightDetailsEl.appendChild(citySpanEl);
+
+  // airport data
   var airportSpanEl = document.createElement("span");
   airportSpanEl.classList.add("fa", "stronger", "margin-small-left");
   airportSpanEl.innerHTML = departureCityCode + " &#xf072; " + arrivalCityCode;
@@ -775,9 +781,9 @@ getFavoriteFlightsLS();
 /* ------------------------- BEGINS EVENT HANDLERS -------------------------- */
 searchFormEl.addEventListener("submit", searchFormHandler);
 flightsTabEl.addEventListener("click", hideFlightSortingMenu);
-favoritesTabEl.addEventListener("click", getFavoriteFlightsLS);
-favoriteFlightsBtn.addEventListener("click", showFavoriteFlights);
-favoriteHotelsBtn.addEventListener("click", showFavoriteHotels);
+// favoritesTabEl.addEventListener("click", getFavoriteFlightsLS);
+// favoriteFlightsBtn.addEventListener("click", showFavoriteFlights);
+// favoriteHotelsBtn.addEventListener("click", showFavoriteHotels);
 
 sortFlightsByPriceBtn.addEventListener("click", sortByPrice); // sorts search results by price
 sortFlightsByArrivalBtn.addEventListener("click", sortByArrival); // sorts search results by Arrival Time
