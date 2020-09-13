@@ -51,7 +51,7 @@ const currencyCode = "USD"; // sets currency in fetch request to USD (default in
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "a2l9mAG4fUHIPMjs5VezTTQAGdmd"; // access token must be renewed for 30 minutes at a time
+const accessToken = "vbwYkxGZrzu9vgZKB376JvzxVPdN"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /*  declares required query variables for "flight offers search" amadeus api  */
@@ -391,6 +391,16 @@ var convertTime12H = function (timeToConvert) {
   return convertedTime;
 };
 
+/* ---------------- converts time from fetch to date format ----------------- */
+var convertDate = function (timeToConvert) {
+  var convertedDate = new Date(timeToConvert);
+  var year = convertedDate.getFullYear();
+  var month = convertedDate.getMonth() + 1;
+  var day = convertedDate.getDate();
+  convertedDate = month + "/" + day + "/" + year;
+  return convertedDate;
+};
+
 /* ---------- converts price from fetch to comma separated format ----------- */
 var convertPrice = function (priceToConvert) {
   var stringPrice;
@@ -587,7 +597,7 @@ var createSegmentElements = function (
   );
   itineraryContainerEl.appendChild(segmentContainerEl);
 
-  /* ----- carrier (ariline) name ----- */
+  // /* ----- carrier (ariline) name ----- */
   var carrierCode =
     data.data[flightCounter].itineraries[intineraryCounter].segments[
       segmentCounter
@@ -598,7 +608,7 @@ var createSegmentElements = function (
   carrierFullEl.textContent = carrierFull;
   segmentContainerEl.appendChild(carrierFullEl);
 
-  /* ----- carrier (ariline) logo ----- */
+  /* ----- carrier (airline) logo ----- */
   var carrierLogoEl = document.createElement("img");
   carrierLogoEl.className = "frame";
   carrierLogoEl.alt = "airline logo";
@@ -651,6 +661,10 @@ var createSegmentElements = function (
     convertTime12H(departureTime) +
     " to " +
     convertTime12H(arrivalTime) +
+    "<br />" +
+    convertDate(departureTime) +
+    "&nbsp; &nbsp;" +
+    convertDate(arrivalTime) +
     "<br />";
   flightDetailsEl.appendChild(timeSpanEl);
 
