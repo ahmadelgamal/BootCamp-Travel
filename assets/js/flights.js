@@ -252,7 +252,7 @@ var fetchFlightOffersSearch = function () {
       clearInterval(toggleInterval); // stops toggling searching message
       searchingMessageEl.textContent = ""; // clears searching message
       errorMessageEl.textContent =
-        "Error!. Please check the dates and airport codes.";
+        "Error! Please check the dates and airport codes.";
     });
 };
 
