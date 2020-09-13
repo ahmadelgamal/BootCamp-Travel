@@ -50,6 +50,9 @@ This app is very simple to use. Just follow these steps:
 - Click on the favorite icon to save it to memory (you may choose up to 5 flights and/or 5 hotels)
 - Revisit the website at any time to see your favorite items, or make new searches!
 
+## Pre-requisites
+Flights section cannot run without a valid *access token* from **Amadeus**. To receive one, please visit https://developers.amadeus.com/ and follow their instructions.
+
 ## Screenshots:
 ![Landing Page](./assets/images/screen-shot-1.jpg)
 
