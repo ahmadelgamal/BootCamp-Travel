@@ -71,7 +71,7 @@ var roundTripFlightOffersSearchApiUrl;
 var apiUrl;
 
 /* ---------------- declares constants for daisycon api urls ---------------- */
-const daisyConHost = "https://daisycon.io/images/airline/?";
+const daisyconHost = "https://daisycon.io/images/airline/?";
 const carrierLogoWidth = "width=300"; // requested logo width in pixels
 const carrierLogoHeight = "height=150"; // requested logo height in pixels
 const backgroundColor = "color=ffffff"; // Type of a logo: r - for rectangular, s - for square and t - for tail logo
@@ -270,7 +270,7 @@ var fetchFlightOffersSearch = function () {
 /* -------------- gets airline carrier's logo from daisycon api ------------- */
 var fetchCarrierLogoDaisycon = function (carrierCode) {
   var logoApiUrl =
-    daisyConHost +
+    daisyconHost +
     carrierLogoWidth +
     "&" +
     carrierLogoHeight +
