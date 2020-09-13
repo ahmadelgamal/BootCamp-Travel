@@ -5,7 +5,7 @@ var checkOutDt = ""; // Check-out date
 var id = 0;
 var urls = []; // URLs of the images
 var maxHistoryLength = 5; // History length
-var urlKey = "083f233336mshc03be33994e1ed0p1698afjsnc157beab7f7c"; // URL Key
+var urlKey = "5d5909e26bmshfb2a825f7b2cf74p1f485ajsna344ade586d8"; // URL Key
 var newHotellay = document.getElementById("hotels-grid"); // Get parent element of HTML document from search
 var newInitlay = document.getElementById("hotel-favorites-grid");// Get parent element of HTML document during initalization
 var pageNumber = 1; // # of pages to display
@@ -88,10 +88,10 @@ var displayPropertyInfo = function (
       totalGuestReviews + '</span>' +
       '<span> Reviews)</span></div> <div class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price"> <p> Check-In: ' + checkindate + '<br> Check-Out: ' + checkoutdate + '<br> Adults: ' + numberofadults + '</p> <h2 class="uk-margin-remove-vertical">' +
       pricee +
-      '</h2> <b>per Night</b> <button class="reserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded" style ="background-color: red" id="' +
+      '</h2> <b>per Night</b> <button class="unreserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-danger uk-border-rounded"  id="' +
       identity +
-      '">Remove Selection </button> </div> </div>'+
-      '</h2> <b>per Night</b>' +  '</div>  </div>'
+      '">Remove</button> </div> </div>'+
+       '</div>  </div>'
     );
   }
  
@@ -165,7 +165,7 @@ var getProperties = function (
   pgSize,
   adultNumber
 ) {
-  console.log("I am here first");
+
   $("#hotels-container").append(
     '<div class = "temporary"> <p>Searching... </p> </div>');
   var url6 =
@@ -291,12 +291,13 @@ var getProperties = function (
                 neighbourhoodName,
                 price
               );
-              if (hotels != "") {
+              if (hotels != null) {
                 for (k = 0; k < hotels.length; k++) {
                   if (hotels[k].IdCity == propIde[i]) {
-                      $("#"+propIde[i]).css("background", "red");
-                      $("#"+propIde[i]).html("Remove Selection");
-                      $("#"+propIde[i]).removeClass("reserve").addClass("unreserve");
+                    
+                    //  $("#"+propIde[i]).css("background", "red");
+                      $("#"+propIde[i]).html("Remove");
+                      $("#"+propIde[i]).removeClass("reserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded").addClass("unreserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-danger uk-border-rounded");
                   }
                 }
               }
@@ -308,7 +309,7 @@ var getProperties = function (
           }
         });
       }
-      console.log("I am here");
+    
       $(".temporary").empty();
     })
 
@@ -418,10 +419,8 @@ var SortOrderFunction = function (sortSelect) {
 
 var unReserve = function (propval) {
 hotels = JSON.parse(localStorage.getItem("hotels"));
-console.log (hotels);
 if (hotels != "") {
   for (i = 0; i < hotels.length; i++) {
-  
 
     if (hotels[i].IdCity == propval) {
         hotels.splice(i,1);
@@ -448,7 +447,7 @@ $("#form").on("submit", function (event) {
 
     // Read city value from form
     city = $("#hotel-city").val();
-    console.log(city);
+    
 
     if (city == "") {
       $("#hotels-container").append(
@@ -549,9 +548,9 @@ $(document).on("click", ".reserve", function () {
     .parent()
     .find("h6");
   var address = addressEl[0].innerText;
-  $(this).css("background", "red");
-  $(this).html("Remove Selection");
-  $(this).removeClass("reserve").addClass("unreserve");
+
+  $(this).html("Remove");
+  $(this).removeClass("reserve uk-button-primaryuk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded").addClass("unreserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-danger uk-border-rounded");
   hotels = JSON.parse(localStorage.getItem("hotels"));
 
   //sets initial values if null
@@ -637,6 +636,8 @@ $(document).on("click", "#sort-hotel-rating", function () {
 /* -------------------- PROCESS REQUEST FOR CLICKING ON FAVORITES------------------ */
 
 $(document).on("click", "#favorites-btn", function () {
+  
+  
   $("#hotels-grid").empty();
   $("#hotel-favorites-grid").empty();
   hotels = JSON.parse(localStorage.getItem("hotels"));
@@ -661,6 +662,7 @@ $(document).on("click", "#favorites-btn", function () {
       );
     }
   }
+
 });
 $(document).on("click", "#hotels-tab", function () {
 
@@ -691,9 +693,44 @@ $(document).on("click", "#hotels-tab", function () {
 
 $(document).on("click", ".unreserve", function () {
   var propval = this.getAttribute("id");
+  var inFavorites = ($(this).parent().parent().parent().attr("id")).includes("hotel-favorites-grid"); // Check if the request is coming from favorites or a search. 
+  
   unReserve(propval);
-  $(this).css("background", "DodgerBlue");
-$(this).html("FAVORITES");
-$(this).removeClass("unreserve").addClass("reserve");
+
+  if (inFavorites){  // if request is coming from the favorite tag, then delete the favorite when user chooses to remove
+  localStorage.setItem("hotels", JSON.stringify(hotels));
+  //$(this).css("background", "DodgerBlue"); ---- REMOVE
+
+  $("#hotels-grid").empty();
+  $("#hotel-favorites-grid").empty();
+  hotels = JSON.parse(localStorage.getItem("hotels"));
+  // Display favorites
+  if (hotels != null) {
+    for (i = 0; i < hotels.length; i++) {
+      displayPropertyInfo(
+        newInitlay,
+        hotels[i].IdCity,
+        hotels[i].ChkInDate,
+        hotels[i].ChkOutDate,
+        hotels[i].NumAdults,
+        hotels[i].Currcy,
+        i,
+        hotels[i].UrlThumbNl,
+        hotels[i].rating,
+        hotels[i].hotelName,
+        hotels[i].address,
+        hotels[i].guestReviews,
+        hotels[i].neighborhood,
+        hotels[i].price
+      );
+    }
+  }
+} 
+else {  // If request is coming from a search, then you can toggle the button to add or delete the favorite
 localStorage.setItem("hotels", JSON.stringify(hotels));
+$(this).html("FAVORITES");
+$(this).removeClass("unreserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-danger uk-border-rounded").addClass("reserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded");
+
+}
+
 });
