@@ -8,6 +8,9 @@ var flightsContainer = document.querySelector("#flights-container");
 var hotelsContainer = document.querySelector("#hotels-container");
 var searchContainer = document.querySelector("#past-search-container");
 
+
+
+
 var tempAutoCompleteValue = "";
 
 var activeTab = "flights";
@@ -224,6 +227,7 @@ var inputBlurHandler = function (event) {
     closeAllLists(null, input);
   }
 };
+
 
 var init = function () {
   showSearchHistory();
@@ -457,6 +461,7 @@ hotelsBtn.addEventListener("click", hotelsHandler);
 menuTabs.addEventListener("click",tabsHandler);
 
 tripSelector.addEventListener("change", toggleTripHandler);
+
 
 document.addEventListener("keydown", tabKeyHandler);
 document
