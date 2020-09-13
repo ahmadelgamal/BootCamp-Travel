@@ -242,30 +242,29 @@ var collectCity = function (iataAirport) {
 };
 
 /* -------- insures that return date can't be before departure date --------- */
-// // addeventListener to clicking on return date and launch this function on click
-// var minReturnDate = function () {
-//   var daysDifference = convertDateEpoch(dateDepartureEl.value);
-//   console.log(daysDifference);
-// dateReturnEl.setAttribute("data-uk-datepicker", ("{minDate:" + 0 + ",format:'YYYY-MM-DD'"}));
+var dateDepartureHandler = function () {
+  // // addeventListener to clicking on return date and launch this function on click
+  // var minReturnDate = function () {
+  //   var daysDifference = convertDateEpoch(dateDepartureEl.value);
+  //   console.log(daysDifference);
+  // dateReturnEl.setAttribute("data-uk-datepicker", ("{minDate:" + 0 + ",format:'YYYY-MM-DD'"}));
+  // $(document).ready(function () {
+  //   var $dateFrom = $("#date-departure"),
+  //     $dateTo = $("#date-return");
+  //   var datepickerFrom = UIkit.datetimepicker($dateFrom, { format: "YYYY-MM-DD" });
+  //   $dateFrom.on("change", function () {
+  //     $dateTo.removeAttr("disabled");
+  //     var datepickerTo = UIkit.datetimepicker($dateTo, {
+  //       format: "YYYY-MM-DD",
+  //       minDate: $(this).val(),
+  //     });
+  //   });
+  // });
 };
 
-
-// $(document).ready(function () {
-//   var $dateFrom = $("#date-departure"),
-//     $dateTo = $("#date-return");
-
-//   var datepickerFrom = UIkit.datetimepicker($dateFrom, { format: "YYYY-MM-DD" });
-
-//   $dateFrom.on("change", function () {
-//     $dateTo.removeAttr("disabled");
-
-//     var datepickerTo = UIkit.datetimepicker($dateTo, {
-//       format: "YYYY-MM-DD",
-//       minDate: $(this).val(),
-//     });
-//   });
-// });
-
+/* --------- insures that departure date can't be after return date --------- */
+var dateReturnHandler = function () {
+};
 /* --------------------- ENDS DATA COLLECTION FUNCTIONS --------------------- */
 
 /* ----------------------- BEGINS FETCH API FUNCTIONS ----------------------- */
@@ -450,7 +449,7 @@ var convertTime12H = function (timeToConvert) {
 var convertDateEpoch = function (timeToConvert) {
   var convertedDate = new Date(timeToConvert);
   return convertedDate;
-}
+};
 
 /* ---------------- converts time from fetch to date format ----------------- */
 var convertDate = function (timeToConvert) {
@@ -505,14 +504,10 @@ var sortByArrival = function () {
 
   function compare(a, b) {
     const timeA = Date.parse(
-      a.itineraries[0].segments[
-        a.itineraries[0].segments.length - 1
-      ].arrival.at
+      a.itineraries[0].segments[a.itineraries[0].segments.length - 1].arrival.at
     );
     const timeB = Date.parse(
-      b.itineraries[0].segments[
-        b.itineraries[0].segments.length - 1
-      ].arrival.at
+      b.itineraries[0].segments[b.itineraries[0].segments.length - 1].arrival.at
     );
 
     let comparison = 0;
@@ -868,6 +863,8 @@ startInitialSettings(); // loads initial settings for initial visit and refresh
 searchFormEl.addEventListener("submit", searchFormHandler);
 flightsTabEl.addEventListener("click", flightsTabHandler);
 favoritesBtn.addEventListener("click", favoritesBtnHandler);
+dateDepartureEl.addEventListener("click", dateDepartureHandler);
+dateReturnEl.addEventListener("click", dateReturnHandler);
 filterFavoritesByFlightsBtn.addEventListener("click", filterByFlightsHandler);
 filterFavoritesByHotelsBtn.addEventListener("click", filterByHotelsHandler);
 sortFlightsByPriceBtn.addEventListener("click", sortByPriceHandler);
