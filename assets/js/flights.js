@@ -242,6 +242,13 @@ var collectCity = function (iataAirport) {
 };
 
 /* -------- insures that return date can't be before departure date --------- */
+// // addeventListener to clicking on return date and launch this function on click
+// var minReturnDate = function () {
+//   var daysDifference = convertDateEpoch(dateDepartureEl.value);
+//   console.log(daysDifference);
+// dateReturnEl.setAttribute("data-uk-datepicker", ("{minDate:" + 0 + ",format:'YYYY-MM-DD'"}));
+};
+
 
 // $(document).ready(function () {
 //   var $dateFrom = $("#date-departure"),
@@ -439,6 +446,12 @@ var convertTime12H = function (timeToConvert) {
   return convertedTime;
 };
 
+/* ---------------- converts date to epoch value ----------------- */
+var convertDateEpoch = function (timeToConvert) {
+  var convertedDate = new Date(timeToConvert);
+  return convertedDate;
+}
+
 /* ---------------- converts time from fetch to date format ----------------- */
 var convertDate = function (timeToConvert) {
   var convertedDate = new Date(timeToConvert);
@@ -493,12 +506,12 @@ var sortByArrival = function () {
   function compare(a, b) {
     const timeA = Date.parse(
       a.itineraries[0].segments[
-        a.itineraries[a.itineraries.length - 1].segments.length - 1
+        a.itineraries[0].segments.length - 1
       ].arrival.at
     );
     const timeB = Date.parse(
       b.itineraries[0].segments[
-        b.itineraries[b.itineraries.length - 1].segments.length - 1
+        b.itineraries[0].segments.length - 1
       ].arrival.at
     );
 
