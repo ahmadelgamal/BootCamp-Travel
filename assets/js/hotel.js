@@ -133,7 +133,7 @@ var GetIdhotel = function (City, checkIn, checkOut) {
               adults
             );
             var tempHotel = {
-              propertyId: ide,
+              cityIdent: ide,
               checkInDt: checkIn,
               checkOutDt: checkOut,
             };
@@ -345,7 +345,7 @@ var SortOrderFunction = function (sortSelect) {
       $("#hotels-grid").empty();
       $("#hotel-favorites-grid").empty();
       getProperties(
-        tempHotel.propertyId,
+        tempHotel.cityIdent,
         curr,
         sortOrd,
         pageNumber,
@@ -362,7 +362,7 @@ var SortOrderFunction = function (sortSelect) {
       $("#hotels-grid").empty();
       $("#hotel-favorites-grid").empty();
       getProperties(
-        tempHotel.propertyId,
+        tempHotel.cityIdent,
         curr,
         sortOrd,
         pageNumber,
@@ -383,7 +383,7 @@ var SortOrderFunction = function (sortSelect) {
       $("#hotels-grid").empty();
       $("#hotel-favorites-grid").empty();
       getProperties(
-        tempHotel.propertyId,
+        tempHotel.cityIdent,
         curr,
         sortOrd,
         pageNumber,
@@ -400,7 +400,7 @@ var SortOrderFunction = function (sortSelect) {
       $("#hotels-grid").empty();
       $("#hotel-favorites-grid").empty();
       getProperties(
-        tempHotel.propertyId,
+        tempHotel.cityIdent,
         curr,
         sortOrd,
         pageNumber,
@@ -675,7 +675,7 @@ $(document).on("click", "#hotels-tab", function () {
   if (tempHotel != null) {
 
     getProperties(
-      tempHotel.propertyId,
+      tempHotel.cityIdent,
       curr,
       sortOrd,
       pageNumber,
