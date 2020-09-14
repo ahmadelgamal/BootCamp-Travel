@@ -811,12 +811,9 @@ var removeFavoriteColor = function (favoriteFlightObject) {
   var removedFavorite = document.getElementsByClassName(
     favoriteFlightObject.epochTimeStamp + " price-flights"
   )[0];
-  console.log(removedFavorite.epochTimeStamp);
-  console.log(favoriteFlightObject.epochTimeStamp + " price-flights");
   // check if the flight is still there on the search flights grid
   if (removedFavorite !== null) {
     removedFavorite.style.backgroundColor = "";
-    console.log(removedFavorite.style.backgroundColor);
   }
 };
 
