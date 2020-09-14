@@ -748,6 +748,7 @@ $(document).on("click", "#favorites-btn", function () {
   searchingMessageEl2.innerHTML = "";
   errorgMessageEl2.innerHTML = "";
   $("#hotels-sub-menu").hide(); // hide the sorting bar
+  $("#hotel-favorites-grid").parent().show();
   setFavData();
   }
 
@@ -763,7 +764,7 @@ $(document).on("click", "#hotels-tab", function () {
   errorgMessageEl2.innerHTML = "";
 
   if (tempHotel != null) {
-
+  
     getProperties(
       tempHotel.cityIdent,
       curr,
