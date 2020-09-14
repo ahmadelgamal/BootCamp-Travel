@@ -51,7 +51,7 @@ var travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "5xiFKwKH6FAa9HmYNENxUAkKdWJa"; // access token must be renewed for 30 minutes at a time
+const accessToken = "20LJhfu323YnQEAhcjvzwl4QALWt"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /*  declares required query variables for "flight offers search" amadeus api  */
@@ -352,30 +352,22 @@ var fetchCarrierLogoDaisycon = function (carrierCode) {
 /* ---------------------- BEGINS LOCALSTORAGE FUNCTIONS --------------------- */
 /* ----------------- saves favorite flight to localStorage ------------------ */
 var setFavoriteFlightsLS = function (favoriteFlightObject) {
-  var favoriteFlightsLS = getFavoriteFlightsLS();
+  var loadedFavoriteFlightsLS = getFavoriteFlightsLS();
+  var newFavoriteFlightsLS = [];
 
-  if (favoriteFlightsLS === null) {
-    // if there are no favorites, then it is set to current flight favorite
-    favoriteFlightsLS = [favoriteFlightObject];
-  } else {
-    // checks if it's already in favorites, then it deletes the existing one in order not to duplicate
-    for (let i = 0; i < favoriteFlightsLS.length; i++) {
+  if (loadedFavoriteFlightsLS !== null) {
+    for (let i = 0; i < loadedFavoriteFlightsLS.length; i++) {
       if (
-        favoriteFlightsLS[i].epochTimeStamp === favoriteFlightObject.epochTimeStamp
+        loadedFavoriteFlightsLS[i].epochTimeStamp !==
+        favoriteFlightObject.epochTimeStamp
       ) {
-        favoriteFlightsLS.splice(favoriteFlightsLS[i - 1], 1);
-        return;
+        newFavoriteFlightsLS.push(loadedFavoriteFlightsLS[i]);
       }
     }
-    favoriteFlightsLS.unshift(favoriteFlightObject); // otherwise, if favorites is not empty, then the current favorite is added on top of the list
   }
+  newFavoriteFlightsLS.unshift(favoriteFlightObject);
 
-  // // limits favorite flights to five
-  // if (favoriteFlightsLS.length === 6) {
-  //   favoriteFlightsLS.splice(5, 1);
-  // }
-
-  localStorage.setItem("favoriteFlights", JSON.stringify(favoriteFlightsLS));
+  localStorage.setItem("favoriteFlights", JSON.stringify(newFavoriteFlightsLS));
 };
 
 /* ----------- loads/gets favorite flight data from localStorage ------------ */
@@ -387,16 +379,19 @@ var getFavoriteFlightsLS = function () {
 
 /* ------- deletes favorite flight from localStorage when unselected -------- */
 var deleteFavoriteFlightsLS = function (favoriteFlightObject) {
-  // gets existing favorites from localStorage
-  var favoriteFlightsLS = getFavoriteFlightsLS();
+  var loadedFavoriteFlightsLS = getFavoriteFlightsLS();
+  var newFavoriteFlightsLS = [];
 
-  for (let i = 0; i < favoriteFlightsLS.length; i++) {
-    if (favoriteFlightObject.epochTimeStamp === favoriteFlightsLS[i].epochTimeStamp) {
-      favoriteFlightsLS.splice(favoriteFlightsLS[i - 1], 1);
+  for (let i = 0; i < loadedFavoriteFlightsLS.length; i++) {
+    if (
+      loadedFavoriteFlightsLS[i].epochTimeStamp !==
+      favoriteFlightObject.epochTimeStamp
+    ) {
+      newFavoriteFlightsLS.push(loadedFavoriteFlightsLS[i]);
     }
   }
 
-  localStorage.setItem("favoriteFlights", JSON.stringify(favoriteFlightsLS));
+  localStorage.setItem("favoriteFlights", JSON.stringify(newFavoriteFlightsLS));
 };
 /* ----------------------- ENDS LOCALSTORAGE FUNCTIONS ---------------------- */
 
