@@ -565,7 +565,7 @@ var createFlightElements = function (data) {
   for (var flightCounter = 0; flightCounter < flightCount; flightCounter++) {
     // gets number of itineraries (usually 1 for outbound and 1 for inbound)
     var intineraryCount = data.data[flightCounter].itineraries.length;
-    var epochTimeStamp = "T" + Date.now();
+    var epochTimeStamp = "id" + flightCounter + "T" + Date.now();
 
     // loops through number of itineraries to create a container element for each
     for (
