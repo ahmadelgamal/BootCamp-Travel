@@ -97,7 +97,8 @@ nav h3 {
 
 .xs-size-button {
   padding: 5px 12px 5px 12px;
-  max-width: 25%;
+  max-width: 30%;
+  font: size 12;
 }
 
 .height-maxed {
