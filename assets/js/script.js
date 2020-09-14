@@ -8,9 +8,6 @@ var flightsContainer = document.querySelector("#flights-container");
 var hotelsContainer = document.querySelector("#hotels-container");
 var searchContainer = document.querySelector("#past-search-container");
 
-
-
-
 var tempAutoCompleteValue = "";
 
 var activeTab = "flights";
@@ -22,7 +19,8 @@ var showFlightsMenu = function () {
     "class",
     "uk-margin-small uk-padding-small uk-padding-remove-vertical"
   );
-
+  document.querySelector("#date-return").style.display = "none";
+  
   var goingTo = document.querySelector("#going-to").parentElement.parentElement;
   goingTo.setAttribute(
     "class",
@@ -130,6 +128,7 @@ var showHotelsMenu = function () {
 
   var dArrival = document.querySelector("#date-return").parentElement
     .parentElement;
+
   dArrival.setAttribute(
     "class",
     "uk-margin-small uk-padding-small uk-padding-remove-vertical hide"
@@ -462,10 +461,14 @@ menuTabs.addEventListener("click",tabsHandler);
 
 tripSelector.addEventListener("change", toggleTripHandler);
 
-
 document.addEventListener("keydown", tabKeyHandler);
 document
   .querySelector("#form")
   .addEventListener("blur", inputBlurHandler, true);
 
+
+
 init();
+
+//var datep1 = jQuery.UIkit.datepicker(document.querySelector("#check-out"),{minDate:5,format: "DD/MM/YYYY"});
+//console.log(datep1);
