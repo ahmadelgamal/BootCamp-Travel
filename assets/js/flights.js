@@ -55,7 +55,7 @@ var travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "QhSGbZvzxhOsiFo1f87WQpjdgIvj"; // access token must be renewed for 30 minutes at a time
+const accessToken = "Av0B85AOMpzyoFNhxZJcglfxoFW8"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /*  declares required query variables for "flight offers search" amadeus api  */
@@ -216,18 +216,14 @@ var collectSearchForm = function () {
   originCode = goingFromEl.value.slice(2, 5);
   destinationCode = goingToEl.value.slice(2, 5);
   departureDate = dateDepartureEl.value;
-  // checks if user selects roundtrip or one-way
+  // if one-way, then returnDate is empty for fetch request
   if (tripSelectEl.options[tripSelectEl.selectedIndex].value === "Roundtrip") {
     returnDate = dateReturnEl.value;
   } else {
     returnDate = "";
   }
   numberOfAdults = numberOfAdultsEl.value.charAt(0);
-  // if no class is selected, then "economy" is selected as default
   travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
-  if (travelClass === "") {
-    travelClass = "ECONOMY";
-  }
 };
 
 /* --------------------- collects favorite flight data ---------------------- */
@@ -602,7 +598,6 @@ var createFlightElements = function (data) {
         createSegmentElements(
           data,
           flightCounter,
-          epochTimeStamp,
           intineraryCounter,
           segmentCounter,
           itineraryContainerEl,
@@ -618,7 +613,6 @@ var createFlightElements = function (data) {
 var createSegmentElements = function (
   data,
   flightCounter,
-  epochTimeStamp,
   intineraryCounter,
   segmentCounter,
   itineraryContainerEl,
@@ -627,7 +621,7 @@ var createSegmentElements = function (
   /* ----- creates segment container in index.html ----- */
   var segmentContainerEl = document.createElement("div");
   segmentContainerEl.classList.add(
-    "uk-width-1-2",
+    "uk-width-1-1",
     "uk-padding-remove-horizontal"
   );
   itineraryContainerEl.appendChild(segmentContainerEl);

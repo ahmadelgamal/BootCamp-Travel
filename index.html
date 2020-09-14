@@ -116,8 +116,8 @@
           <div class="uk-form-controls">
             <input
               class="uk-input uk-border-rounded fa"
-              readonly
-              data-uk-datepicker="{minDate:0,format:'&#xf783; MM/DD/YYYY'}"
+              
+              data-uk-datepicker="{minDate:0,format:'MM/DD/YYYY'}"
               id="check-in"
               type="text"
               placeholder="&#xf783;  Check In:"
@@ -133,7 +133,7 @@
             <input
               class="uk-input uk-border-rounded fa"
               readonly
-              data-uk-datepicker="{minDate:0,format:'&#xf783; MM/DD/YYYY'}"
+              data-uk-datepicker="{minDate:0,format:'MM/DD/YYYY'}"
               id="check-out"
               type="text"
               placeholder="&#xf783;  Check Out:"
@@ -146,17 +146,14 @@
         >
           <div class="uk-form-controls">
             <select class="uk-select uk-width-3-10 uk-border-rounded" id="trip">
-              <option selected>Roundtrip</option>
-              <option>One-way</option>
+              <option selected>One-way</option>
+              <option>Roundtrip</option>
             </select>
 
             <select
               class="uk-select uk-border-rounded uk-width-3-10 fa"
               id="travel-class"
             >
-              <option class="hide" value="" disabled selected
-                >&#xf53a; Class</option
-              >
               <option value="ECONOMY">Economy</option>
               <option value="PREMIUM_ECONOMY">Premium Economy</option>
               <option value="BUSINESS">Business</option>
@@ -344,6 +341,9 @@
       </div>
 
       <!-- ends favorites container -->
+
+      <h3 id="searching-message-hotel"></h3>
+      <h3 id="error-message-hotel"></h3>
 
       <!-- this is the hotels container grid. All single hotel offers should be appended here with JS -->
       <div

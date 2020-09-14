@@ -4,12 +4,14 @@ var checkInDt = ""; //Check-in date
 var checkOutDt = ""; // Check-out date
 var id = 0;
 var urls = []; // URLs of the images
-var maxHistoryLength = 5; // History length
+var maxHistoryLength = 100; // History length
 var urlKey = "5d5909e26bmshfb2a825f7b2cf74p1f485ajsna344ade586d8"; // URL Key
-var newHotellay = document.getElementById("hotels-grid"); // Get parent element of HTML document from search
-var newInitlay = document.getElementById("hotel-favorites-grid");// Get parent element of HTML document during initalization
+const newHotellay = document.getElementById("hotels-grid"); // Get parent element of HTML document from search
+const newInitlay = document.getElementById("hotel-favorites-grid");// Get parent element of HTML document during initalization
+const searchingMessageEl2 = document.getElementById("searching-message-hotel"); // constant that points to searching message element
+const errorgMessageEl2 = document.getElementById("error-message-hotel"); // constant that points to searching message element
 var pageNumber = 1; // # of pages to display
-var resultMax = 20; // # of hotels to show up in a single request
+var resultMax = 25; // # of hotels to show up in a single request
 var adults = 1; // # of adults
 var curr = "USD"; // Currency
 var sortOrd = "PRICE"; // Sort order
@@ -72,6 +74,7 @@ var displayPropertyInfo = function (
       identity +
       '">Favorites</button> </div> </div>'
     );
+
   
   }
   else {
@@ -120,8 +123,11 @@ var GetIdhotel = function (City, checkIn, checkOut) {
             if ($(".temporary")) {
               $(".temporary").empty();
             }
-            var ide = data.suggestions[0].entities[0].destinationId;
+            errorgMessageEl2.innerHTML = "";
+            searchingMessageEl2.innerHTML = "";
 
+            var ide = data.suggestions[0].entities[0].destinationId;
+            pageNumber = 1;
             getProperties(
               ide,
               curr,
@@ -139,18 +145,18 @@ var GetIdhotel = function (City, checkIn, checkOut) {
             };
             localStorage.setItem("tempHotel", JSON.stringify(tempHotel));
           } else {
-            $("#hotels-container").append(
-              '<div class = "temporary"> Sorry, information for this city is not available. Coming soon. Please try another city </div'
-            ); // Message incase there is no cityinformation or city is not found
+           // $("#hotels-container").append(
+             // '<div class = "temporary"> Sorry, information for this city is not available. Coming soon. Please try another city </div'
+             errorgMessageEl2.innerHTML = "Sorry, there was an error loading the results. Please try again "; 
+           // ); // Message incase there is no cityinformation or city is not found
           }
         });
       }
     })
     .catch(function (error) {
-      $("#hotels-container").append(
-        '<div class = "temporary"> Sorry, there was an error loading the results. Please try again </div'
-      ); // Message incase there is an error connecting
-      console.log(err);
+      errorgMessageEl2.innerHTML = "Sorry, there was an error loading the results. Please try again "; 
+      // Message incase there is an error connecting
+     
     });
 };
 
@@ -164,10 +170,11 @@ var getProperties = function (
   checkOutDate,
   pgSize,
   adultNumber
-) {
+)   {
 
-  $("#hotels-container").append(
-    '<div class = "temporary"> <p>Searching... </p> </div>');
+  //$("#hotels-container").append(
+   // '<div class = "temporary"> <h3 id="searching-message">Searching... </h3> </div>');
+  searchingMessageEl2.innerHTML = "Searching...";
   var url6 =
     "https://cors-anywhere.herokuapp.com/https://hotels4.p.rapidapi.com/properties/list?currency=" +
     currency +
@@ -211,6 +218,31 @@ var getProperties = function (
               $(".temporary").empty();
             }
 
+            // get page number and total count 
+            
+            if ((typeof data6.data.body.searchResults.pagination != "undefined" )) {
+              var pagen = data6.data.body.searchResults.pagination.currentPage;
+              var nextPage = data6.data.body.searchResults.pagination.nextPageNumber;
+        
+            if((pagen > nextPage)&&(pagen >1)) {
+              $(newHotellay).append('<div class = "uk-grid uk-inline .uk-width-1-1 uk-margin-medium-bottom"> <button class="previousButton uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-small uk-button-primary uk-border-rounded uk-position-top-center" id="previousButton"> Previous Page </button> </div>');
+            }
+
+             if (pagen < nextPage){
+            if (pagen > 1){
+             $(newHotellay).append('<div class = "uk-grid uk-inline .uk-width-1-1 uk-margin-medium-bottom"> <button class="nextButton uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-small uk-button-primary uk-border-rounded uk-position-top-right" id="nextButton"> Next Page </button> <button class="previousButton uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-small uk-button-primary uk-border-rounded uk-position-top-left uk-margin-medium-left" id="previousButton"> Previous Page </button> </div>');
+            }
+             else {
+              $(newHotellay).append('<div class = "uk-grid uk-inline .uk-width-1-1 uk-margin-medium-bottom"> <button class="nextButton uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-small uk-button-primary uk-border-rounded uk-position-top-center" id="nextButton"> Next Page </button> </div>');
+             }
+            
+             }   
+             
+            }
+            
+            // Get remaining information about the hotel properties
+
+       //     searchingMessageEl2.innerHTML = tct+ ' hotels available';
             for (i = 0; i < propId.length; i++) {
               // the if statements account for any information on the server that might be undefined 
               var propIde = [];
@@ -267,13 +299,12 @@ var getProperties = function (
                 var neighbourhoodName = data6.data.body.searchResults.results[i].neighbourhood;
               }
 
-              if ((typeof data6.data.body.searchResults.results[i].ratePlan.price == "undefined")) {
-                price = "Missing Price Information";
+              if ((typeof data6.data.body.searchResults.results[i].ratePlan == "undefined")) {
+                price = "Missing";
               }
               else {
                 var price = data6.data.body.searchResults.results[i].ratePlan.price.current;
               }
-
 
               displayPropertyInfo(
                 newHotellay,
@@ -292,8 +323,11 @@ var getProperties = function (
                 price
               );
               if (hotels != null) {
+                
                 for (k = 0; k < hotels.length; k++) {
+               
                   if (hotels[k].IdCity == propIde[i]) {
+               
                     
                     //  $("#"+propIde[i]).css("background", "red");
                       $("#"+propIde[i]).html("Remove");
@@ -311,13 +345,11 @@ var getProperties = function (
       }
     
       $(".temporary").empty();
+      searchingMessageEl2.innerHTML = "";
     })
 
     .catch(function (error) {
-      $("#hotels-container").append(
-        '<div class = "temporary"> Sorry, there was an error loading the results. Please try again </div'
-      ); // Message incase there is an error connecting
-      console.log(err);
+      errorgMessageEl2.innerHTML = "Sorry, there was an error loading the results. Please try again ";  // Message incase there is an error connecting
     });
 };
 /* -------------------- PULL LOCAL STORAGE DATA AND HOTELS -------------------- */
@@ -325,16 +357,20 @@ var setInitial = function () {
   hotels = JSON.parse(localStorage.getItem("hotels"));
   $("#hotels-grid").empty(); // Empties previous display
   $("#hotel-favorites-grid").empty();
+  searchingMessageEl2.innerHTML = "";
+  errorgMessageEl2.innerHTML = "";
   $("#hotels-sub-menu").hide(); // hide the sorting bar
   var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
   if (tempHotel !== null) {
     localStorage.removeItem("tempHotel");
   }
+setFavData();
 }
 
 
 /* -------------------- SET SORTING ORDER AND DISPLAY -------------------- */
 var SortOrderFunction = function (sortSelect) {
+  pageNumber = 1;
   var ele = $(sortSelect);
   if (sortSelect == "#sort-hotel-price") {
     var sortPrice = ele[0].innerText;
@@ -344,6 +380,8 @@ var SortOrderFunction = function (sortSelect) {
       var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
       $("#hotels-grid").empty();
       $("#hotel-favorites-grid").empty();
+      searchingMessageEl2.innerHTML = "";
+      errorgMessageEl2.innerHTML = "";
       getProperties(
         tempHotel.cityIdent,
         curr,
@@ -361,6 +399,8 @@ var SortOrderFunction = function (sortSelect) {
       var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
       $("#hotels-grid").empty();
       $("#hotel-favorites-grid").empty();
+      searchingMessageEl2.innerHTML = "";
+      errorgMessageEl2.innerHTML = "";
       getProperties(
         tempHotel.cityIdent,
         curr,
@@ -382,6 +422,8 @@ var SortOrderFunction = function (sortSelect) {
       var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
       $("#hotels-grid").empty();
       $("#hotel-favorites-grid").empty();
+      searchingMessageEl2.innerHTML = "";
+      errorgMessageEl2.innerHTML = "";
       getProperties(
         tempHotel.cityIdent,
         curr,
@@ -399,6 +441,8 @@ var SortOrderFunction = function (sortSelect) {
       var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
       $("#hotels-grid").empty();
       $("#hotel-favorites-grid").empty();
+      searchingMessageEl2.innerHTML = "";
+      errorgMessageEl2.innerHTML = "";
       getProperties(
         tempHotel.cityIdent,
         curr,
@@ -430,6 +474,65 @@ if (hotels != "") {
 
 }
 
+/* --------------------- GET FAVORITES DATA -----------------*/
+
+var setFavData = function () {
+
+  hotels = JSON.parse(localStorage.getItem("hotels"));
+  // Display forvorites
+  if (hotels != null) {
+    for (i = 0; i < hotels.length; i++) {
+      displayPropertyInfo(
+        newInitlay,
+        hotels[i].IdCity,
+        hotels[i].ChkInDate,
+        hotels[i].ChkOutDate,
+        hotels[i].NumAdults,
+        hotels[i].Currcy,
+        i,
+        hotels[i].UrlThumbNl,
+        hotels[i].rating,
+        hotels[i].hotelName,
+        hotels[i].address,
+        hotels[i].guestReviews,
+        hotels[i].neighborhood,
+        hotels[i].price
+      );
+    }
+}
+}
+
+/* --------------------- GET PROPERTY DATA FUNCTION CALL -----------------*/
+
+var propData = function () {
+
+  var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
+
+  $("#hotels-grid").empty();
+  $("#hotel-favorites-grid").empty();
+  $("#hotels-sub-menu").show(); // show the sorting bar
+  searchingMessageEl2.innerHTML = "";
+  errorgMessageEl2.innerHTML = "";
+
+  if (tempHotel != null) {
+
+    getProperties(
+      tempHotel.cityIdent,
+      curr,
+      sortOrd,
+      pageNumber,
+      tempHotel.checkInDt,
+      tempHotel.checkOutDt,
+      resultMax,
+      adults
+    );
+  }
+
+  }
+
+
+
+
 /* -------------------- PULL LOCAL STORAGE-------------------- */
 
 setInitial();
@@ -443,6 +546,8 @@ $("#form").on("submit", function (event) {
     $("#hotels-grid").empty(); // Empties previous display
     $("#hotel-favorites-grid").empty();
     $(".temporary").empty();
+    errorgMessageEl2.innerHTML = "";
+    searchingMessageEl2.innerHTML = "";
     // $(".temporary").empty();
 
     // Read city value from form
@@ -450,8 +555,9 @@ $("#form").on("submit", function (event) {
     
 
     if (city == "") {
-      $("#hotels-container").append(
-        '<div class = "temporary"> <p>Sorry, the city name is missing. Please try again </p> </div>');
+
+      errorgMessageEl2.innerHTML = "Sorry, the city name is missing. Please try again "; 
+    
     }
     else {
 
@@ -497,9 +603,8 @@ $("#form").on("submit", function (event) {
       }
       else {
 
-        $("#hotels-container").append(
-          '<div class = "temporary"> <p>Sorry, the check-in date needs to be before the check-out date</p> </div>');
-
+        
+          errorgMessageEl2.innerHTML = "Sorry, check-in date needs to be before the check-out date "; 
       }
     }
   }
@@ -640,37 +745,22 @@ $(document).on("click", "#favorites-btn", function () {
   
   $("#hotels-grid").empty();
   $("#hotel-favorites-grid").empty();
-  hotels = JSON.parse(localStorage.getItem("hotels"));
-  // Display forvorites
-  if (hotels != null) {
-    for (i = 0; i < hotels.length; i++) {
-      displayPropertyInfo(
-        newInitlay,
-        hotels[i].IdCity,
-        hotels[i].ChkInDate,
-        hotels[i].ChkOutDate,
-        hotels[i].NumAdults,
-        hotels[i].Currcy,
-        i,
-        hotels[i].UrlThumbNl,
-        hotels[i].rating,
-        hotels[i].hotelName,
-        hotels[i].address,
-        hotels[i].guestReviews,
-        hotels[i].neighborhood,
-        hotels[i].price
-      );
-    }
+  searchingMessageEl2.innerHTML = "";
+  errorgMessageEl2.innerHTML = "";
+  $("#hotels-sub-menu").hide(); // hide the sorting bar
+  setFavData();
   }
 
-});
+);
 $(document).on("click", "#hotels-tab", function () {
 
   var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
 
   $("#hotels-grid").empty();
   $("#hotel-favorites-grid").empty();
-
+  $("#hotels-sub-menu").show(); // hide the sorting bar
+  searchingMessageEl2.innerHTML = "";
+  errorgMessageEl2.innerHTML = "";
 
   if (tempHotel != null) {
 
@@ -703,28 +793,10 @@ $(document).on("click", ".unreserve", function () {
 
   $("#hotels-grid").empty();
   $("#hotel-favorites-grid").empty();
+  
   hotels = JSON.parse(localStorage.getItem("hotels"));
   // Display favorites
-  if (hotels != null) {
-    for (i = 0; i < hotels.length; i++) {
-      displayPropertyInfo(
-        newInitlay,
-        hotels[i].IdCity,
-        hotels[i].ChkInDate,
-        hotels[i].ChkOutDate,
-        hotels[i].NumAdults,
-        hotels[i].Currcy,
-        i,
-        hotels[i].UrlThumbNl,
-        hotels[i].rating,
-        hotels[i].hotelName,
-        hotels[i].address,
-        hotels[i].guestReviews,
-        hotels[i].neighborhood,
-        hotels[i].price
-      );
-    }
-  }
+  setFavData();
 } 
 else {  // If request is coming from a search, then you can toggle the button to add or delete the favorite
 localStorage.setItem("hotels", JSON.stringify(hotels));
@@ -734,3 +806,20 @@ $(this).removeClass("unreserve uk-button uk-margin-small-top uk-margin-small-bot
 }
 
 });
+
+/* -------------------- GO TO NEXT PAGE OF SEARCH RESULTS (PAGEINATION)----------------- */
+$(document).on("click", "#nextButton", function () {
+  hotels = JSON.parse(localStorage.getItem("hotels"));
+  pageNumber = pageNumber + 1;
+  propData();
+  
+});
+
+/* -------------------- GO TO PREVIOUS PAGE OF SEARCH RESULTS (PAGEINATION)----------------- */
+$(document).on("click", "#previousButton", function () {
+
+  hotels = JSON.parse(localStorage.getItem("hotels"));
+  pageNumber = pageNumber - 1;
+  propData();
+});
+
