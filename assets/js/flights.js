@@ -51,7 +51,7 @@ var travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "20LJhfu323YnQEAhcjvzwl4QALWt"; // access token must be renewed for 30 minutes at a time
+const accessToken = "IVikChnzWGZs4xWHOyJjYaJvpYgz"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /*  declares required query variables for "flight offers search" amadeus api  */
@@ -174,6 +174,11 @@ var deleteFavoriteFlightHandler = function (event) {
     var loadedFavoriteFlightsLS = getFavoriteFlightsLS();
     createFavoriteFlightsElements(loadedFavoriteFlightsLS);
   }, 1000); // leaves favorite on screen for 1 second before deleting it.
+
+  setTimeout(function () {
+    // changes color of same item in flights grid for last search after 2 seconds
+    removeFavoriteColor(favoriteFlightObject);
+  }, 2000);
 };
 
 /* ----------- handler for sorting flight search results by price ----------- */
@@ -711,18 +716,18 @@ var createPriceElements = function (data, flightCounter, epochTimeStamp) {
   var priceContainerEl = document.createElement("div");
   priceContainerEl.classList.add(
     epochTimeStamp, // used to store favorites in localStorage
+    "price-flights",
     "uk-border-rounded",
     "uk-width-1-1",
     "uk-padding-small",
-    "uk-margin-small-top",
-    "price-flights"
+    "uk-margin-small-top"
   );
   flightsGridEl.appendChild(priceContainerEl);
 
   // more details
   var saveEl = document.createElement("span");
   saveEl.classList.add("black-ops", "stronger", "uk-text-emphasis");
-  saveEl.innerHTML = "Favorite";
+  saveEl.innerHTML = "Add to Favorites";
   priceContainerEl.appendChild(saveEl);
 
   var grandTotalPrice = data.data[flightCounter].price.grandTotal;
@@ -786,17 +791,32 @@ var createFavoriteFlightsElements = function (favoriteFlightsLS) {
     var priceContainerEl = document.createElement("div");
     priceContainerEl.classList.add(
       favoriteFlightsLS[i].epochTimeStamp,
+      "price-flights",
       "uk-border-rounded",
       "uk-width-1-1",
       "uk-padding-small",
-      "uk-margin-small-top",
-      "price-flights"
+      "uk-margin-small-top"
     );
     priceContainerEl.style.backgroundColor = "rgb(255, 165, 0)";
     priceContainerEl.innerHTML = favoriteFlightsLS[i].price;
+    priceContainerEl.firstChild.textContent = "Remove";
     flightsFavoritesGridEl.appendChild(priceContainerEl);
 
     priceContainerEl.addEventListener("click", deleteFavoriteFlightHandler); // handler to delete favorite flight from localStorage
+  }
+};
+
+/* resets background color of deleted favorite (deleted in favorites grid) in flights grid */
+var removeFavoriteColor = function (favoriteFlightObject) {
+  var removedFavorite = document.getElementsByClassName(
+    favoriteFlightObject.epochTimeStamp + " price-flights"
+  )[0];
+  console.log(removedFavorite.epochTimeStamp);
+  console.log(favoriteFlightObject.epochTimeStamp + " price-flights");
+  // check if the flight is still there on the search flights grid
+  if (removedFavorite !== null) {
+    removedFavorite.style.backgroundColor = "";
+    console.log(removedFavorite.style.backgroundColor);
   }
 };
 
