@@ -2,6 +2,10 @@
 /*jshint esversion: 6 */
 
 /* ---------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ----------- */
+// ui settings. rgb were chosen over hexadecimals because console was loggin hexa in rgb
+const favoritesBtnColor = "rgb(255, 165, 0)";
+const deletedFavoritesBtnColor = "rgb(255, 0, 0)";
+
 /* -- declares constants to point to existing html elements in index.html --- */
 // constants that point to search form
 const flightsTabEl = document.getElementById("flights-tab");
@@ -11,10 +15,9 @@ const goingToEl = document.getElementById("going-to");
 const dateDepartureEl = document.getElementById("date-departure");
 const dateReturnEl = document.getElementById("date-return");
 const tripSelectEl = document.getElementById("trip"); // One-way or Roundtrip
-const travelClassEl = document.getElementById("travel-class"); // ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
+const travelClassEl = document.getElementById("travel-class");
 const numberOfAdultsEl = document.getElementById("guests-select");
 
-const favoritesBtn = document.getElementById("favorites-btn");
 // constants that point to flight sorting elements
 const sortFlightsMenuEl = document.querySelector("#flights-sub-menu");
 const sortFlightsByPriceBtn = document.querySelector("#sort-flight-price");
@@ -28,14 +31,17 @@ const departureSortingArrow = document.querySelector(
   "#departure-sorting-arrow"
 );
 
-// constants that point to other flight search elements
-const searchingMessageEl = document.getElementById("searching-message"); // constant that points to searching message element
-const errorMessageEl = document.getElementById("error-message"); // constant that points to error message element
-const flightsGridEl = document.getElementById("flights-grid"); // constant that points to flights grid
-const flightsFavoritesGridEl = document.getElementById("flight-favorites-grid"); // constant that points to flights search history grid
-const hotelsFavoritesGridEl = document.getElementById("hotel-favorites-grid"); // constant that points to flights search history grid
-const filterFavoritesByFlightsBtn = document.getElementById("favorite-flights");
-const filterFavoritesByHotelsBtn = document.getElementById("favorite-hotels");
+// constants that point to other flights elements
+const searchingMessageEl = document.getElementById("flights-searching-message");
+const errorMessageEl = document.getElementById("flights-error-message");
+const favoritesBtn = document.getElementById("favorites-btn");
+const flightsGridEl = document.getElementById("flights-grid");
+const flightsFavoritesGridEl = document.getElementById("flight-favorites-grid");
+const filterFlightsFavoritesBtn = document.getElementById("favorite-flights");
+const filterHotelsFavoritesBtn = document.getElementById("favorite-hotels");
+
+// constants that point to hotels elements
+const hotelsFavoritesGridEl = document.getElementById("hotel-favorites-grid");
 
 /*  declares variables for user input for "flight offers search" amadeus api  */
 var originCode;
@@ -45,13 +51,11 @@ var returnDate = dateReturnEl.value; // Format: YYYY-MM-DD
 var numberOfAdults = numberOfAdultsEl.value.charAt(0);
 var travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
 
-const currencyCode = "USD"; // sets currency in fetch request to USD (default in amadeus is euro)
-
 /* -------- declares common constants & variables of amadeus apis url ------- */
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "2q0GEyyXigKheoYgJfuEy1eQa85N"; // access token must be renewed for 30 minutes at a time
+const accessToken = "QhSGbZvzxhOsiFo1f87WQpjdgIvj"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /*  declares required query variables for "flight offers search" amadeus api  */
@@ -63,7 +67,8 @@ const queryNumberOfAdults = "&adults=";
 /* declares important query variables for "flight offers search" amadeus api  */
 const queryReturnDate = "&returnDate="; // required for roundtrip flights
 const queryTravelClass = "&travelClass="; // ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
-const queryCurrency = "&currencyCode="; // default is EUR, so needed for USD
+const queryCurrency = "&currencyCode=";
+const currencyCode = "USD"; // default is EUR.
 
 /* ---------------- declares variables for amadeus api urls ----------------- */
 var oneWayFlightOffersSearchApiUrl;
@@ -78,6 +83,7 @@ const backgroundColor = "color=ffffff"; // Type of a logo: r - for rectangular, 
 const queryIata = "&iata="; // can change to .svg
 
 // /* ----------------- declares constants for airhex api urls ----------------- */
+// airhex logo are watermarked, so daisycon api is used instead
 // const airhexHost = "https://content.airhex.com/content/logos/airlines";
 // const carrierLogoWidth = 70; // requested logo width in pixels
 // const carrierLogoHeight = 70; // requested logo height in pixels
@@ -115,6 +121,16 @@ var flightsTabHandler = function () {
   }
 };
 
+/* --------- handler for departure date calendar input ui-kit field --------- */
+var dateDepartureHandler = function () {
+  dateDepartureMax();
+};
+
+/* ---------- handler for return date calendar input ui-kit field ----------- */
+var dateReturnHandler = function () {
+  dateReturnMin();
+};
+
 /* ----------- handler for favorites button on top of search form ----------- */
 var favoritesBtnHandler = function (event) {
   var favoriteFlightsLS = getFavoriteFlightsLS();
@@ -126,13 +142,13 @@ var favoritesBtnHandler = function (event) {
 };
 
 /* ------------ handler for filtering favorites by flights only ------------- */
-var filterByFlightsHandler = function () {
+var filterFlightsFavoritesHandler = function () {
   flightsFavoritesGridEl.style.display = "";
   hotelsFavoritesGridEl.style.display = "none";
 };
 
 /* ------------- handler for filtering favorites by hotels only ------------- */
-var filterByHotelsHandler = function () {
+var filterHotelsFavoritesHandler = function () {
   flightsFavoritesGridEl.style.display = "none";
   hotelsFavoritesGridEl.style.display = "";
 };
@@ -143,8 +159,8 @@ var addFavoriteFlightHandler = function (event) {
 
   var favoriteFlightObject = collectFavoriteFlightData(favoriteFlightBtn);
 
-  if (favoriteFlightBtn.style.backgroundColor !== "rgb(255, 165, 0)") {
-    favoriteFlightBtn.style.backgroundColor = "rgb(255, 165, 0)"; // changes background color of favorite to orange
+  if (favoriteFlightBtn.style.backgroundColor !== favoritesBtnColor) {
+    favoriteFlightBtn.style.backgroundColor = favoritesBtnColor; // changes background color of favorite to orange
     setFavoriteFlightsLS(favoriteFlightObject);
   } else {
     favoriteFlightBtn.style.backgroundColor = ""; // returns background color to default if unselected
@@ -155,13 +171,18 @@ var addFavoriteFlightHandler = function (event) {
 /* --------- handler for favorite flight buttons in favorites grid ---------- */
 var deleteFavoriteFlightHandler = function (event) {
   var favoriteFlightBtn = event.target.closest(".price-flights");
-  favoriteFlightBtn.style.backgroundColor = "rgb(255, 0, 0)"; // turns background color to red
+  favoriteFlightBtn.style.backgroundColor = deletedFavoritesBtnColor; // turns background color to red
+  var favoriteFlightObject = collectFavoriteFlightData(favoriteFlightBtn);
   setTimeout(function () {
-    var favoriteFlightObject = collectFavoriteFlightData(favoriteFlightBtn);
     deleteFavoriteFlightsLS(favoriteFlightObject);
+    var loadedFavoriteFlightsLS = getFavoriteFlightsLS();
+    createFavoriteFlightsElements(loadedFavoriteFlightsLS);
   }, 1000); // leaves favorite on screen for 1 second before deleting it.
-  var favoriteFlightsLS = getFavoriteFlightsLS();
-  createFavoriteFlightsElements(favoriteFlightsLS);
+
+  setTimeout(function () {
+    // changes color of same item in flights grid for last search after 2 seconds
+    removeFavoriteColor(favoriteFlightObject);
+  }, 2000);
 };
 
 /* ----------- handler for sorting flight search results by price ----------- */
@@ -211,23 +232,23 @@ var collectSearchForm = function () {
 
 /* --------------------- collects favorite flight data ---------------------- */
 var collectFavoriteFlightData = function (favoriteFlightBtn) {
-  // collects value of "flight-xxx" class name from the classNames list
-  var flightIndex = favoriteFlightBtn.className.split(" ")[0];
+  // collects value of {epochTimeStamp} class name from the classNames list to identify flight
+  var epochTimeStamp = favoriteFlightBtn.className.split(" ")[0];
   var favoriteFlightObject = {};
 
   var priceHTML = favoriteFlightBtn;
-  var outboundHTML = document.querySelector("." + flightIndex); //outbound element is first occurence of class
+  var outboundHTML = document.querySelector("." + epochTimeStamp); //outbound element is first occurence of class
   // if there's a 3rd element with the same class name, then there's an inbound
-  if (document.querySelectorAll("." + flightIndex).length === 3) {
+  if (document.querySelectorAll("." + epochTimeStamp).length === 3) {
     favoriteFlightObject = {
-      flightIndex: flightIndex,
+      epochTimeStamp: epochTimeStamp,
       outbound: outboundHTML.innerHTML,
       inbound: outboundHTML.nextSibling.innerHTML,
       price: priceHTML.innerHTML,
     };
   } else {
     favoriteFlightObject = {
-      flightIndex: flightIndex,
+      epochTimeStamp: epochTimeStamp,
       outbound: outboundHTML.innerHTML,
       inbound: "",
       price: priceHTML.innerHTML,
@@ -240,25 +261,6 @@ var collectFavoriteFlightData = function (favoriteFlightBtn) {
 var collectCity = function (iataAirport) {
   return mainAirports[iataAirport].city;
 };
-
-/* -------- insures that return date can't be before departure date --------- */
-
-// $(document).ready(function () {
-//   var $dateFrom = $("#date-departure"),
-//     $dateTo = $("#date-return");
-
-//   var datepickerFrom = UIkit.datetimepicker($dateFrom, { format: "YYYY-MM-DD" });
-
-//   $dateFrom.on("change", function () {
-//     $dateTo.removeAttr("disabled");
-
-//     var datepickerTo = UIkit.datetimepicker($dateTo, {
-//       format: "YYYY-MM-DD",
-//       minDate: $(this).val(),
-//     });
-//   });
-// });
-
 /* --------------------- ENDS DATA COLLECTION FUNCTIONS --------------------- */
 
 /* ----------------------- BEGINS FETCH API FUNCTIONS ----------------------- */
@@ -359,30 +361,22 @@ var fetchCarrierLogoDaisycon = function (carrierCode) {
 /* ---------------------- BEGINS LOCALSTORAGE FUNCTIONS --------------------- */
 /* ----------------- saves favorite flight to localStorage ------------------ */
 var setFavoriteFlightsLS = function (favoriteFlightObject) {
-  var favoriteFlightsLS = getFavoriteFlightsLS();
+  var loadedFavoriteFlightsLS = getFavoriteFlightsLS();
+  var newFavoriteFlightsLS = [];
 
-  if (favoriteFlightsLS === null) {
-    // if there are no favorites, then it is set to current flight favorite
-    favoriteFlightsLS = [favoriteFlightObject];
-  } else {
-    // checks if it's already in favorites, then it deletes the existing one in order not to duplicate
-    for (let i = 0; i < favoriteFlightsLS.length; i++) {
+  if (loadedFavoriteFlightsLS !== null) {
+    for (let i = 0; i < loadedFavoriteFlightsLS.length; i++) {
       if (
-        favoriteFlightsLS[i].flightIndex === favoriteFlightObject.flightIndex
+        loadedFavoriteFlightsLS[i].epochTimeStamp !==
+        favoriteFlightObject.epochTimeStamp
       ) {
-        favoriteFlightsLS.splice(favoriteFlightsLS[i - 1], 1);
-        return;
+        newFavoriteFlightsLS.push(loadedFavoriteFlightsLS[i]);
       }
     }
-    favoriteFlightsLS.unshift(favoriteFlightObject); // otherwise, if favorites is not empty, then the current favorite is added on top of the list
   }
+  newFavoriteFlightsLS.unshift(favoriteFlightObject);
 
-  // limits favorite flights to five
-  if (favoriteFlightsLS.length === 6) {
-    favoriteFlightsLS.splice(5, 1);
-  }
-
-  localStorage.setItem("favoriteFlights", JSON.stringify(favoriteFlightsLS));
+  localStorage.setItem("favoriteFlights", JSON.stringify(newFavoriteFlightsLS));
 };
 
 /* ----------- loads/gets favorite flight data from localStorage ------------ */
@@ -394,16 +388,19 @@ var getFavoriteFlightsLS = function () {
 
 /* ------- deletes favorite flight from localStorage when unselected -------- */
 var deleteFavoriteFlightsLS = function (favoriteFlightObject) {
-  // gets existing favorites from localStorage
-  var favoriteFlightsLS = getFavoriteFlightsLS();
+  var loadedFavoriteFlightsLS = getFavoriteFlightsLS();
+  var newFavoriteFlightsLS = [];
 
-  for (let i = 0; i < favoriteFlightsLS.length; i++) {
-    if (favoriteFlightObject.flightIndex === favoriteFlightsLS[i].flightIndex) {
-      favoriteFlightsLS.splice(favoriteFlightsLS[i - 1], 1);
+  for (let i = 0; i < loadedFavoriteFlightsLS.length; i++) {
+    if (
+      loadedFavoriteFlightsLS[i].epochTimeStamp !==
+      favoriteFlightObject.epochTimeStamp
+    ) {
+      newFavoriteFlightsLS.push(loadedFavoriteFlightsLS[i]);
     }
   }
 
-  localStorage.setItem("favoriteFlights", JSON.stringify(favoriteFlightsLS));
+  localStorage.setItem("favoriteFlights", JSON.stringify(newFavoriteFlightsLS));
 };
 /* ----------------------- ENDS LOCALSTORAGE FUNCTIONS ---------------------- */
 
@@ -438,6 +435,12 @@ var convertTime12H = function (timeToConvert) {
   convertedTime = hour + minutes + timeDesignation;
   return convertedTime;
 };
+
+// /* ---------------------- converts date to epoch value ---------------------- */
+// var convertDateEpoch = function (timeToConvert) {
+//   var convertedDate = new Date(timeToConvert);
+//   return convertedDate;
+// };
 
 /* ---------------- converts time from fetch to date format ----------------- */
 var convertDate = function (timeToConvert) {
@@ -492,14 +495,10 @@ var sortByArrival = function () {
 
   function compare(a, b) {
     const timeA = Date.parse(
-      a.itineraries[0].segments[
-        a.itineraries[a.itineraries.length - 1].segments.length - 1
-      ].arrival.at
+      a.itineraries[0].segments[a.itineraries[0].segments.length - 1].arrival.at
     );
     const timeB = Date.parse(
-      b.itineraries[0].segments[
-        b.itineraries[b.itineraries.length - 1].segments.length - 1
-      ].arrival.at
+      b.itineraries[0].segments[b.itineraries[0].segments.length - 1].arrival.at
     );
 
     let comparison = 0;
@@ -570,6 +569,7 @@ var createFlightElements = function (data) {
   for (var flightCounter = 0; flightCounter < flightCount; flightCounter++) {
     // gets number of itineraries (usually 1 for outbound and 1 for inbound)
     var intineraryCount = data.data[flightCounter].itineraries.length;
+    var epochTimeStamp = "T" + Date.now();
 
     // loops through number of itineraries to create a container element for each
     for (
@@ -579,7 +579,7 @@ var createFlightElements = function (data) {
     ) {
       var itineraryContainerEl = document.createElement("div");
       itineraryContainerEl.classList.add(
-        "flight-" + flightCounter,
+        epochTimeStamp, // used to store favorites in localStorage
         "uk-grid",
         "uk-width-1-1",
         "uk-background-default",
@@ -602,6 +602,7 @@ var createFlightElements = function (data) {
         createSegmentElements(
           data,
           flightCounter,
+          epochTimeStamp,
           intineraryCounter,
           segmentCounter,
           itineraryContainerEl,
@@ -609,7 +610,7 @@ var createFlightElements = function (data) {
         );
       }
     }
-    createPriceElements(data, flightCounter);
+    createPriceElements(data, flightCounter, epochTimeStamp);
   }
 };
 
@@ -617,6 +618,7 @@ var createFlightElements = function (data) {
 var createSegmentElements = function (
   data,
   flightCounter,
+  epochTimeStamp,
   intineraryCounter,
   segmentCounter,
   itineraryContainerEl,
@@ -713,23 +715,23 @@ var createSegmentElements = function (
 };
 
 /* ---------------- writes price data elements to index.html ---------------- */
-var createPriceElements = function (data, flightCounter) {
+var createPriceElements = function (data, flightCounter, epochTimeStamp) {
   /* ----- price container ----- */
   var priceContainerEl = document.createElement("div");
   priceContainerEl.classList.add(
-    "flight-" + flightCounter, // used to store favorites in localStorage
+    epochTimeStamp, // used to store favorites in localStorage
+    "price-flights",
     "uk-border-rounded",
     "uk-width-1-1",
     "uk-padding-small",
-    "uk-margin-small-top",
-    "price-flights"
+    "uk-margin-small-top"
   );
   flightsGridEl.appendChild(priceContainerEl);
 
   // more details
   var saveEl = document.createElement("span");
   saveEl.classList.add("black-ops", "stronger", "uk-text-emphasis");
-  saveEl.innerHTML = "Favorite";
+  saveEl.innerHTML = "Add to Favorites";
   priceContainerEl.appendChild(saveEl);
 
   var grandTotalPrice = data.data[flightCounter].price.grandTotal;
@@ -766,7 +768,7 @@ var createFavoriteFlightsElements = function (favoriteFlightsLS) {
   for (let i = 0; i < favoriteFlightsLS.length; i++) {
     var outboundContainerEl = document.createElement("div");
     outboundContainerEl.classList.add(
-      favoriteFlightsLS[i].flightIndex,
+      favoriteFlightsLS[i].epochTimeStamp,
       "uk-grid",
       "uk-width-1-1",
       "uk-background-default",
@@ -779,7 +781,7 @@ var createFavoriteFlightsElements = function (favoriteFlightsLS) {
 
     var inboundContainerEl = document.createElement("div");
     inboundContainerEl.classList.add(
-      favoriteFlightsLS[i].flightIndex,
+      favoriteFlightsLS[i].epochTimeStamp,
       "uk-grid",
       "uk-width-1-1",
       "uk-background-default",
@@ -792,18 +794,30 @@ var createFavoriteFlightsElements = function (favoriteFlightsLS) {
 
     var priceContainerEl = document.createElement("div");
     priceContainerEl.classList.add(
-      favoriteFlightsLS[i].flightIndex,
+      favoriteFlightsLS[i].epochTimeStamp,
+      "price-flights",
       "uk-border-rounded",
       "uk-width-1-1",
       "uk-padding-small",
-      "uk-margin-small-top",
-      "price-flights"
+      "uk-margin-small-top"
     );
-    priceContainerEl.style.backgroundColor = "rgb(255, 165, 0)";
+    priceContainerEl.style.backgroundColor = favoritesBtnColor;
     priceContainerEl.innerHTML = favoriteFlightsLS[i].price;
+    priceContainerEl.firstChild.textContent = "Remove";
     flightsFavoritesGridEl.appendChild(priceContainerEl);
 
     priceContainerEl.addEventListener("click", deleteFavoriteFlightHandler); // handler to delete favorite flight from localStorage
+  }
+};
+
+/* resets background color of deleted favorite (deleted in favorites grid) in flights grid */
+var removeFavoriteColor = function (favoriteFlightObject) {
+  var removedFavorite = document.getElementsByClassName(
+    favoriteFlightObject.epochTimeStamp + " price-flights"
+  )[0];
+  // check if the flight is still there on the search flights grid
+  if (removedFavorite !== null) {
+    removedFavorite.style.backgroundColor = "";
   }
 };
 
@@ -843,6 +857,28 @@ var searchingMessage = function () {
 };
 /* -------------------- ENDS DOM-MANIPULATION FUNCTIONS --------------------- */
 
+/* -------------------- BEGINS ERROR-HANDLING FUNCTIONS --------------------- */
+/* -------- insures that return date can't be before departure date --------- */
+var dateDepartureMax = function () {
+  if (dateReturnEl.value !== "") {
+    dateDepartureEl.setAttribute(
+      "data-uk-datepicker",
+      "{maxDate:" + dateReturnEl.value + ",format:'YYYY-MM-DD'}"
+    );
+  }
+};
+
+/* --------- insures that departure date can't be after return date --------- */
+var dateReturnMin = function () {
+  if (dateDepartureEl.value !== "") {
+    dateReturnEl.setAttribute(
+      "data-uk-datepicker",
+      "{minDate:" + dateDepartureEl.value + ",format:'YYYY-MM-DD'}"
+    );
+  }
+};
+/* --------------------- ENDS ERROR-HANDLING FUNCTIONS ---------------------- */
+
 /* ------------------------ BEGINS INITIAL SETTINGS ------------------------- */
 var startInitialSettings = function () {
   favoritesBtnHandler();
@@ -855,14 +891,22 @@ startInitialSettings(); // loads initial settings for initial visit and refresh
 searchFormEl.addEventListener("submit", searchFormHandler);
 flightsTabEl.addEventListener("click", flightsTabHandler);
 favoritesBtn.addEventListener("click", favoritesBtnHandler);
-filterFavoritesByFlightsBtn.addEventListener("click", filterByFlightsHandler);
-filterFavoritesByHotelsBtn.addEventListener("click", filterByHotelsHandler);
+dateDepartureEl.addEventListener("click", dateDepartureHandler);
+dateReturnEl.addEventListener("click", dateReturnHandler);
+filterFlightsFavoritesBtn.addEventListener(
+  "click",
+  filterFlightsFavoritesHandler
+);
+filterHotelsFavoritesBtn.addEventListener(
+  "click",
+  filterHotelsFavoritesHandler
+);
 sortFlightsByPriceBtn.addEventListener("click", sortByPriceHandler);
 sortFlightsByArrivalBtn.addEventListener("click", sortByArrivalHandler);
 sortFlightsByDepartureBtn.addEventListener("click", sortByDepartureHandler);
 /* -------------------------- ENDS EVENT HANDLERS --------------------------- */
 
-/* -------------------------- BEGINS TESTING CODE --------------------------- */
+/* -------------------------- BEGINS TESTING CODE --------------------------- *
 /*  CODE BELOW IS NOT PART OF THE APP. IT IS ONLY USED FOR TESTING PURPOSES   */
 /* ---------------- begins amadeus credentials status check ----------------- */
 

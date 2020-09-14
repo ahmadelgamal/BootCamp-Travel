@@ -24,7 +24,7 @@ Link: https://github.com/gtankha/bootcamptravel/wiki
 ## Technologies Used
 1. HTML5
 2. CSS3
-3. JavaScript
+3. JavaScript ES6
 4. JSON
 5. AJAX
 6. jQuery

@@ -190,16 +190,16 @@
               readonly="true"
               data-uk-datepicker="{minDate:0,format:'YYYY-MM-DD'}"
               id="date-departure"
-              type="text"
               placeholder="&#xf783;  Departs:"
-            />
-
+              />
+              
+              <!-- type="text" -->
+            <!-- type="text" -->
             <input
               class="uk-input uk-border-rounded uk-width-2-5 fa"
               readonly="true"
               data-uk-datepicker="{minDate:0,format:'YYYY-MM-DD'}"
               id="date-return"
-              type="text"
               placeholder="&#xf783;  Returns:"
             />
 
@@ -252,29 +252,7 @@
         class="uk-grid uk-width-1-1 uk-border-rounded uk-background-muted uk-padding-remove-horizontal margin-zero"
       >
         <!-- begins single past flights search (favorite flights), should be created dynamically with JS-->
-        <!-- <div
-          class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded test-border margin-zero"
-        >
-          <div class="uk-width-1-2 uk-padding-remove-horizontal">
-            <p>Searched on 09.01.2020</p>
-            <h4><span class="fa">LAX &#xf072; SFO </span></h4>
-            <p class="fa">
-              &#xf783; 10/08/2020 <br />
-              &#xf783; 10/15/2020
-            </p>
-          </div>
-          <div class="uk-border-rounded uk-width-1-2 uk-padding-small price">
-            <h3 class="uk-margin-remove-vertical uk-text-center fa">
-              &#xf072; <br />
-              Round-Trip
-            </h3>
-            <button
-              class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide"
-            >
-              Delete
-            </button>
-          </div>
-        </div> -->
+     
         <!-- ends single past flights search (favorite flights) -->
       </div>
       <!-- ends past flights search (favorite flights) grid-->
@@ -323,8 +301,8 @@
       </div>
       <!-- ends flights sorting menu / dropdowns -->
 
-      <h3 id="searching-message"></h3>
-      <h3 id="error-message"></h3>
+      <h3 id="flights-searching-message"></h3>
+      <h3 id="flights-error-message"></h3>
 
       <!-- begins flights grid -->
       <div
@@ -332,103 +310,7 @@
         class="uk-grid uk-width-1-1 uk-border-rounded uk-padding-remove-horizontal margin-zero"
       >
         <!-- THIS IS NOT AN ELEMENT - begins single flight (trip) container, must be generated dymanically with JS and then appended to the div above (id="flights-grid") -->
-        <!-- begins outbound itinerary -->
-        <!-- <div
-          class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded margin-zero uk-margin-small-top"
-        > -->
-        <!-- begins segment -->
-        <!-- <div class="uk-width-1-2 uk-padding-remove-horizontal">
-            <h4 class="black-ops">Delta Airlines</h4>
-            <img
-              width="70"
-              height="70"
-              class="frame"
-              src="https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/DL_sq.svg"
-            />
-            <p>
-              Los Angeles to Dubai
-              <span class="fa stronger"> LAX &#xf072; DBX </span>
-              <br />6:55am to 8:17pm
-              <span class="fa"> &#xf152; &#xf1eb; &#xf5e7; </span>
-            </p>
-            <p></p>
-          </div> -->
-        <!-- ends segment -->
-
-        <!-- begins segment -->
-        <!-- <div class="uk-width-1-2 uk-padding-remove-horizontal">
-            <h4 class="black-ops">Fly Emirates</h4>
-            <img
-              width="70"
-              height="70"
-              class="frame"
-              src="https://cdn.freebiesupply.com/logos/large/2x/fly-emirates-logo-svg-vector.svg"
-            />
-            <p>
-              Alexandria to Dubai
-              <span class="fa stronger margin-small-left"
-                >DBX &#xf072; HBE
-              </span>
-              <br />6:05am to 7:37am
-              <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
-            </p>
-          </div> -->
-        <!-- ends segment -->
-        <!-- </div> -->
-        <!-- ends outbound itinerary -->
-
-        <!-- begins inbound itinerary -->
-        <!-- <div
-          class="uk-grid uk-width-1-1 uk-background-default uk-border-rounded margin-zero uk-margin-small-top"
-        >
-          <div class="uk-width-1-2 uk-padding-remove-horizontal">
-            <h4 class="black-ops">Flydubai</h4>
-            <img
-              width="70"
-              height="70"
-              class="frame"
-              src="https://upload.wikimedia.org/wikipedia/commons/7/79/Fly_Dubai_logo_2010_03.svg"
-            />
-            <p>
-              Dubai to Alexandria
-              <span class="fa stronger">DBX &#xf072; HBE </span>
-              <br />6:05am to 7:37am
-              <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
-            </p>
-          </div>
-
-          <div class="uk-width-1-2 uk-padding-remove-horizontal">
-            <h4 class="black-ops">Air Alaska</h4>
-            <img
-              width="70"
-              height="70"
-              class="frame"
-              src="https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/AS_sq.svg"
-            />
-            <p>
-              Dubai to Los Angeles
-              <span class="fa stronger">DBX &#xf072; HBE </span>
-              <br />6:05am to 7:37am
-              <span class="fa"> &#xf152; &#xf1eb; &#xf5e7;</span>
-            </p>
-          </div>
-        </div> -->
-        <!-- ends inbound itinerary -->
-
-        <!-- begins price container -->
-        <!-- <div
-          class="uk-border-rounded uk-width-1-1 uk-padding-small uk-margin-small-top price-flights"
-        >
-          <span class="black-ops stronger uk-text-emphasis">Reserve</span>
-          <h2 class="uk-margin-remove-vertical black-ops">$96</h2>
-          <b class="uk-text-emphasis">Round trip</b>
-          <button
-            class="uk-button uk-button-large uk-button-primary uk-border-rounded uk-padding-remove-vertical xs-size-button hide"
-          >
-            Select
-          </button>
-        </div> -->
-        <!-- ends price container -->
+       
         <!-- THIS IS NOT AN ELEMENT - ends single flight (trip) container -->
       </div>
       <!-- ends flights grid -->
@@ -516,6 +398,10 @@
 
         <!-- end of single hotel grid-->
       </div>
+
+      <h3 id="hotels-searching-message"></h3>
+      <h3 id="hotels-error-message"></h3>
+
       <div
         id="hotel-favorites-grid"
         class="uk-grid uk-width-1-1 uk-padding-remove-horizontal margin-zero uk-margin-top"
