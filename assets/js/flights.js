@@ -168,12 +168,12 @@ var addFavoriteFlightHandler = function (event) {
 var deleteFavoriteFlightHandler = function (event) {
   var favoriteFlightBtn = event.target.closest(".price-flights");
   favoriteFlightBtn.style.backgroundColor = "rgb(255, 0, 0)"; // turns background color to red
+  var favoriteFlightObject = collectFavoriteFlightData(favoriteFlightBtn);
   setTimeout(function () {
-    var favoriteFlightObject = collectFavoriteFlightData(favoriteFlightBtn);
     deleteFavoriteFlightsLS(favoriteFlightObject);
+    var loadedFavoriteFlightsLS = getFavoriteFlightsLS();
+    createFavoriteFlightsElements(loadedFavoriteFlightsLS);
   }, 1000); // leaves favorite on screen for 1 second before deleting it.
-  var favoriteFlightsLS = getFavoriteFlightsLS();
-  createFavoriteFlightsElements(favoriteFlightsLS);
 };
 
 /* ----------- handler for sorting flight search results by price ----------- */
