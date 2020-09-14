@@ -166,11 +166,11 @@ var hotelsHandler = function (event) {
 
 var toggleTripHandler = function (event) {
   if (this.options[0].selected) {
-    document.querySelector("#date-return").style.display = "";
+    document.querySelector("#date-return").style.display = "none";
   }
 
   if (this.options[1].selected) {
-    document.querySelector("#date-return").style.display = "none";
+    document.querySelector("#date-return").style.display = "";
   }
 };
 
