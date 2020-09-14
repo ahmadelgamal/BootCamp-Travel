@@ -2,6 +2,10 @@
 /*jshint esversion: 6 */
 
 /* ---------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ----------- */
+// ui settings. rgb were chosen over hexadecimals because console was loggin hexa in rgb
+const favoritesBtnColor = "rgb(255, 165, 0)";
+const deletedFavoritesBtnColor = "rgb(255, 0, 0)";
+
 /* -- declares constants to point to existing html elements in index.html --- */
 // constants that point to search form
 const flightsTabEl = document.getElementById("flights-tab");
@@ -51,7 +55,7 @@ var travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "IVikChnzWGZs4xWHOyJjYaJvpYgz"; // access token must be renewed for 30 minutes at a time
+const accessToken = "QhSGbZvzxhOsiFo1f87WQpjdgIvj"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /*  declares required query variables for "flight offers search" amadeus api  */
@@ -155,8 +159,8 @@ var addFavoriteFlightHandler = function (event) {
 
   var favoriteFlightObject = collectFavoriteFlightData(favoriteFlightBtn);
 
-  if (favoriteFlightBtn.style.backgroundColor !== "rgb(255, 165, 0)") {
-    favoriteFlightBtn.style.backgroundColor = "rgb(255, 165, 0)"; // changes background color of favorite to orange
+  if (favoriteFlightBtn.style.backgroundColor !== favoritesBtnColor) {
+    favoriteFlightBtn.style.backgroundColor = favoritesBtnColor; // changes background color of favorite to orange
     setFavoriteFlightsLS(favoriteFlightObject);
   } else {
     favoriteFlightBtn.style.backgroundColor = ""; // returns background color to default if unselected
@@ -167,7 +171,7 @@ var addFavoriteFlightHandler = function (event) {
 /* --------- handler for favorite flight buttons in favorites grid ---------- */
 var deleteFavoriteFlightHandler = function (event) {
   var favoriteFlightBtn = event.target.closest(".price-flights");
-  favoriteFlightBtn.style.backgroundColor = "rgb(255, 0, 0)"; // turns background color to red
+  favoriteFlightBtn.style.backgroundColor = deletedFavoritesBtnColor; // turns background color to red
   var favoriteFlightObject = collectFavoriteFlightData(favoriteFlightBtn);
   setTimeout(function () {
     deleteFavoriteFlightsLS(favoriteFlightObject);
@@ -797,7 +801,7 @@ var createFavoriteFlightsElements = function (favoriteFlightsLS) {
       "uk-padding-small",
       "uk-margin-small-top"
     );
-    priceContainerEl.style.backgroundColor = "rgb(255, 165, 0)";
+    priceContainerEl.style.backgroundColor = favoritesBtnColor;
     priceContainerEl.innerHTML = favoriteFlightsLS[i].price;
     priceContainerEl.firstChild.textContent = "Remove";
     flightsFavoritesGridEl.appendChild(priceContainerEl);
@@ -902,7 +906,7 @@ sortFlightsByArrivalBtn.addEventListener("click", sortByArrivalHandler);
 sortFlightsByDepartureBtn.addEventListener("click", sortByDepartureHandler);
 /* -------------------------- ENDS EVENT HANDLERS --------------------------- */
 
-/* -------------------------- BEGINS TESTING CODE --------------------------- */
+/* -------------------------- BEGINS TESTING CODE --------------------------- *
 /*  CODE BELOW IS NOT PART OF THE APP. IT IS ONLY USED FOR TESTING PURPOSES   */
 /* ---------------- begins amadeus credentials status check ----------------- */
 
