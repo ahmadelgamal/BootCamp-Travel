@@ -74,7 +74,7 @@
               class="uk-input uk-border-rounded fa"
               id="going-from"
               type="text"
-              placeholder="&#xf5b0;  From: (Enter Airport Code)"
+              placeholder="&#xf5b0;  From: (City or Airport Code)"
             />
           </div>
         </div>
@@ -89,7 +89,7 @@
               class="uk-input uk-border-rounded fa"
               id="going-to"
               type="text"
-              placeholder="&#xf5af;  To: (Enter Airport Code)"
+              placeholder="&#xf5af;  To: (City or Airport Code)"
             />
           </div>
         </div>
@@ -190,16 +190,16 @@
               readonly="true"
               data-uk-datepicker="{minDate:0,format:'YYYY-MM-DD'}"
               id="date-departure"
-              type="text"
               placeholder="&#xf783;  Departs:"
-            />
-
+              />
+              
+              <!-- type="text" -->
+            <!-- type="text" -->
             <input
               class="uk-input uk-border-rounded uk-width-2-5 fa"
               readonly="true"
               data-uk-datepicker="{minDate:0,format:'YYYY-MM-DD'}"
               id="date-return"
-              type="text"
               placeholder="&#xf783;  Returns:"
             />
 
@@ -301,8 +301,8 @@
       </div>
       <!-- ends flights sorting menu / dropdowns -->
 
-      <h3 id="searching-message"></h3>
-      <h3 id="error-message"></h3>
+      <h3 id="flights-searching-message"></h3>
+      <h3 id="flights-error-message"></h3>
 
       <!-- begins flights grid -->
       <div
@@ -395,6 +395,10 @@
 
         <!-- end of single hotel grid-->
       </div>
+
+      <h3 id="hotels-searching-message"></h3>
+      <h3 id="hotels-error-message"></h3>
+
       <div
         id="hotel-favorites-grid"
         class="uk-grid uk-width-1-1 uk-padding-remove-horizontal margin-zero uk-margin-top"

@@ -5,14 +5,13 @@
 /* -- declares constants to point to existing html elements in index.html --- */
 // constants that point to search form
 const flightsTabEl = document.getElementById("flights-tab");
-const favoritesTabEl = document.getElementById("favorites-tab");
 const searchFormEl = document.getElementById("form");
 const goingFromEl = document.getElementById("going-from");
 const goingToEl = document.getElementById("going-to");
 const dateDepartureEl = document.getElementById("date-departure");
 const dateReturnEl = document.getElementById("date-return");
 const tripSelectEl = document.getElementById("trip"); // One-way or Roundtrip
-const travelClassEl = document.getElementById("travel-class"); // ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
+const travelClassEl = document.getElementById("travel-class");
 const numberOfAdultsEl = document.getElementById("guests-select");
 
 // constants that point to flight sorting elements
@@ -28,30 +27,31 @@ const departureSortingArrow = document.querySelector(
   "#departure-sorting-arrow"
 );
 
-// constants that point to other flight search elements
-const searchingMessageEl = document.getElementById("searching-message"); // constant that points to searching message element
-const errorMessageEl = document.getElementById("error-message"); // constant that points to error message element
-const flightsGridEl = document.getElementById("flights-grid"); // constant that points to flights grid
-const flightsFavoritesGridEl = document.getElementById("flight-favorites-grid"); // constant that points to flights search history grid
-const hotelsFavoritesGridEl = document.getElementById("hotel-favorites-grid"); // constant that points to flights search history grid
-const favoriteFlightsBtn = document.getElementById("favorite-flights");
-const favoriteHotelsBtn = document.getElementById("favorite-hotels");
+// constants that point to other flights elements
+const searchingMessageEl = document.getElementById("flights-searching-message");
+const errorMessageEl = document.getElementById("flights-error-message");
+const favoritesBtn = document.getElementById("favorites-btn");
+const flightsGridEl = document.getElementById("flights-grid");
+const flightsFavoritesGridEl = document.getElementById("flight-favorites-grid");
+const filterFlightsFavoritesBtn = document.getElementById("favorite-flights");
+const filterHotelsFavoritesBtn = document.getElementById("favorite-hotels");
+
+// constants that point to hotels elements
+const hotelsFavoritesGridEl = document.getElementById("hotel-favorites-grid");
 
 /*  declares variables for user input for "flight offers search" amadeus api  */
-var originCode = goingFromEl.value; // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
-var destinationCode = goingToEl.value; // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
+var originCode;
+var destinationCode;
 var departureDate = dateDepartureEl.value; // Format: YYYY-MM-DD
 var returnDate = dateReturnEl.value; // Format: YYYY-MM-DD
 var numberOfAdults = numberOfAdultsEl.value.charAt(0);
 var travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
 
-const currencyCode = "USD"; // sets currency in fetch request to USD (default in amadeus is euro)
-
 /* -------- declares common constants & variables of amadeus apis url ------- */
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "CD0KzlKHmZu7iTnFHI3IvAAPrA5h"; // access token must be renewed for 30 minutes at a time
+const accessToken = "5xiFKwKH6FAa9HmYNENxUAkKdWJa"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /*  declares required query variables for "flight offers search" amadeus api  */
@@ -63,21 +63,30 @@ const queryNumberOfAdults = "&adults=";
 /* declares important query variables for "flight offers search" amadeus api  */
 const queryReturnDate = "&returnDate="; // required for roundtrip flights
 const queryTravelClass = "&travelClass="; // ECONOMY, PREMIUM_ECONOMY, BUSINESS, FIRST
-const queryCurrency = "&currencyCode="; // default is EUR, so needed for USD
+const queryCurrency = "&currencyCode=";
+const currencyCode = "USD"; // default is EUR.
 
 /* ---------------- declares variables for amadeus api urls ----------------- */
 var oneWayFlightOffersSearchApiUrl;
 var roundTripFlightOffersSearchApiUrl;
 var apiUrl;
 
-/* ----------------- declares constants for airhex api urls ----------------- */
-const airhexHost = "https://content.airhex.com/content/logos/airlines";
-const carrierLogoWidth = 70; // requested logo width in pixels
-const carrierLogoHeight = 70; // requested logo height in pixels
-const carrierLogoType = "s"; // Type of a logo: r - for rectangular, s - for square and t - for tail logo
-const carrierLogoFormat = ".png"; // can change to .svg
-const queryairhexApi = "?md5apikey=";
-const airhexApiKey = "VDjfGgv8mxiTvvLLwGicD6V2eq";
+/* ---------------- declares constants for daisycon api urls ---------------- */
+const daisyconHost = "https://daisycon.io/images/airline/?";
+const carrierLogoWidth = "width=300"; // requested logo width in pixels
+const carrierLogoHeight = "height=150"; // requested logo height in pixels
+const backgroundColor = "color=ffffff"; // Type of a logo: r - for rectangular, s - for square and t - for tail logo
+const queryIata = "&iata="; // can change to .svg
+
+// /* ----------------- declares constants for airhex api urls ----------------- */
+// airhex logo are watermarked, so daisycon api is used instead
+// const airhexHost = "https://content.airhex.com/content/logos/airlines";
+// const carrierLogoWidth = 70; // requested logo width in pixels
+// const carrierLogoHeight = 70; // requested logo height in pixels
+// const carrierLogoType = "s"; // Type of a logo: r - for rectangular, s - for square and t - for tail logo
+// const carrierLogoFormat = ".png"; // can change to .svg
+// const queryairhexApi = "?md5apikey=";
+// const airhexApiKey = "VDjfGgv8mxiTvvLLwGicD6V2eq";
 
 /* ------------------------ declares other variables ------------------------ */
 var amadeusData = []; //declares array to store copy of fetched data from amadeus
@@ -86,7 +95,7 @@ var toggleInterval; // timer for toggling "searching" message
 
 /* ------------------------ BEGINS HANDLER FUNCTIONS ------------------------ */
 /* --------------------------- search-form handler -------------------------- */
-var searchFormHandler = function () {
+var searchFormHandler = function (event) {
   if (flightsTabEl.className === "uk-active") {
     event.preventDefault(); // prevents the search-form submit from triggering a refresh of index.html
     collectSearchForm();
@@ -99,8 +108,49 @@ var searchFormHandler = function () {
   }
 };
 
+/* ------------------------ handler for flights tab ------------------------- */
+var flightsTabHandler = function () {
+  if (flightsGridEl.textContent.trim() === "") {
+    sortFlightsMenuEl.style.display = "none";
+  } else {
+    sortFlightsMenuEl.style.display = "";
+  }
+};
+
+/* --------- handler for departure date calendar input ui-kit field --------- */
+var dateDepartureHandler = function () {
+  dateDepartureMax();
+};
+
+/* ---------- handler for return date calendar input ui-kit field ----------- */
+var dateReturnHandler = function () {
+  dateReturnMin();
+};
+
+/* ----------- handler for favorites button on top of search form ----------- */
+var favoritesBtnHandler = function (event) {
+  var favoriteFlightsLS = getFavoriteFlightsLS();
+
+  // if it's not empty, then create favorites elements from data in localStorage
+  if (favoriteFlightsLS !== null) {
+    createFavoriteFlightsElements(favoriteFlightsLS);
+  }
+};
+
+/* ------------ handler for filtering favorites by flights only ------------- */
+var filterFlightsFavoritesHandler = function () {
+  flightsFavoritesGridEl.style.display = "";
+  hotelsFavoritesGridEl.style.display = "none";
+};
+
+/* ------------- handler for filtering favorites by hotels only ------------- */
+var filterHotelsFavoritesHandler = function () {
+  flightsFavoritesGridEl.style.display = "none";
+  hotelsFavoritesGridEl.style.display = "";
+};
+
 /* -------- handler for favorite flight buttons in flights grid ------------- */
-var newFavoriteFlightHandler = function () {
+var addFavoriteFlightHandler = function (event) {
   var favoriteFlightBtn = event.target.closest(".price-flights");
 
   var favoriteFlightObject = collectFavoriteFlightData(favoriteFlightBtn);
@@ -115,45 +165,47 @@ var newFavoriteFlightHandler = function () {
 };
 
 /* --------- handler for favorite flight buttons in favorites grid ---------- */
-var savedFavoriteFlightHandler = function () {
+var deleteFavoriteFlightHandler = function (event) {
   var favoriteFlightBtn = event.target.closest(".price-flights");
-  favoriteFlightBtn.style.backgroundColor = "#ff0000"; // turns background color to red
+  favoriteFlightBtn.style.backgroundColor = "rgb(255, 0, 0)"; // turns background color to red
   setTimeout(function () {
     var favoriteFlightObject = collectFavoriteFlightData(favoriteFlightBtn);
     deleteFavoriteFlightsLS(favoriteFlightObject);
-    getFavoriteFlightsLS();
   }, 1000); // leaves favorite on screen for 1 second before deleting it.
+  var favoriteFlightsLS = getFavoriteFlightsLS();
+  createFavoriteFlightsElements(favoriteFlightsLS);
+};
+
+/* ----------- handler for sorting flight search results by price ----------- */
+var sortByPriceHandler = function () {
+  changeArrowDirection(priceSortingArrow);
+  removeOtherArrows(arrivalSortingArrow, departureSortingArrow);
+  var sortedData = sortByPrice();
+  createFlightElements(sortedData);
+};
+
+/* ------- handler for sorting flight search results by arrival time -------- */
+var sortByArrivalHandler = function () {
+  changeArrowDirection(arrivalSortingArrow);
+  removeOtherArrows(priceSortingArrow, departureSortingArrow);
+  var dataCopy = sortByArrival();
+  createFlightElements(dataCopy);
+};
+
+/* ------- handler for sorting flight search results by departure time -------*/
+var sortByDepartureHandler = function () {
+  changeArrowDirection(departureSortingArrow);
+  removeOtherArrows(priceSortingArrow, arrivalSortingArrow);
+  var dataCopy = sortByDeparture();
+  createFlightElements(dataCopy);
 };
 /* ------------------------- ENDS HANDLER FUNCTIONS ------------------------- */
-
-/* ------------------ BEGINS DISPLAY (SHOW/HIDE) FUNCTIONS ------------------ */
-/* --------------------- display (show/hide) functions ---------------------- */
-var showFavoriteFlights = function () {
-  flightsFavoritesGridEl.style.display = "";
-  hotelsFavoritesGridEl.style.display = "none";
-};
-
-var showFavoriteHotels = function () {
-  flightsFavoritesGridEl.style.display = "none";
-  hotelsFavoritesGridEl.style.display = "";
-};
-
-var hideFlightSortingMenu = function () {
-  if (flightsGridEl.textContent.trim() === "") {
-    sortFlightsMenuEl.style.display = "none";
-  } else {
-    sortFlightsMenuEl.style.display = "";
-  }
-};
-/* ------------------- ENDS DISPLAY (SHOW/HIDE) FUNCTIONS ------------------- */
 
 /* -------------------- BEGINS DATA COLLECTION FUNCTIONS -------------------- */
 /* ------------------- gets current values in search form ------------------- */
 var collectSearchForm = function () {
-  // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
-  originCode = goingFromEl.value.toUpperCase();
-  // CURRENTLY AIRPORT CODE. NEED TO CHANGE TO CITY NAME
-  destinationCode = goingToEl.value.toUpperCase();
+  originCode = goingFromEl.value.slice(2, 5);
+  destinationCode = goingToEl.value.slice(2, 5);
   departureDate = dateDepartureEl.value;
   // checks if user selects roundtrip or one-way
   if (tripSelectEl.options[tripSelectEl.selectedIndex].value === "Roundtrip") {
@@ -171,28 +223,34 @@ var collectSearchForm = function () {
 
 /* --------------------- collects favorite flight data ---------------------- */
 var collectFavoriteFlightData = function (favoriteFlightBtn) {
-  // takes out the "flight-xxx" class name from the classNames list
-  var flightIndex = favoriteFlightBtn.className.split(" ")[0];
-  var favoriteFlightObject;
+  // collects value of {epochTimeStamp} class name from the classNames list to identify flight
+  var epochTimeStamp = favoriteFlightBtn.className.split(" ")[0];
+  var favoriteFlightObject = {};
 
-  var outboundHTML = document.querySelector("." + flightIndex);
   var priceHTML = favoriteFlightBtn;
-  if (document.querySelectorAll("." + flightIndex).length === 3) {
+  var outboundHTML = document.querySelector("." + epochTimeStamp); //outbound element is first occurence of class
+  // if there's a 3rd element with the same class name, then there's an inbound
+  if (document.querySelectorAll("." + epochTimeStamp).length === 3) {
     favoriteFlightObject = {
-      flightIndex: flightIndex,
+      epochTimeStamp: epochTimeStamp,
       outbound: outboundHTML.innerHTML,
       inbound: outboundHTML.nextSibling.innerHTML,
       price: priceHTML.innerHTML,
     };
   } else {
     favoriteFlightObject = {
-      flightIndex: flightIndex,
+      epochTimeStamp: epochTimeStamp,
       outbound: outboundHTML.innerHTML,
       inbound: "",
       price: priceHTML.innerHTML,
     };
   }
   return favoriteFlightObject;
+};
+
+/* ---------------- uses iata airport code to get city name ----------------- */
+var collectCity = function (iataAirport) {
+  return mainAirports[iataAirport].city;
 };
 /* --------------------- ENDS DATA COLLECTION FUNCTIONS --------------------- */
 
@@ -256,32 +314,45 @@ var fetchFlightOffersSearch = function () {
     });
 };
 
-/* --------------- gets airline carrier's logo from airhex api -------------- */
-var fetchCarrierLogo = function (carrierCode) {
+/* -------------- gets airline carrier's logo from daisycon api ------------- */
+var fetchCarrierLogoDaisycon = function (carrierCode) {
   var logoApiUrl =
-    airhexHost +
-    "_" +
-    carrierCode +
-    "_" +
+    daisyconHost +
     carrierLogoWidth +
-    "_" +
+    "&" +
     carrierLogoHeight +
-    "_" +
-    carrierLogoType +
-    carrierLogoFormat +
-    queryairhexApi +
-    airhexApiKey;
+    backgroundColor +
+    queryIata +
+    carrierCode;
 
   return logoApiUrl;
 };
+
+// /* --------------- gets airline carrier's logo from airhex api -------------- */
+// can choose between airhex or daisycon by replacing the function name (optional: and commenting/uncommenting functions and variables)
+// var fetchCarrierLogoAirhex = function (carrierCode) {
+//   var logoApiUrl =
+//     airhexHost +
+//     "_" +
+//     carrierCode +
+//     "_" +
+//     carrierLogoWidth +
+//     "_" +
+//     carrierLogoHeight +
+//     "_" +
+//     carrierLogoType +
+//     carrierLogoFormat +
+//     queryairhexApi +
+//     airhexApiKey;
+
+//   return logoApiUrl;
+// };
 /* ------------------------ ENDS FETCH API FUNCTIONS ------------------------ */
 
 /* ---------------------- BEGINS LOCALSTORAGE FUNCTIONS --------------------- */
 /* ----------------- saves favorite flight to localStorage ------------------ */
 var setFavoriteFlightsLS = function (favoriteFlightObject) {
-  var favoriteFlightsLS = []; // declares an array to be used for localStorage
-  favoriteFlightsLS = JSON.parse(localStorage.getItem("favoriteFlights")); // gets existing favorites from localStorage if it exists
-  // var favoriteFlightObject = collectFavoriteFlightData(favoriteFlightBtn);
+  var favoriteFlightsLS = getFavoriteFlightsLS();
 
   if (favoriteFlightsLS === null) {
     // if there are no favorites, then it is set to current flight favorite
@@ -290,18 +361,19 @@ var setFavoriteFlightsLS = function (favoriteFlightObject) {
     // checks if it's already in favorites, then it deletes the existing one in order not to duplicate
     for (let i = 0; i < favoriteFlightsLS.length; i++) {
       if (
-        favoriteFlightObject.flightIndex === favoriteFlightsLS[i].flightIndex
+        favoriteFlightsLS[i].epochTimeStamp === favoriteFlightObject.epochTimeStamp
       ) {
-        favoriteFlightsLS.splice(favoriteFlightsLS[i], 1);
+        favoriteFlightsLS.splice(favoriteFlightsLS[i - 1], 1);
+        return;
       }
     }
     favoriteFlightsLS.unshift(favoriteFlightObject); // otherwise, if favorites is not empty, then the current favorite is added on top of the list
   }
 
-  // limits favorite flights to five
-  if (favoriteFlightsLS.length === 6) {
-    favoriteFlightsLS.splice(5, 1);
-  }
+  // // limits favorite flights to five
+  // if (favoriteFlightsLS.length === 6) {
+  //   favoriteFlightsLS.splice(5, 1);
+  // }
 
   localStorage.setItem("favoriteFlights", JSON.stringify(favoriteFlightsLS));
 };
@@ -310,22 +382,17 @@ var setFavoriteFlightsLS = function (favoriteFlightObject) {
 var getFavoriteFlightsLS = function () {
   // get existing search history from localStorage if it exists
   var favoriteFlightsLS = JSON.parse(localStorage.getItem("favoriteFlights"));
-
-  // if there is a search history, the following creates search history elements from data in localStorage
-  if (favoriteFlightsLS !== null) {
-    createFavoriteFlightsElements(favoriteFlightsLS);
-  }
+  return favoriteFlightsLS;
 };
 
 /* ------- deletes favorite flight from localStorage when unselected -------- */
 var deleteFavoriteFlightsLS = function (favoriteFlightObject) {
   // gets existing favorites from localStorage
-  var favoriteFlightsLS = JSON.parse(localStorage.getItem("favoriteFlights"));
+  var favoriteFlightsLS = getFavoriteFlightsLS();
 
   for (let i = 0; i < favoriteFlightsLS.length; i++) {
-    if (favoriteFlightObject.flightIndex === favoriteFlightsLS[i].flightIndex) {
-      favoriteFlightsLS.splice(favoriteFlightsLS[i], 1);
-      // i--;
+    if (favoriteFlightObject.epochTimeStamp === favoriteFlightsLS[i].epochTimeStamp) {
+      favoriteFlightsLS.splice(favoriteFlightsLS[i - 1], 1);
     }
   }
 
@@ -365,6 +432,22 @@ var convertTime12H = function (timeToConvert) {
   return convertedTime;
 };
 
+// /* ---------------------- converts date to epoch value ---------------------- */
+// var convertDateEpoch = function (timeToConvert) {
+//   var convertedDate = new Date(timeToConvert);
+//   return convertedDate;
+// };
+
+/* ---------------- converts time from fetch to date format ----------------- */
+var convertDate = function (timeToConvert) {
+  var convertedDate = new Date(timeToConvert);
+  var year = convertedDate.getFullYear();
+  var month = convertedDate.getMonth() + 1;
+  var day = convertedDate.getDate();
+  convertedDate = month + "/" + day + "/" + year;
+  return convertedDate;
+};
+
 /* ---------- converts price from fetch to comma separated format ----------- */
 var convertPrice = function (priceToConvert) {
   var stringPrice;
@@ -383,11 +466,8 @@ var convertPrice = function (priceToConvert) {
   return convertedPrice;
 };
 
-/* -------------------- sorts search results by price ----------------------- */
+/* ---------------- sorts flight search results by price -------------------- */
 var sortByPrice = function () {
-  changeArrowDirection(priceSortingArrow);
-  removeOtherArrows(arrivalSortingArrow, departureSortingArrow);
-
   // creates a disconnected copy of the data object
   var sortedData = JSON.parse(JSON.stringify(amadeusData));
 
@@ -400,31 +480,21 @@ var sortByPrice = function () {
     sortedData.data = reversedArray;
   }
 
-  createFlightElements(sortedData);
+  return sortedData;
 };
 
-/* ----------- sorts search results according to arrival time --------------- */
+/* sorts flight search results by arrival time of last segment of outbound itinerary */
 var sortByArrival = function () {
-  changeArrowDirection(arrivalSortingArrow);
-  removeOtherArrows(priceSortingArrow, departureSortingArrow);
-
   // creates a disconnected copy of the data object
   var dataCopy = JSON.parse(JSON.stringify(amadeusData));
-
   var arrayToSort = dataCopy.data;
 
   function compare(a, b) {
     const timeA = Date.parse(
-      a.itineraries[a.itineraries.length - 1].segments[
-        a.itineraries[a.itineraries.length - 1].segments.length - 1
-      ].arrival.at
+      a.itineraries[0].segments[a.itineraries[0].segments.length - 1].arrival.at
     );
     const timeB = Date.parse(
-      // b.itineraries[b.itineraries.length - 1].segments[
-      //   b.itineraries[b.itineraries.length - 1].length - 1
-      b.itineraries[b.itineraries.length - 1].segments[
-        b.itineraries[b.itineraries.length - 1].segments.length - 1
-      ].arrival.at
+      b.itineraries[0].segments[b.itineraries[0].segments.length - 1].arrival.at
     );
 
     let comparison = 0;
@@ -441,20 +511,15 @@ var sortByArrival = function () {
   }
 
   var sortedArray = arrayToSort.sort(compare);
-
   dataCopy.data = sortedArray;
 
-  createFlightElements(dataCopy);
+  return dataCopy;
 };
 
-/* ---------- sorts search results according to departure time -------------- */
+/* sorts flight search results by departure time of 1st segment of outbound itinerary */
 var sortByDeparture = function () {
-  changeArrowDirection(departureSortingArrow);
-  removeOtherArrows(priceSortingArrow, arrivalSortingArrow);
-
   // creates a disconnected copy of the data object
   var dataCopy = JSON.parse(JSON.stringify(amadeusData));
-
   var arrayToSort = dataCopy.data;
 
   function compare(a, b) {
@@ -475,10 +540,9 @@ var sortByDeparture = function () {
   }
 
   var sortedArray = arrayToSort.sort(compare);
-
   dataCopy.data = sortedArray;
 
-  createFlightElements(dataCopy);
+  return dataCopy;
 };
 /* ------------- ENDS CONVERT/REFORMAT & SORT/REORDER FUNCTIONS ------------- */
 
@@ -501,6 +565,7 @@ var createFlightElements = function (data) {
   for (var flightCounter = 0; flightCounter < flightCount; flightCounter++) {
     // gets number of itineraries (usually 1 for outbound and 1 for inbound)
     var intineraryCount = data.data[flightCounter].itineraries.length;
+    var epochTimeStamp = "T" + Date.now();
 
     // loops through number of itineraries to create a container element for each
     for (
@@ -510,7 +575,7 @@ var createFlightElements = function (data) {
     ) {
       var itineraryContainerEl = document.createElement("div");
       itineraryContainerEl.classList.add(
-        "flight-" + flightCounter,
+        epochTimeStamp, // used to store favorites in localStorage
         "uk-grid",
         "uk-width-1-1",
         "uk-background-default",
@@ -533,6 +598,7 @@ var createFlightElements = function (data) {
         createSegmentElements(
           data,
           flightCounter,
+          epochTimeStamp,
           intineraryCounter,
           segmentCounter,
           itineraryContainerEl,
@@ -540,7 +606,7 @@ var createFlightElements = function (data) {
         );
       }
     }
-    createPriceElements(data, flightCounter);
+    createPriceElements(data, flightCounter, epochTimeStamp);
   }
 };
 
@@ -548,6 +614,7 @@ var createFlightElements = function (data) {
 var createSegmentElements = function (
   data,
   flightCounter,
+  epochTimeStamp,
   intineraryCounter,
   segmentCounter,
   itineraryContainerEl,
@@ -561,7 +628,7 @@ var createSegmentElements = function (
   );
   itineraryContainerEl.appendChild(segmentContainerEl);
 
-  /* ----- carrier (ariline) name ----- */
+  // /* ----- carrier (ariline) name ----- */
   var carrierCode =
     data.data[flightCounter].itineraries[intineraryCounter].segments[
       segmentCounter
@@ -572,14 +639,14 @@ var createSegmentElements = function (
   carrierFullEl.textContent = carrierFull;
   segmentContainerEl.appendChild(carrierFullEl);
 
-  /* ----- carrier (ariline) logo ----- */
+  /* ----- carrier (airline) logo ----- */
   var carrierLogoEl = document.createElement("img");
   carrierLogoEl.className = "frame";
   carrierLogoEl.alt = "airline logo";
   carrierLogoEl.style.width = "70";
   carrierLogoEl.style.height = "70";
   carrierLogoEl.setAttribute("loading", "lazy");
-  carrierLogoEl.src = fetchCarrierLogo(carrierCode); // gets carrier logo from airhex api
+  carrierLogoEl.src = fetchCarrierLogoDaisycon(carrierCode); // gets carrier logo from api
   segmentContainerEl.appendChild(carrierLogoEl);
 
   /* ----- flight details container ----- */
@@ -588,13 +655,6 @@ var createSegmentElements = function (
   segmentContainerEl.appendChild(flightDetailsEl);
 
   // city data
-  // NEED TO DECLARE departureCityFull & arrivalCityFulls
-  var citySpanEl = document.createElement("span");
-  // citySpanEl.innerHTML = departureCityFull + " to " + arrivalCityFull + "<br />";
-  citySpanEl.innerHTML = "Test City 1" + " to " + "Test City 2" + "<br />";
-  flightDetailsEl.appendChild(citySpanEl);
-
-  // airport data
   var departureCityCode =
     data.data[flightCounter].itineraries[intineraryCounter].segments[
       segmentCounter
@@ -603,6 +663,15 @@ var createSegmentElements = function (
     data.data[flightCounter].itineraries[intineraryCounter].segments[
       segmentCounter
     ].arrival.iataCode;
+  var citySpanEl = document.createElement("span");
+  citySpanEl.innerHTML =
+    collectCity(departureCityCode) +
+    " to " +
+    collectCity(arrivalCityCode) +
+    "<br />";
+  flightDetailsEl.appendChild(citySpanEl);
+
+  // airport data
   var airportSpanEl = document.createElement("span");
   airportSpanEl.classList.add("fa", "stronger", "margin-small-left");
   airportSpanEl.innerHTML = departureCityCode + " &#xf072; " + arrivalCityCode;
@@ -623,6 +692,10 @@ var createSegmentElements = function (
     convertTime12H(departureTime) +
     " to " +
     convertTime12H(arrivalTime) +
+    "<br />" +
+    convertDate(departureTime) +
+    "&nbsp; &nbsp;" +
+    convertDate(arrivalTime) +
     "<br />";
   flightDetailsEl.appendChild(timeSpanEl);
 
@@ -638,11 +711,11 @@ var createSegmentElements = function (
 };
 
 /* ---------------- writes price data elements to index.html ---------------- */
-var createPriceElements = function (data, flightCounter) {
+var createPriceElements = function (data, flightCounter, epochTimeStamp) {
   /* ----- price container ----- */
   var priceContainerEl = document.createElement("div");
   priceContainerEl.classList.add(
-    "flight-" + flightCounter, // used to store favorites in localStorage
+    epochTimeStamp, // used to store favorites in localStorage
     "uk-border-rounded",
     "uk-width-1-1",
     "uk-padding-small",
@@ -678,7 +751,7 @@ var createPriceElements = function (data, flightCounter) {
   priceContainerEl.appendChild(saveBtn);
 
   // saves flight search favorite to localStorage
-  priceContainerEl.addEventListener("click", newFavoriteFlightHandler);
+  priceContainerEl.addEventListener("click", addFavoriteFlightHandler);
 };
 
 /* --------- creates favorite flight elements on visit and refresh ---------- */
@@ -691,7 +764,7 @@ var createFavoriteFlightsElements = function (favoriteFlightsLS) {
   for (let i = 0; i < favoriteFlightsLS.length; i++) {
     var outboundContainerEl = document.createElement("div");
     outboundContainerEl.classList.add(
-      favoriteFlightsLS[i].flightIndex,
+      favoriteFlightsLS[i].epochTimeStamp,
       "uk-grid",
       "uk-width-1-1",
       "uk-background-default",
@@ -704,7 +777,7 @@ var createFavoriteFlightsElements = function (favoriteFlightsLS) {
 
     var inboundContainerEl = document.createElement("div");
     inboundContainerEl.classList.add(
-      favoriteFlightsLS[i].flightIndex,
+      favoriteFlightsLS[i].epochTimeStamp,
       "uk-grid",
       "uk-width-1-1",
       "uk-background-default",
@@ -717,7 +790,7 @@ var createFavoriteFlightsElements = function (favoriteFlightsLS) {
 
     var priceContainerEl = document.createElement("div");
     priceContainerEl.classList.add(
-      favoriteFlightsLS[i].flightIndex,
+      favoriteFlightsLS[i].epochTimeStamp,
       "uk-border-rounded",
       "uk-width-1-1",
       "uk-padding-small",
@@ -728,7 +801,7 @@ var createFavoriteFlightsElements = function (favoriteFlightsLS) {
     priceContainerEl.innerHTML = favoriteFlightsLS[i].price;
     flightsFavoritesGridEl.appendChild(priceContainerEl);
 
-    priceContainerEl.addEventListener("click", savedFavoriteFlightHandler); // handler to delete favorite flight from localStorage
+    priceContainerEl.addEventListener("click", deleteFavoriteFlightHandler); // handler to delete favorite flight from localStorage
   }
 };
 
@@ -768,20 +841,53 @@ var searchingMessage = function () {
 };
 /* -------------------- ENDS DOM-MANIPULATION FUNCTIONS --------------------- */
 
+/* -------------------- BEGINS ERROR-HANDLING FUNCTIONS --------------------- */
+/* -------- insures that return date can't be before departure date --------- */
+var dateDepartureMax = function () {
+  if (dateReturnEl.value !== "") {
+    dateDepartureEl.setAttribute(
+      "data-uk-datepicker",
+      "{maxDate:" + dateReturnEl.value + ",format:'YYYY-MM-DD'}"
+    );
+  }
+};
+
+/* --------- insures that departure date can't be after return date --------- */
+var dateReturnMin = function () {
+  if (dateDepartureEl.value !== "") {
+    dateReturnEl.setAttribute(
+      "data-uk-datepicker",
+      "{minDate:" + dateDepartureEl.value + ",format:'YYYY-MM-DD'}"
+    );
+  }
+};
+/* --------------------- ENDS ERROR-HANDLING FUNCTIONS ---------------------- */
+
 /* ------------------------ BEGINS INITIAL SETTINGS ------------------------- */
-getFavoriteFlightsLS();
+var startInitialSettings = function () {
+  favoritesBtnHandler();
+};
+
+startInitialSettings(); // loads initial settings for initial visit and refresh
 /* ------------------------- ENDS INITIAL SETTINGS -------------------------- */
 
 /* ------------------------- BEGINS EVENT HANDLERS -------------------------- */
 searchFormEl.addEventListener("submit", searchFormHandler);
-flightsTabEl.addEventListener("click", hideFlightSortingMenu);
-favoritesTabEl.addEventListener("click", getFavoriteFlightsLS);
-favoriteFlightsBtn.addEventListener("click", showFavoriteFlights);
-favoriteHotelsBtn.addEventListener("click", showFavoriteHotels);
-
-sortFlightsByPriceBtn.addEventListener("click", sortByPrice); // sorts search results by price
-sortFlightsByArrivalBtn.addEventListener("click", sortByArrival); // sorts search results by Arrival Time
-sortFlightsByDepartureBtn.addEventListener("click", sortByDeparture); // sorts search results by Departure Time
+flightsTabEl.addEventListener("click", flightsTabHandler);
+favoritesBtn.addEventListener("click", favoritesBtnHandler);
+dateDepartureEl.addEventListener("click", dateDepartureHandler);
+dateReturnEl.addEventListener("click", dateReturnHandler);
+filterFlightsFavoritesBtn.addEventListener(
+  "click",
+  filterFlightsFavoritesHandler
+);
+filterHotelsFavoritesBtn.addEventListener(
+  "click",
+  filterHotelsFavoritesHandler
+);
+sortFlightsByPriceBtn.addEventListener("click", sortByPriceHandler);
+sortFlightsByArrivalBtn.addEventListener("click", sortByArrivalHandler);
+sortFlightsByDepartureBtn.addEventListener("click", sortByDepartureHandler);
 /* -------------------------- ENDS EVENT HANDLERS --------------------------- */
 
 /* -------------------------- BEGINS TESTING CODE --------------------------- */
