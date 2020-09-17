@@ -55,7 +55,7 @@ var travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "Ge7mmlQtaRu4iBhJlwzqjmPAxm4Q"; // access token must be renewed for 30 minutes at a time
+const accessToken = "kaHKJJAt3ODdD7WeIhp4aOd4yh6n"; // access token must be renewed for 30 minutes at a time
 const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
 
 /*  declares required query variables for "flight offers search" amadeus api  */
