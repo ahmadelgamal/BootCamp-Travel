@@ -252,8 +252,6 @@ var collectCity = function (iataAirport) {
 /* ------------------- fetches access token from amadeus -------------------- */
 var requestAccessToken = function () {
 
-  const amadeusRequestAccessTokenBody = require('../../../server');
-
   fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
     method: "POST",
     headers: {
