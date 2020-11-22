@@ -18,11 +18,11 @@ Link: https://github.com/gtankha/bootcamptravel/wiki
 
 ## Collaborators (Group Members)
 
-| Name              | GitHub Page                     | Main Role                            | Files                                    |
+| Name              | GitHub Page                     | Main Responsibilities                | Main Files                               |
 | ----------------- | ------------------------------- | ------------------------------------ | ---------------------------------------- |
 | Gautam Tankha     | https://github.com/gtankha      | Project Manager & Hotel search       | `hotel.js`                               |
 | Marco Evangelista | https://github.com/marcobjj     | User Interface (Structure & Styling) | `index.html`, `style.css`, & `script.js` |
-| Ahmad El Gamal    | https://github.com/ahmadelgamal | Flights search, routing & heroku     | `flights.js`                             |
+| Ahmad El Gamal    | https://github.com/ahmadelgamal | Flights search, routing & heroku     | `flights.js` & `server.js`               |
 
 ## Technologies Used
 
