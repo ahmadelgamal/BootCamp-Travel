@@ -1,6 +1,6 @@
 # BootCamp Travel
 
-**Bootcamp Travel** is group 7's project 1 at the University of California, Berkeley, extension, blended-online full-stack web-development part-time bootcamp.
+Do you travel? If yes, and you want to compare prices for airfare and lodging to make a more informed decision when you are ready to pay, then BootCamp Travel can help you search, save favorites, and retreive them as needed!
 
 ## Wiki
 
@@ -22,7 +22,7 @@ Link: https://github.com/gtankha/bootcamptravel/wiki
 | ----------------- | ------------------------------- | ------------------------------------ | ---------------------------------------- |
 | Gautam Tankha     | https://github.com/gtankha      | Project Manager & Hotel search       | `hotel.js`                               |
 | Marco Evangelista | https://github.com/marcobjj     | User Interface (Structure & Styling) | `index.html`, `style.css`, & `script.js` |
-| Ahmad El Gamal    | https://github.com/ahmadelgamal | Flights search                       | `flights.js`                             |
+| Ahmad El Gamal    | https://github.com/ahmadelgamal | Flights search, routing & heroku     | `flights.js`                             |
 
 ## Technologies Used
 
@@ -58,10 +58,6 @@ This app is very simple to use. Just follow these steps:
 - Pick your favorite hotel or flight
 - Click on the favorite icon to save it to memory (you may choose up to 5 flights and/or 5 hotels)
 - Revisit the website at any time to see your favorite items, or make new searches!
-
-## Pre-requisites
-
-Flights section cannot run without a valid _access token_ from **Amadeus**. To receive one, please visit https://developers.amadeus.com/ and follow their instructions.
 
 ## Screenshots:
 
