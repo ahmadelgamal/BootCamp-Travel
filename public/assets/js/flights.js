@@ -82,16 +82,6 @@ const carrierLogoHeight = "height=150"; // requested logo height in pixels
 const backgroundColor = "color=ffffff"; // Type of a logo: r - for rectangular, s - for square and t - for tail logo
 const queryIata = "&iata="; // can change to .svg
 
-// /* ----------------- declares constants for airhex api urls ----------------- */
-// airhex logo are watermarked, so daisycon api is used instead
-// const airhexHost = "https://content.airhex.com/content/logos/airlines";
-// const carrierLogoWidth = 70; // requested logo width in pixels
-// const carrierLogoHeight = 70; // requested logo height in pixels
-// const carrierLogoType = "s"; // Type of a logo: r - for rectangular, s - for square and t - for tail logo
-// const carrierLogoFormat = ".png"; // can change to .svg
-// const queryairhexApi = "?md5apikey=";
-// const airhexApiKey = "VDjfGgv8mxiTvvLLwGicD6V2eq";
-
 /* ------------------------ declares other variables ------------------------ */
 var amadeusData = []; //declares array to store copy of fetched data from amadeus
 var toggleInterval; // timer for toggling "searching" message
@@ -211,6 +201,32 @@ var sortByDepartureHandler = function () {
 /* ------------------------- ENDS HANDLER FUNCTIONS ------------------------- */
 
 /* -------------------- BEGINS DATA COLLECTION FUNCTIONS -------------------- */
+/* ------------------- fetches access token from amadeus -------------------- */
+var requestAccessToken = function () {
+  const requestAccessTokenBody = 'grant_type=client_credentials&client_id=' + process.env.AMADEUS_API_KEY + '&client_secret=' + process.env.AMADEUS_API_SECRET;
+
+  fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: requestAccessTokenBody
+  })
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+
+    })
+    .catch(function (error) {
+      // clearInterval(toggleInterval); // stops toggling searching message
+      // searchingMessageEl.textContent = ""; // clears searching message
+      errorMessageEl.textContent = "Error! Unable to request new access token.";
+    });
+};
+
+requestAccessToken();
+
 /* ------------------- gets current values in search form ------------------- */
 var collectSearchForm = function () {
   originCode = goingFromEl.value.slice(2, 5);
@@ -332,26 +348,6 @@ var fetchCarrierLogoDaisycon = function (carrierCode) {
 
   return logoApiUrl;
 };
-
-// /* --------------- gets airline carrier's logo from airhex api -------------- */
-// can choose between airhex or daisycon by replacing the function name (optional: and commenting/uncommenting functions and variables)
-// var fetchCarrierLogoAirhex = function (carrierCode) {
-//   var logoApiUrl =
-//     airhexHost +
-//     "_" +
-//     carrierCode +
-//     "_" +
-//     carrierLogoWidth +
-//     "_" +
-//     carrierLogoHeight +
-//     "_" +
-//     carrierLogoType +
-//     carrierLogoFormat +
-//     queryairhexApi +
-//     airhexApiKey;
-
-//   return logoApiUrl;
-// };
 /* ------------------------ ENDS FETCH API FUNCTIONS ------------------------ */
 
 /* ---------------------- BEGINS LOCALSTORAGE FUNCTIONS --------------------- */
@@ -431,12 +427,6 @@ var convertTime12H = function (timeToConvert) {
   convertedTime = hour + minutes + timeDesignation;
   return convertedTime;
 };
-
-// /* ---------------------- converts date to epoch value ---------------------- */
-// var convertDateEpoch = function (timeToConvert) {
-//   var convertedDate = new Date(timeToConvert);
-//   return convertedDate;
-// };
 
 /* ---------------- converts time from fetch to date format ----------------- */
 var convertDate = function (timeToConvert) {
@@ -922,5 +912,5 @@ var accessTokenStatus = function () {
 };
 
 // UNCOMMENT function below to check on status of access token
-// accessTokenStatus();
+accessTokenStatus();
 /* --------------------------- ENDS TESTING CODE ---------------------------- */
