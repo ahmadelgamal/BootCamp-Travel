@@ -18,6 +18,8 @@ Link: https://github.com/gtankha/bootcamptravel/wiki
 
 ## Collaborators (Group Members)
 
+Bootcamp Travel is group 7's project 1 at the University of California, Berkeley, extension, blended-online full-stack web-development part-time bootcamp. The group is:
+
 | Name              | GitHub Page                     | Main Responsibilities                | Main Files                               |
 | ----------------- | ------------------------------- | ------------------------------------ | ---------------------------------------- |
 | Gautam Tankha     | https://github.com/gtankha      | Project Manager & Hotel search       | `hotel.js`                               |

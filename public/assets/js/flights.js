@@ -103,8 +103,7 @@ var searchFormHandler = function (event) {
     })
       .then(res => res.json())
       .then(data => {
-        let accessToken = JSON.stringify(data);
-        console.log('Form Handler: ' + accessToken);
+        let accessToken = data;
         fetchFlightOffersSearch(accessToken);
       })
   }
@@ -292,7 +291,6 @@ var saveUrl = function () {
 
 /* --- gets flight search results from "flight offers search" amadeus api --- */
 var fetchFlightOffersSearch = function (accessToken) {
-  console.log('Fetch Request: ' + accessToken);
 
   fetch(apiUrl, {
     method: "GET",

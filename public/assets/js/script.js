@@ -20,7 +20,7 @@ var showFlightsMenu = function () {
     "uk-margin-small uk-padding-small uk-padding-remove-vertical"
   );
   document.querySelector("#date-return").style.display = "none";
-  
+
   var goingTo = document.querySelector("#going-to").parentElement.parentElement;
   goingTo.setAttribute(
     "class",
@@ -176,7 +176,7 @@ var toggleTripHandler = function (event) {
 var tabKeyHandler = function (event) {
   if (event.which == 9 && document.activeElement.tagName == "INPUT") {
     var input = document.activeElement;
-   
+
     if (input.id == "going-to" || input.id == "going-from") {
       // input.value = tempAutoCompleteValue;
       closeAllLists(null, input);
@@ -184,28 +184,28 @@ var tabKeyHandler = function (event) {
   }
 };
 
-var tabsHandler = function(event) {
+var tabsHandler = function (event) {
 
 
-if (event.target.id == "flights-btn" || event.target.parentElement.id == "flights-btn") {
-  
-  activeTab = "flights";
-}
+  if (event.target.id == "flights-btn" || event.target.parentElement.id == "flights-btn") {
 
-if (event.target.id == "hotels-btn" || event.target.parentElement.id == "hotels-btn") {
-  
-  activeTab = "hotels";
-}
+    activeTab = "flights";
+  }
 
-if (event.target.id == "favorites-btn" || event.target.parentElement.id == "favorites-btn") {
+  if (event.target.id == "hotels-btn" || event.target.parentElement.id == "hotels-btn") {
 
-setTimeout(function (){
-document.querySelector("#"+activeTab+"-tab").className = "uk-active";
+    activeTab = "hotels";
+  }
 
-document.querySelector("#favorites-tab").className = "";
-},300);
+  if (event.target.id == "favorites-btn" || event.target.parentElement.id == "favorites-btn") {
 
-}
+    setTimeout(function () {
+      document.querySelector("#" + activeTab + "-tab").className = "uk-active";
+
+      document.querySelector("#favorites-tab").className = "";
+    }, 300);
+
+  }
 
 }
 
@@ -217,7 +217,7 @@ var inputBlurHandler = function (event) {
   var input = event.target;
 
   if (
-     input.id == "going-to" ||
+    input.id == "going-to" ||
     input.id == "going-from" ||
     input.id == "hotel-city"
   ) {
@@ -261,11 +261,11 @@ function autocomplete(inp, arr) {
     this.parentNode.appendChild(a);
 
     /*for each item in the array...*/
-  //  for (i = 0; i < arr.length; i++) {
+    //  for (i = 0; i < arr.length; i++) {
     for (i in arr) {
       /*check if the item starts with the same letters as the text field value:*/
       if (
-        arr[i].iata.substr(0, val.length).toUpperCase() == val.toUpperCase() ||  arr[i].city.substr(0, val.length).toUpperCase() == val.toUpperCase() 
+        arr[i].iata.substr(0, val.length).toUpperCase() == val.toUpperCase() || arr[i].city.substr(0, val.length).toUpperCase() == val.toUpperCase()
       ) {
         if (max++ >= 4) break;
         /*create a DIV element for each matching element:*/
@@ -277,60 +277,56 @@ function autocomplete(inp, arr) {
 
         if (this.id == "going-from") icon = "&#xf5b0; ";
         if (this.id == "going-to") icon = "&#xf5af; ";
-        if (this.id == "hotel-city") { icon = "&#xf594; "; 
+        if (this.id == "hotel-city") {
+          icon = "&#xf594; ";
 
-        b.innerHTML =
-          "<strong>" + arr[i].city + "</strong> ";
-        b.innerHTML +=
-          ", "+
-          arr[i].country 
-  
-          +" ("+arr[i].iata+")";
-      
+          b.innerHTML =
+            "<strong>" + arr[i].city + "</strong> ";
+          b.innerHTML +=
+            ", " +
+            arr[i].country
 
-        b.innerHTML +=
-        "<input class='fa' type='hidden' value='" +
-        icon +
-        arr[i].city +
-        ", "+
-        arr[i].country +
-        "'>";
-
-      }
-      else
-{
-        /*insert a input field that will hold the current array item's value:*/
-
-        b.innerHTML =
-        "<strong>" + arr[i].iata + "</strong> ";
-      b.innerHTML +=
-        ", "+
-        arr[i].name+
-        ", "+
-        arr[i].city+
-        ", "+
-        arr[i].country;
+            + " (" + arr[i].iata + ")";
 
 
-        
-        b.innerHTML +=
-          "<input class='fa' type='hidden' value='" +
-          icon +
-          arr[i].iata +
-          ", "+
-          arr[i].name +
-          ", "+
-          arr[i].city +
-          "'>";
-    }
+          b.innerHTML +=
+            "<input class='fa' type='hidden' value='" +
+            icon +
+            arr[i].city +
+            ", " +
+            arr[i].country +
+            "'>";
+
+        }
+        else {
+          /*insert a input field that will hold the current array item's value:*/
+
+          b.innerHTML =
+            "<strong>" + arr[i].iata + "</strong> ";
+          b.innerHTML +=
+            ", " +
+            arr[i].name +
+            ", " +
+            arr[i].city +
+            ", " +
+            arr[i].country;
+
+
+
+          b.innerHTML +=
+            "<input class='fa' type='hidden' value='" +
+            icon +
+            arr[i].iata +
+            ", " +
+            arr[i].name +
+            ", " +
+            arr[i].city +
+            "'>";
+        }
         if (max == 1)
           tempAutoCompleteValue = b.getElementsByTagName("input")[0].value;
 
         var test = b.getElementsByTagName("input");
-
-        // for (var k = 0; k < test.length; k++) {
-        //   console.log(test[k].value + k);
-        // }
 
         /*execute a function when someone clicks on the item value (DIV element):*/
         b.addEventListener("mousedown", function (e) {
@@ -377,10 +373,10 @@ function autocompleteCities(inp, arr) {
 
     /*for each item in the array...*/
     for (i = 0; i < arr.length; i++) {
- 
+
       /*check if the item starts with the same letters as the text field value:*/
       if (
-        arr[i].name.substr(0, val.length).toUpperCase() == val.toUpperCase() 
+        arr[i].name.substr(0, val.length).toUpperCase() == val.toUpperCase()
       ) {
         if (max++ >= 12) break;
         /*create a DIV element for each matching element:*/
@@ -390,37 +386,33 @@ function autocompleteCities(inp, arr) {
 
         /*make the matching letters bold:*/
 
-   
-        icon = "&#xf594; "; 
+
+        icon = "&#xf594; ";
 
         /*insert a input field that will hold the current array item's value:*/
 
         b.innerHTML =
-        "<strong>" + arr[i].name + "</strong> ";
-      b.innerHTML +=
-        ", "+
-        arr[i].subcountry+
-        ", "+
-        arr[i].country;
+          "<strong>" + arr[i].name + "</strong> ";
+        b.innerHTML +=
+          ", " +
+          arr[i].subcountry +
+          ", " +
+          arr[i].country;
 
 
-        
+
         b.innerHTML +=
           "<input class='fa' type='hidden' value='" +
           icon +
           arr[i].name +
-          ", "+
+          ", " +
           arr[i].country +
           "'>";
-    
+
         if (max == 1)
           tempAutoCompleteValue = b.getElementsByTagName("input")[0].value;
 
         var test = b.getElementsByTagName("input");
-
-        // for (var k = 0; k < test.length; k++) {
-        //   console.log(test[k].value + k);
-        // }
 
         /*execute a function when someone clicks on the item value (DIV element):*/
         b.addEventListener("mousedown", function (e) {
@@ -451,13 +443,13 @@ function closeAllLists(elmnt, inp) {
 }
 
 /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-autocomplete(document.getElementById("going-from"), mainAirports); 
+autocomplete(document.getElementById("going-from"), mainAirports);
 autocomplete(document.getElementById("going-to"), mainAirports);
 autocompleteCities(document.getElementById("hotel-city"), mainCities);
 
 flightsBtn.addEventListener("click", flightsHandler);
 hotelsBtn.addEventListener("click", hotelsHandler);
-menuTabs.addEventListener("click",tabsHandler);
+menuTabs.addEventListener("click", tabsHandler);
 
 tripSelector.addEventListener("change", toggleTripHandler);
 
@@ -469,6 +461,3 @@ document
 
 
 init();
-
-//var datep1 = jQuery.UIkit.datepicker(document.querySelector("#check-out"),{minDate:5,format: "DD/MM/YYYY"});
-//console.log(datep1);

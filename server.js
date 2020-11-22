@@ -27,7 +27,6 @@ app.get('/api/access-token', (req, res) => {
     })
     .then(function (data) {
       var accessToken = (data.access_token);
-      console.log(accessToken);
       res.json(accessToken);
     })
     .catch(function (error) {
