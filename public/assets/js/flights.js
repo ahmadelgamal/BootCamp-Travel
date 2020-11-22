@@ -54,8 +54,6 @@ var travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
 /* -------- declares common constants & variables of amadeus apis url ------- */
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
-const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-let accessToken = ""; // access token must be renewed for 30 minutes at a time
 
 /*  declares required query variables for "flight offers search" amadeus api  */
 const queryOrigin = "?originLocationCode=";
@@ -97,7 +95,8 @@ var searchFormHandler = function (event) {
     searchingMessage(); // informs user that search is running
     errorMessageEl.textContent = ""; // clears error message from previous search
     saveUrl();
-    requestAccessToken();
+    fetchFlightOffersSearch();
+    // requestAccessToken();
   }
 };
 
@@ -249,31 +248,31 @@ var collectCity = function (iataAirport) {
 /* --------------------- ENDS DATA COLLECTION FUNCTIONS --------------------- */
 
 /* ----------------------- BEGINS FETCH API FUNCTIONS ----------------------- */
-/* ------------------- fetches access token from amadeus -------------------- */
-var requestAccessToken = function () {
+// /* ------------------- fetches access token from amadeus -------------------- */
+// var requestAccessToken = function () {
 
-  const amadeusRequestAccessTokenBody = require('../../../server');
+//   const amadeusRequestAccessTokenBody = require('../../../server');
 
-  fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
-    method: "POST",
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: amadeusRequestAccessTokenBody
-  })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      accessToken = (data.access_token);
-      fetchFlightOffersSearch();
-    })
-    .catch(function (error) {
-      clearInterval(toggleInterval); // stops toggling searching message
-      searchingMessageEl.textContent = ""; // clears searching message
-      errorMessageEl.textContent = "Error! Unable to request new access token.";
-    });
-};
+//   fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
+//     method: "POST",
+//     headers: {
+//       'Content-Type': 'application/x-www-form-urlencoded',
+//     },
+//     body: amadeusRequestAccessTokenBody
+//   })
+//     .then(function (response) {
+//       return response.json();
+//     })
+//     .then(function (data) {
+//       accessToken = (data.access_token);
+//       fetchFlightOffersSearch();
+//     })
+//     .catch(function (error) {
+//       clearInterval(toggleInterval); // stops toggling searching message
+//       searchingMessageEl.textContent = ""; // clears searching message
+//       errorMessageEl.textContent = "Error! Unable to request new access token.";
+//     });
+// };
 
 /* ---------- saves api url depending on one-way or roundtrip input --------- */
 var saveUrl = function () {
