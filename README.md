@@ -33,6 +33,9 @@ Link: https://github.com/gtankha/bootcamptravel/wiki
 5. AJAX
 6. jQuery
 7. UI Kit (CSS Framework)
+8. Node.js
+9. Express.js
+10. Heroku
 
 ## GitHub Pages Deployment URL
 
