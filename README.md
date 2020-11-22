@@ -37,9 +37,9 @@ Link: https://github.com/gtankha/bootcamptravel/wiki
 9. Express.js
 10. Heroku
 
-## GitHub Pages Deployment URL
+## Heroku Deployment URL
 
-The app is deployed at the following GitHub Pages URL: https://gtankha.github.io/bootcamptravel/
+https://bootcamp-travel.herokuapp.com/
 
 ## GitHub Repo URL
 
