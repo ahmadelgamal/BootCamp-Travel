@@ -95,8 +95,18 @@ var searchFormHandler = function (event) {
     searchingMessage(); // informs user that search is running
     errorMessageEl.textContent = ""; // clears error message from previous search
     saveUrl();
-    fetchFlightOffersSearch();
-    // requestAccessToken();
+    fetch('/api/access-token', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        let accessToken = JSON.stringify(data);
+        console.log('Form Handler: ' + accessToken);
+        fetchFlightOffersSearch(accessToken);
+      })
   }
 };
 
@@ -248,32 +258,6 @@ var collectCity = function (iataAirport) {
 /* --------------------- ENDS DATA COLLECTION FUNCTIONS --------------------- */
 
 /* ----------------------- BEGINS FETCH API FUNCTIONS ----------------------- */
-// /* ------------------- fetches access token from amadeus -------------------- */
-// var requestAccessToken = function () {
-
-//   const amadeusRequestAccessTokenBody = require('../../../server');
-
-//   fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
-//     method: "POST",
-//     headers: {
-//       'Content-Type': 'application/x-www-form-urlencoded',
-//     },
-//     body: amadeusRequestAccessTokenBody
-//   })
-//     .then(function (response) {
-//       return response.json();
-//     })
-//     .then(function (data) {
-//       accessToken = (data.access_token);
-//       fetchFlightOffersSearch();
-//     })
-//     .catch(function (error) {
-//       clearInterval(toggleInterval); // stops toggling searching message
-//       searchingMessageEl.textContent = ""; // clears searching message
-//       errorMessageEl.textContent = "Error! Unable to request new access token.";
-//     });
-// };
-
 /* ---------- saves api url depending on one-way or roundtrip input --------- */
 var saveUrl = function () {
   // full "flight offers search" api url for one-way
@@ -307,7 +291,9 @@ var saveUrl = function () {
 };
 
 /* --- gets flight search results from "flight offers search" amadeus api --- */
-var fetchFlightOffersSearch = function () {
+var fetchFlightOffersSearch = function (accessToken) {
+  console.log('Fetch Request: ' + accessToken);
+
   fetch(apiUrl, {
     method: "GET",
     headers: {
