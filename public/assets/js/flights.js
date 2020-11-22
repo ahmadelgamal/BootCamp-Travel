@@ -55,8 +55,7 @@ var travelClass = travelClassEl.options[travelClassEl.selectedIndex].value;
 const baseUrl = "https://test.api.amadeus.com"; // amadeus for developers testing baseUrl
 const flightOffersSearchPath = "/v2/shopping/flight-offers"; // path for flight offers search
 const accessTokenPath = "/v1/security/oauth2/token/"; // url for requesting and checking on access token
-const accessToken = "kaHKJJAt3ODdD7WeIhp4aOd4yh6n"; // access token must be renewed for 30 minutes at a time
-const authorizationValue = "Bearer " + accessToken; // `value` of `headers` "Authorization" `key`
+let accessToken = ""; // access token must be renewed for 30 minutes at a time
 
 /*  declares required query variables for "flight offers search" amadeus api  */
 const queryOrigin = "?originLocationCode=";
@@ -98,7 +97,7 @@ var searchFormHandler = function (event) {
     searchingMessage(); // informs user that search is running
     errorMessageEl.textContent = ""; // clears error message from previous search
     saveUrl();
-    fetchFlightOffersSearch();
+    requestAccessToken();
   }
 };
 
@@ -201,32 +200,6 @@ var sortByDepartureHandler = function () {
 /* ------------------------- ENDS HANDLER FUNCTIONS ------------------------- */
 
 /* -------------------- BEGINS DATA COLLECTION FUNCTIONS -------------------- */
-/* ------------------- fetches access token from amadeus -------------------- */
-var requestAccessToken = function () {
-  const requestAccessTokenBody = 'grant_type=client_credentials&client_id=' + process.env.AMADEUS_API_KEY + '&client_secret=' + process.env.AMADEUS_API_SECRET;
-
-  fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
-    method: "POST",
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: requestAccessTokenBody
-  })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-
-    })
-    .catch(function (error) {
-      // clearInterval(toggleInterval); // stops toggling searching message
-      // searchingMessageEl.textContent = ""; // clears searching message
-      errorMessageEl.textContent = "Error! Unable to request new access token.";
-    });
-};
-
-requestAccessToken();
-
 /* ------------------- gets current values in search form ------------------- */
 var collectSearchForm = function () {
   originCode = goingFromEl.value.slice(2, 5);
@@ -276,6 +249,32 @@ var collectCity = function (iataAirport) {
 /* --------------------- ENDS DATA COLLECTION FUNCTIONS --------------------- */
 
 /* ----------------------- BEGINS FETCH API FUNCTIONS ----------------------- */
+/* ------------------- fetches access token from amadeus -------------------- */
+var requestAccessToken = function () {
+
+  const amadeusRequestAccessTokenBody = require('../../../server');
+
+  fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: amadeusRequestAccessTokenBody
+  })
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      accessToken = (data.access_token);
+      fetchFlightOffersSearch();
+    })
+    .catch(function (error) {
+      clearInterval(toggleInterval); // stops toggling searching message
+      searchingMessageEl.textContent = ""; // clears searching message
+      errorMessageEl.textContent = "Error! Unable to request new access token.";
+    });
+};
+
 /* ---------- saves api url depending on one-way or roundtrip input --------- */
 var saveUrl = function () {
   // full "flight offers search" api url for one-way
@@ -313,7 +312,7 @@ var fetchFlightOffersSearch = function () {
   fetch(apiUrl, {
     method: "GET",
     headers: {
-      Authorization: authorizationValue,
+      Authorization: "Bearer " + accessToken,
     },
   })
     .then(function (response) {
@@ -889,28 +888,3 @@ sortFlightsByPriceBtn.addEventListener("click", sortByPriceHandler);
 sortFlightsByArrivalBtn.addEventListener("click", sortByArrivalHandler);
 sortFlightsByDepartureBtn.addEventListener("click", sortByDepartureHandler);
 /* -------------------------- ENDS EVENT HANDLERS --------------------------- */
-
-/* -------------------------- BEGINS TESTING CODE --------------------------- *
-/*  CODE BELOW IS NOT PART OF THE APP. IT IS ONLY USED FOR TESTING PURPOSES   */
-/* ---------------- begins amadeus credentials status check ----------------- */
-
-// checks status of access token. expires every 30 minutes
-var accessTokenStatus = function () {
-  var fetchAccessToken = baseUrl + accessTokenPath + accessToken;
-
-  fetch(fetchAccessToken)
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      console.log(data);
-    })
-    .catch(function (error) {
-      console.log("Catch-all error for check status of access token.");
-      console.log(error);
-    });
-};
-
-// UNCOMMENT function below to check on status of access token
-accessTokenStatus();
-/* --------------------------- ENDS TESTING CODE ---------------------------- */

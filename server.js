@@ -12,4 +12,7 @@ app.get('/', (req, res) => {
   res.sendFile('index.html');
 });
 
+const amadeusRequestAccessTokenBody = 'grant_type=client_credentials&client_id=' + process.env.AMADEUS_API_KEY + '&client_secret=' + process.env.AMADEUS_API_SECRET;
+module.exports = amadeusRequestAccessTokenBody;
+
 app.listen(port, () => console.log(`App listening on port ${port}`));
