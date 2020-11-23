@@ -35,14 +35,14 @@ This app is very simple to use. Just follow these steps:
   - For flights: by price, departure time, or arrival time
 - Scroll through the list of search results
 - Pick your favorite hotel or flight
-- Click on the favorite icon to save it to memory (you may choose up to 5 flights and/or 5 hotels)
+- Click on the favorite icon to save it to memory
 - Revisit the website at any time to see your favorite items, or make new searches!
 
 ## Technologies Used
 
 1. HTML5
 2. CSS3
-3. JavaScript ES6
+3. JavaScript
 4. JSON
 5. AJAX
 6. jQuery
@@ -53,7 +53,15 @@ This app is very simple to use. Just follow these steps:
 
 ## Cloning
 
-If you wish to clone this app, you will need to generate your own api keys for flights, from Amadeus, and for hotels, from RapidApi. You will also need to include the Amadeus API credentials in a `.env` file for testing, and to set it in `heroku` configurations, or whatever other host you use.
+If you wish to clone this app, you will need to:
+
+1. Generate your own API credentials for hotels, from RapidApi.
+1. Generate your own API credentials for flights, from Amadeus.
+1. Include the Amadeus API credentials in a `.env` file for testing. There is a sample `.env` file in `lib/v2-assets` named `dotenv`:
+   1. Rename that file to `.env`.
+   1. Move it to the root directory.
+   1. Enter your Amadeus API credentials in the corresponding variables.
+1. Set the Amadeus API credentials in `heroku` configurations, or whatever other host you use.
 
 ## Collaborators (Group Members)
 
