@@ -93,7 +93,7 @@ var searchFormHandler = function (event) {
     amadeusData = []; // clears previous fetch from memory;
     showFlights(); // calls function in script.js to display id=flights-container (overall flights container)
     searchingMessage(); // informs user that search is running
-    errorMessageEl.textContent = ""; // clears error message from previous search
+    errorMessageEl.innerHTML = ""; // clears error message from previous search
     saveUrl();
     fetch('/api/access-token', {
       method: 'GET',
@@ -105,7 +105,7 @@ var searchFormHandler = function (event) {
       .then(data => {
         let accessToken = data;
         fetchFlightOffersSearch(accessToken);
-      })
+      });
   }
 };
 
@@ -129,7 +129,7 @@ var dateReturnHandler = function () {
 };
 
 /* ----------- handler for favorites button on top of search form ----------- */
-var favoritesBtnHandler = function (event) {
+var favoritesBtnHandler = function () {
   var favoriteFlightsLS = getFavoriteFlightsLS();
 
   // if it's not empty, then create favorites elements from data in localStorage
@@ -252,7 +252,7 @@ var collectFavoriteFlightData = function (favoriteFlightBtn) {
 
 /* ---------------- uses iata airport code to get city name ----------------- */
 var collectCity = function (iataAirport) {
-  return mainAirports[iataAirport].city;
+  return mainAirports[iataAirport].city; // calls object in a different file
 };
 /* --------------------- ENDS DATA COLLECTION FUNCTIONS --------------------- */
 
@@ -312,8 +312,7 @@ var fetchFlightOffersSearch = function (accessToken) {
     .catch(function (error) {
       clearInterval(toggleInterval); // stops toggling searching message
       searchingMessageEl.textContent = ""; // clears searching message
-      errorMessageEl.textContent =
-        "Error! Please check the dates and airport codes.";
+      errorMessageEl.innerHTML = error + "<br />Please check the dates and airport codes.";
     });
 };
 
