@@ -2,6 +2,10 @@
 
 Do you travel? If yes, and you want to compare prices for airfare and lodging to make a more informed decision when you are ready to pay, then BootCamp Travel can help you search, save favorites, and retreive them as needed!
 
+## Version
+
+This is version 2 of the app. Version 1 was only frontend. This version (2) includes both frontend and backend development.
+
 ## Purpose of App
 
 - As a frequent traveler...
