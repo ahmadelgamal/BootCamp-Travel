@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en" class="uk-background-muted">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <!-- UIkit CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.5.7/css/uikit.min.css"
+    />
+    <link rel="stylesheet" href="./assets/css/uikit.gradient.addons.min.css" />
+    <!-- Font Awesome CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/solid.min.css"
+    />
+    <!-- Google Fonts CSS -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Custom CSS -->
+    <link href="assets/css/style.css" rel="stylesheet" />
+
+    <title>Bootcamp Travel</title>
+  </head>
+
+  <body>
+    <!-- begins navbar / topbar -->
+    <nav class="uk-navbar-container" uk-navbar>
+      <div class="uk-navbar-center">
+        <h3><span class="fa">&#xf19c;</span> Bootcamp Travel</h3>
+      </div>
+    </nav>
+    <!-- ends navbar / topbar -->
+
+    <!-- begins search form container -->
+    <div class="hero uk-flex uk-flex-center uk-flex-middle">
+      <!-- begins search form -->
+      <form
+        autocomplete="off"
+        id="form"
+        class="uk-form-stacked uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s uk-background-default uk-border-rounded uk-box-shadow-large"
+      >
+        <div class="uk-margin-small-top">
+          <ul id="menu-tabs" class="uk-flex-center" uk-tab>
+            <li id="flights-tab" class="uk-active">
+              <a id="flights-btn" href="#"
+                ><span class="fa">&#xf072; </span>Flights</a
+              >
+            </li>
+            <li id="hotels-tab">
+              <a id="hotels-btn" href="#"
+                ><span class="fa">&#xf594; </span>Hotels</a
+              >
+            </li>
+            <li id="favorites-tab">
+              <a id="favorites-btn" href="#"
+                ><span class="fa">&#xf004; </span></a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical"
+        >
+          <!--departure input with custom autocomplete (default is turned off) -->
+          <div class="uk-form-controls relative">
+            <input
+              autocomplete="off"
+              class="uk-input uk-border-rounded fa"
+              id="going-from"
+              type="text"
+              placeholder="&#xf5b0;  From: (City or Airport Code)"
+            />
+          </div>
+        </div>
+
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical"
+        >
+          <!--arrival input with custom autocomplete (default browser autocomplete is turned off) -->
+          <div class="uk-form-controls relative">
+            <input
+              autocomplete="off"
+              class="uk-input uk-border-rounded fa"
+              id="going-to"
+              type="text"
+              placeholder="&#xf5af;  To: (City or Airport Code)"
+            />
+          </div>
+        </div>
+
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical"
+        >
+          <!--arrival input with custom autocomplete (default browser autocomplete is turned off) -->
+          <div class="uk-form-controls relative">
+            <input
+              autocomplete="off"
+              class="uk-input uk-border-rounded fa"
+              id="hotel-city"
+              type="text"
+              placeholder="&#xf594;  To:"
+            />
+          </div>
+        </div>
+
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical hide"
+        >
+          <!-- check-in datepicker -->
+          <div class="uk-form-controls">
+            <input
+              class="uk-input uk-border-rounded fa"
+              
+              data-uk-datepicker="{minDate:0,format:'MM/DD/YYYY'}"
+              id="check-in"
+              type="text"
+              placeholder="&#xf783;  Check In:"
+            />
+          </div>
+        </div>
+
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical hide"
+        >
+          <div class="uk-form-controls">
+            <!--check out datepicker-->
+            <input
+              class="uk-input uk-border-rounded fa"
+              readonly
+              data-uk-datepicker="{minDate:0,format:'MM/DD/YYYY'}"
+              id="check-out"
+              type="text"
+              placeholder="&#xf783;  Check Out:"
+            />
+          </div>
+        </div>
+
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical"
+        >
+          <div class="uk-form-controls">
+            <select class="uk-select uk-width-3-10 uk-border-rounded" id="trip">
+              <option selected>One-way</option>
+              <option>Roundtrip</option>
+            </select>
+
+            <select
+              class="uk-select uk-border-rounded uk-width-3-10 fa"
+              id="travel-class"
+            >
+              <option value="ECONOMY">Economy</option>
+              <option value="PREMIUM_ECONOMY">Premium Economy</option>
+              <option value="BUSINESS">Business</option>
+              <option value="FIRST">First</option>
+            </select>
+
+            <select
+              class="uk-select uk-width-3-10 uk-border-rounded"
+              id="guests-select"
+            >
+              <option>1 Adult</option>
+              <option>2 Adults</option>
+            </select>
+
+            <button
+              id="hotels-search"
+              class="uk-button uk-button-small uk-align-right uk-width-1-6 uk-button-primary uk-border-rounded uk-margin-remove-vertical xs-size-button fa"
+            >
+              &#xf002;
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="uk-margin-small uk-padding-small uk-padding-remove-vertical"
+        >
+          <div class="uk-form-controls">
+            <!--departure datepicker-->
+            <input
+              class="uk-input uk-border-rounded uk-width-2-5 fa"
+              readonly="true"
+              data-uk-datepicker="{minDate:0,format:'YYYY-MM-DD'}"
+              id="date-departure"
+              placeholder="&#xf783;  Departs:"
+              />
+              
+              <!-- type="text" -->
+            <!-- type="text" -->
+            <input
+              class="uk-input uk-border-rounded uk-width-2-5 fa"
+              readonly="true"
+              data-uk-datepicker="{minDate:0,format:'YYYY-MM-DD'}"
+              id="date-return"
+              placeholder="&#xf783;  Returns:"
+            />
+
+            <button
+              id="flights-search"
+              class="uk-button uk-button-small uk-width-1-6 uk-button-primary uk-border-rounded uk-margin-remove-vertical xs-size-button fa"
+            >
+              &#xf002;
+            </button>
+          </div>
+        </div>
+      </form>
+      <!-- ends search form -->
+    </div>
+    <!-- ends search form container -->
+
+    <!-- begins past search (favorites) container-->
+    <div
+      id="past-search-container"
+      class="uk-container uk-container-center uk-padding-small width-maxed"
+    >
+      <h3>Your saved favorites:</h3>
+
+      <!-- begins buttons to select favorites by flights or hotels -->
+      <div
+        id="favorites-sub-menu"
+        class="uk-flex uk-flex-center uk-padding-remove-horizontal margin-zero uk-margin-medium-bottom"
+      >
+        <button
+          class="uk-button uk-button-small uk-margin-small-right uk-button-default uk-border-rounded dropdown xs-size-button"
+          id="favorite-flights"
+          type="button"
+        >
+          Flights
+        </button>
+
+        <button
+          class="uk-button uk-button-small uk-margin-small-left uk-button-default uk-border-rounded dropdown xs-size-button"
+          id="favorite-hotels"
+          type="button"
+        >
+          Hotels
+        </button>
+      </div>
+      <!-- ends buttons to select favorites by flights or hotels -->
+
+      <!-- begins past flights search (favorite flights) grid-->
+      <div
+        id="flight-favorites-grid"
+        class="uk-grid uk-width-1-1 uk-border-rounded uk-background-muted uk-padding-remove-horizontal margin-zero"
+      >
+        <!-- begins single past flights search (favorite flights), should be created dynamically with JS-->
+     
+        <!-- ends single past flights search (favorite flights) -->
+      </div>
+      <!-- ends past flights search (favorite flights) grid-->
+
+      <!-- begins past hotels search (hotel favorites) grid-->
+      <div
+      id="hotel-favorites-grid"
+      class="uk-grid uk-width-1-1 uk-padding-remove-horizontal margin-zero uk-margin-top"
+    >
+      <!-- class="uk-grid uk-width-1-1 uk-border-rounded uk-background-muted uk-padding-remove-horizontal margin-zero" -->
+      <!-- ends single past hotels search (favorite hotels) -->
+    </div>
+      <!-- ends past hotels search (hotel favorites) grid-->
+    </div>
+    <!-- ends past search (favorites) container-->
+
+    <!-- begins overall flights container -->
+    <div
+      id="flights-container"
+      class="uk-container uk-container-center uk-padding-small width-maxed uk-text-center"
+    >
+      <!-- begins flights sorting menu / dropdowns -->
+      <div
+        id="flights-sub-menu"
+        class="uk-flex uk-flex-center uk-padding-remove-horizontal margin-zero"
+      >
+        <button
+          id="sort-flight-price"
+          class="uk-button uk-button-small uk-margin-small-right uk-button-default uk-border-rounded xs-size-button"
+          type="button"
+        >
+          Price <span id="price-sorting-arrow">↑</span>
+        </button>
+
+        <button
+          id="sort-flight-arrival"
+          class="uk-button uk-button-small uk-button-default uk-border-rounded xs-size-button"
+          type="button"
+        >
+          Arrival <span id="arrival-sorting-arrow"></span>
+        </button>
+
+        <button
+          id="sort-flight-departure"
+          class="uk-button uk-button-small uk-margin-small-left uk-button-default uk-border-rounded xs-size-button"
+          type="button"
+        >
+          Departure <span id="departure-sorting-arrow"></span>
+        </button>
+
+        <!-- end of flights menu container -->
+      </div>
+      <!-- ends flights sorting menu / dropdowns -->
+
+      <h3 id="flights-searching-message"></h3>
+      <h3 id="flights-error-message"></h3>
+
+      <!-- begins flights grid -->
+      <div
+        id="flights-grid"
+        class="uk-grid uk-width-1-1 uk-border-rounded uk-padding-remove-horizontal margin-zero"
+      >
+        <!-- THIS IS NOT AN ELEMENT - begins single flight (trip) container, must be generated dymanically with JS and then appended to the div above (id="flights-grid") -->
+       
+        <!-- THIS IS NOT AN ELEMENT - ends single flight (trip) container -->
+      </div>
+      <!-- ends flights grid -->
+    </div>
+    <!-- ends overall flights container -->
+
+    <!-- begins overall hotels container -->
+    <div
+      id="hotels-container"
+      class="uk-container uk-padding-small width-maxed"
+    >
+      <div
+        id="hotels-sub-menu"
+        class="uk-flex uk-flex-center uk-padding-remove-horizontal margin-zero height-maxed"
+      >
+        <button
+          class="uk-button uk-button-small uk-margin-small-right uk-button-default uk-border-rounded xs-size-button"
+          id="sort-hotel-price"
+          type="button"
+        >
+          Price
+        </button>
+
+        <button
+          class="uk-button uk-button-small uk-margin-small-left uk-button-default uk-border-rounded xs-size-button"
+          id="sort-hotel-rating"
+          type="button"
+        >
+          Rating
+        </button>
+      </div>
+
+      <!-- ends favorites container -->
+
+      <h3 id="searching-message-hotel"></h3>
+      <h3 id="error-message-hotel"></h3>
+
+      <!-- this is the hotels container grid. All single hotel offers should be appended here with JS -->
+      <div
+        id="hotels-grid"
+        class="uk-grid uk-width-1-1 uk-padding-remove-horizontal margin-zero uk-margin-top"
+      >
+        <!--this is a single hotel. this grid must be generated dynamically through JS and appended to the div above (id="hotels-container")-->
+        <div
+          class="uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal margin-zero test-border"
+        >
+          <div
+            class="uk-border-rounded uk-width-1-3@m uk-width1-1@s uk-background-default padding-none uk-flex uk-flex-middle margin-zero"
+          >
+            <img
+              class="uk-border-rounded"
+              src="https://images.trvl-media.com/hotels/1000000/30000/20900/20835/88bc9393.jpg"
+            />
+          </div>
+
+          <div class="uk-grid uk-width-2-3@m uk-width-1-1@s">
+            <div class="uk-width-1-2 uk-margin-medium">
+              <h4>Travelodge by Wyndham, Santa Clarita/Valencia</h4>
+              <p>
+                Canyon Country <br />
+                <span class="uk-text-success">Reserve Now, Pay Later</span
+                ><br />
+                <span class="uk-text-success">Free Cancellation</span>
+                <span class="uk-position-bottom uk-position-relative"
+                  >3.3/5 Rating (1000 Reviews)</span
+                >
+              </p>
+            </div>
+
+            <div
+              class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price"
+            >
+              <h2 class="uk-margin-remove-vertical">
+                $109
+              </h2>
+              <b>per Night</b>
+              <button
+                class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide"
+              >
+                Reserve
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- end of single hotel grid-->
+      </div>
+
+      <h3 id="hotels-searching-message"></h3>
+      <h3 id="hotels-error-message"></h3>
+
+    
+      <!-- end of hotels grid -->
+    </div>
+    <!-- ends overall hotels container -->
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+    <!-- UIkit -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.8.0/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.5.7/js/uikit.min.js"></script>
+
+    <!-- moment -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+
+    <!-- date selector -->
+    <script src="./assets/js/datepicker.min.js"></script>
+    <!-- database of airports for flights autocomplete -->
+    <script src="./assets/js/airports.js"></script>
+    <!-- database of cities for hotels autocomplete -->
+    <script src="./assets/js/world-cities.js"></script>
+
+    <script src="./assets/js/script.js"></script>
+    <script src="./assets/js/hotel.js"></script>
+    <script src="./assets/js/flights.js"></script>
+  </body>
+</html>
