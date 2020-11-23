@@ -70,7 +70,7 @@ const currencyCode = "USD"; // default is EUR.
 /* ---------------- declares variables for amadeus api urls ----------------- */
 var oneWayFlightOffersSearchApiUrl;
 var roundTripFlightOffersSearchApiUrl;
-var apiUrl;
+var flightsApiUrl;
 
 /* ---------------- declares constants for daisycon api urls ---------------- */
 const daisyconHost = "https://daisycon.io/images/airline/?";
@@ -297,17 +297,17 @@ var saveUrl = function () {
 
   // one-way was selected
   if (returnDate === "") {
-    apiUrl = oneWayFlightOffersSearchApiUrl;
+    flightsApiUrl = oneWayFlightOffersSearchApiUrl;
     // roundtrip was selected
   } else if (returnDate !== "") {
-    apiUrl = roundTripFlightOffersSearchApiUrl;
+    flightsApiUrl = roundTripFlightOffersSearchApiUrl;
   }
 };
 
 /* --- gets flight search results from "flight offers search" amadeus api --- */
 var fetchFlightOffersSearch = function (accessToken) {
 
-  fetch(apiUrl, {
+  fetch(flightsApiUrl, {
     method: "GET",
     headers: {
       Authorization: "Bearer " + accessToken,
@@ -322,7 +322,7 @@ var fetchFlightOffersSearch = function (accessToken) {
       clearInterval(toggleInterval); // stops toggling searching message
       searchingMessageEl.innerHTML =
         amadeusData.meta.count + " flights available!"; // displays number of matching search results
-      priceSortingArrow.textContent = "↑"; // resets sorting order with every new search to price increasing
+      priceSortingArrow.innerHTML = "↑"; // resets sorting order with every new search to price increasing
       createFlightElements(amadeusData);
     })
     .catch(function (error) {
@@ -458,10 +458,10 @@ var sortByPrice = function () {
   // creates a disconnected copy of the data object
   var sortedData = JSON.parse(JSON.stringify(amadeusData));
 
-  if (priceSortingArrow.textContent === "↑") {
+  if (priceSortingArrow.innerHTML === "↑") {
     // resets the data to its original order (sorted by price up)
     sortedData = JSON.parse(JSON.stringify(amadeusData));
-  } else if (priceSortingArrow.textContent === "↓") {
+  } else if (priceSortingArrow.innerHTML === "↓") {
     // reverses the default sort order to become price down
     var reversedArray = sortedData.data.reverse();
     sortedData.data = reversedArray;
@@ -490,9 +490,9 @@ var sortByArrival = function () {
     } else if (timeA < timeB) {
       comparison = -1;
     }
-    if (arrivalSortingArrow.textContent === "↑") {
+    if (arrivalSortingArrow.innerHTML === "↑") {
       return comparison;
-    } else if (arrivalSortingArrow.textContent === "↓") {
+    } else if (arrivalSortingArrow.innerHTML === "↓") {
       return comparison * -1;
     }
   }
@@ -519,9 +519,9 @@ var sortByDeparture = function () {
     } else if (timeA < timeB) {
       comparison = -1;
     }
-    if (departureSortingArrow.textContent === "↑") {
+    if (departureSortingArrow.innerHTML === "↑") {
       return comparison;
-    } else if (departureSortingArrow.textContent === "↓") {
+    } else if (departureSortingArrow.innerHTML === "↓") {
       return comparison * -1;
     }
   }
@@ -536,6 +536,9 @@ var sortByDeparture = function () {
 /* ------------------- BEGINS DOM-MANIPULATION FUNCTIONS -------------------- */
 /* ------ writes data from "flight offers search" amadeus api to html ------- */
 var createFlightElements = function (data) {
+  // clears data from previous search
+  flightsGridEl.innerHTML = "";
+
   // shows flights sorting menu
   sortFlightsMenuEl.style.display = "";
 
