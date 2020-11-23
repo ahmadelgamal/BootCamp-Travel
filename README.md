@@ -71,13 +71,14 @@ This app is very simple to use. Just follow these steps:
 
 If you wish to clone this app, you will need to:
 
-1. Generate your own API credentials for hotels, from RapidApi.
 1. Generate your own API credentials for flights, from Amadeus.
-1. Include the Amadeus API credentials in a `.env` file for testing. There is a sample `.env` file in `lib/v2-assets` named `dotenv`:
+1. Generate your own API Key for hotels, from RapidApi.
+1. For testing on your local machine, there is a sample file in `lib/v2-assets` named `dotenv`:
    1. Rename that file to `.env`.
    1. Move it to the root directory.
    1. Enter your Amadeus API credentials in the corresponding variables.
-1. Set the Amadeus API credentials in `heroku` configurations, or whatever other host you use.
+   1. Enter your Rapid API Key in the corresponding variable.
+1. For production, set the API credentials manually in `heroku` configurations, or whatever other host you use.
 
 ## Collaborators
 

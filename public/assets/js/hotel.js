@@ -22,7 +22,6 @@ var hotelsTabEl = document.getElementById("hotels-tab");
 
 
 /* -------------------- DISPLAYS PROPERTY INFORMATION BASED ON THE PROPERTIES IDs RETURNED WITHIN A CITY -------------------- */
-
 var displayPropertyInfo = function (
   newHotellay1,
   identity,
@@ -42,7 +41,6 @@ var displayPropertyInfo = function (
 
 
   // Add DOM elements to display the property
-
   var hotellayvar = "hotellay" + newHotellay1.id + j.toString();
   // the parent element in newHotelallay1 will depend on whether it needs to be displayed as a search result or favorite
   $(newHotellay1).append(
@@ -74,8 +72,6 @@ var displayPropertyInfo = function (
       identity +
       '">Favorites</button> </div> </div>'
     );
-
-  
   }
   else {
     $(newHotellay2).append(
@@ -93,15 +89,13 @@ var displayPropertyInfo = function (
       pricee +
       '</h2> <b>per Night</b> <button class="unreserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-danger uk-border-rounded"  id="' +
       identity +
-      '">Remove</button> </div> </div>'+
-       '</div>  </div>'
+      '">Remove</button> </div> </div>' +
+      '</div>  </div>'
     );
   }
- 
 }
 
 /* -------------------- OBTAIN ID FOR CITY REQUIRED FOR PROPERTY SEARCH-------------------- */
-
 var GetIdhotel = function (City, checkIn, checkOut) {
   fetch(
     "https://cors-anywhere.herokuapp.com/https://hotels4.p.rapidapi.com/locations/search?locale=en_US&query=" +
@@ -144,19 +138,16 @@ var GetIdhotel = function (City, checkIn, checkOut) {
               checkOutDt: checkOut,
             };
             localStorage.setItem("tempHotel", JSON.stringify(tempHotel));
-          } else {
-           // $("#hotels-container").append(
-             // '<div class = "temporary"> Sorry, information for this city is not available. Coming soon. Please try another city </div'
-             errorgMessageEl2.innerHTML = "Sorry, there was an error loading the results. Please try again "; 
-           // ); // Message incase there is no cityinformation or city is not found
+          }
+          else {
+            errorgMessageEl2.innerHTML = "Sorry, there was an error loading the results. Please try again ";
           }
         });
       }
     })
+    // Message incase there is an error connecting
     .catch(function (error) {
-      errorgMessageEl2.innerHTML = "Sorry, there was an error loading the results. Please try again "; 
-      // Message incase there is an error connecting
-     
+      errorgMessageEl2.innerHTML = "Sorry, there was an error loading the results. Please try again ";
     });
 };
 
@@ -170,10 +161,7 @@ var getProperties = function (
   checkOutDate,
   pgSize,
   adultNumber
-)   {
-
-  //$("#hotels-container").append(
-   // '<div class = "temporary"> <h3 id="searching-message">Searching... </h3> </div>');
+) {
   searchingMessageEl2.innerHTML = "Searching...";
   var url6 =
     "https://cors-anywhere.herokuapp.com/https://hotels4.p.rapidapi.com/properties/list?currency=" +
@@ -206,7 +194,6 @@ var getProperties = function (
         $(".temporary").empty();
       }
 
-
       if (response.ok) {
         response.json().then(function (data6) {
           $("#hotels-container").css("display", ""); // Unhide the document class
@@ -219,30 +206,25 @@ var getProperties = function (
             }
 
             // get page number and total count 
-            
-            if ((typeof data6.data.body.searchResults.pagination != "undefined" )) {
+            if ((typeof data6.data.body.searchResults.pagination != "undefined")) {
               var pagen = data6.data.body.searchResults.pagination.currentPage;
               var nextPage = data6.data.body.searchResults.pagination.nextPageNumber;
-        
-            if((pagen > nextPage)&&(pagen >1)) {
-              $(newHotellay).append('<div class = "uk-grid uk-inline .uk-width-1-1 uk-margin-medium-bottom"> <button class="previousButton uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-small uk-button-primary uk-border-rounded uk-position-top-center" id="previousButton"> Previous Page </button> </div>');
+
+              if ((pagen > nextPage) && (pagen > 1)) {
+                $(newHotellay).append('<div class = "uk-grid uk-inline .uk-width-1-1 uk-margin-medium-bottom"> <button class="previousButton uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-small uk-button-primary uk-border-rounded uk-position-top-center" id="previousButton"> Previous Page </button> </div>');
+              }
+
+              if (pagen < nextPage) {
+                if (pagen > 1) {
+                  $(newHotellay).append('<div class = "uk-grid uk-inline .uk-width-1-1 uk-margin-medium-bottom"> <button class="nextButton uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-small uk-button-primary uk-border-rounded uk-position-top-right" id="nextButton"> Next Page </button> <button class="previousButton uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-small uk-button-primary uk-border-rounded uk-position-top-left uk-margin-medium-left" id="previousButton"> Previous Page </button> </div>');
+                }
+                else {
+                  $(newHotellay).append('<div class = "uk-grid uk-inline .uk-width-1-1 uk-margin-medium-bottom"> <button class="nextButton uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-small uk-button-primary uk-border-rounded uk-position-top-center" id="nextButton"> Next Page </button> </div>');
+                }
+              }
             }
 
-             if (pagen < nextPage){
-            if (pagen > 1){
-             $(newHotellay).append('<div class = "uk-grid uk-inline .uk-width-1-1 uk-margin-medium-bottom"> <button class="nextButton uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-small uk-button-primary uk-border-rounded uk-position-top-right" id="nextButton"> Next Page </button> <button class="previousButton uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-small uk-button-primary uk-border-rounded uk-position-top-left uk-margin-medium-left" id="previousButton"> Previous Page </button> </div>');
-            }
-             else {
-              $(newHotellay).append('<div class = "uk-grid uk-inline .uk-width-1-1 uk-margin-medium-bottom"> <button class="nextButton uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-small uk-button-primary uk-border-rounded uk-position-top-center" id="nextButton"> Next Page </button> </div>');
-             }
-            
-             }   
-             
-            }
-            
             // Get remaining information about the hotel properties
-
-       //     searchingMessageEl2.innerHTML = tct+ ' hotels available';
             for (i = 0; i < propId.length; i++) {
               // the if statements account for any information on the server that might be undefined 
               var propIde = [];
@@ -282,9 +264,7 @@ var getProperties = function (
               }
 
               if (((typeof data6.data.body.searchResults.results[i].address.streetAddress) || (typeof data6.data.body.searchResults.results[i].address.locality) || (typeof data6.data.body.searchResults.results[i].address.region) || (typeof data6.data.body.searchResults.results[i].address.postalCode) || (typeof data6.data.body.searchResults.results[i].address.countryName)) == "undefined") {
-
                 var address = "Missing Address Information"
-
               }
               else {
 
@@ -322,16 +302,14 @@ var getProperties = function (
                 neighbourhoodName,
                 price
               );
+
               if (hotels != null) {
-                
+
                 for (k = 0; k < hotels.length; k++) {
-               
+
                   if (hotels[k].IdCity == propIde[i]) {
-               
-                    
-                    //  $("#"+propIde[i]).css("background", "red");
-                      $("#"+propIde[i]).html("Remove");
-                      $("#"+propIde[i]).removeClass("reserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded").addClass("unreserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-danger uk-border-rounded");
+                    $("#" + propIde[i]).html("Remove");
+                    $("#" + propIde[i]).removeClass("reserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded").addClass("unreserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-danger uk-border-rounded");
                   }
                 }
               }
@@ -343,15 +321,15 @@ var getProperties = function (
           }
         });
       }
-    
+
       $(".temporary").empty();
       searchingMessageEl2.innerHTML = "";
     })
-
     .catch(function (error) {
       errorgMessageEl2.innerHTML = "Sorry, there was an error loading the results. Please try again ";  // Message incase there is an error connecting
     });
 };
+
 /* -------------------- PULL LOCAL STORAGE DATA AND HOTELS -------------------- */
 var setInitial = function () {
   hotels = JSON.parse(localStorage.getItem("hotels"));
@@ -364,9 +342,8 @@ var setInitial = function () {
   if (tempHotel !== null) {
     localStorage.removeItem("tempHotel");
   }
-setFavData();
+  setFavData();
 }
-
 
 /* -------------------- SET SORTING ORDER AND DISPLAY -------------------- */
 var SortOrderFunction = function (sortSelect) {
@@ -460,22 +437,19 @@ var SortOrderFunction = function (sortSelect) {
 };
 
 /*--------------------- CHECK FOR EXISTING FAVORITES ------------------*/
-
 var unReserve = function (propval) {
-hotels = JSON.parse(localStorage.getItem("hotels"));
-if (hotels != "") {
-  for (i = 0; i < hotels.length; i++) {
+  hotels = JSON.parse(localStorage.getItem("hotels"));
+  if (hotels != "") {
+    for (i = 0; i < hotels.length; i++) {
 
-    if (hotels[i].IdCity == propval) {
-        hotels.splice(i,1);
+      if (hotels[i].IdCity == propval) {
+        hotels.splice(i, 1);
+      }
     }
   }
 }
 
-}
-
 /* --------------------- GET FAVORITES DATA -----------------*/
-
 var setFavData = function () {
 
   hotels = JSON.parse(localStorage.getItem("hotels"));
@@ -499,11 +473,10 @@ var setFavData = function () {
         hotels[i].price
       );
     }
-}
+  }
 }
 
 /* --------------------- GET PROPERTY DATA FUNCTION CALL -----------------*/
-
 var propData = function () {
 
   var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
@@ -527,14 +500,9 @@ var propData = function () {
       adults
     );
   }
-
-  }
-
-
-
+}
 
 /* -------------------- PULL LOCAL STORAGE-------------------- */
-
 setInitial();
 
 /* -------------------- PROCESS REQUEST FOR HOTEL SEARCH-------------------- */
@@ -542,25 +510,19 @@ $("#form").on("submit", function (event) {
   if (hotelsTabEl.className === "uk-active") {
     event.preventDefault();
 
-
     $("#hotels-grid").empty(); // Empties previous display
     $("#hotel-favorites-grid").empty();
     $(".temporary").empty();
     errorgMessageEl2.innerHTML = "";
     searchingMessageEl2.innerHTML = "";
-    // $(".temporary").empty();
 
     // Read city value from form
     city = $("#hotel-city").val();
-    
 
     if (city == "") {
-
-      errorgMessageEl2.innerHTML = "Sorry, the city name is missing. Please try again "; 
-    
+      errorgMessageEl2.innerHTML = "Sorry, the city name is missing. Please try again ";
     }
     else {
-
       city = city.trim();
       var spc2 = city.split("");
       var spc3 = spc2[1].trim();
@@ -573,7 +535,6 @@ $("#form").on("submit", function (event) {
       checkOutDt = moment(checkOutDt, "MM-DD-YYYY");
       checkOutDt = moment(checkOutDt).format("YYYY-MM-DD");
       adults = $("#guests-select").val();
-
 
       if (sortOrd == "PRICE") {
         $("#sort-hotel-price").html("<b>PRICE ↑</b>"); // changes display based ascending or descending order
@@ -592,19 +553,13 @@ $("#form").on("submit", function (event) {
         $("#sort-hotel-rating").html("<b>RATING ↓</b>");
       }
 
-
       // Make sure check-in date is before the check-out date 
-
       if (moment(checkOutDt).isAfter(checkInDt)) {
-
         GetIdhotel(city, checkInDt, checkOutDt);
-
         $("#hotels-sub-menu").show();
       }
       else {
-
-        
-          errorgMessageEl2.innerHTML = "Sorry, check-in date needs to be before the check-out date "; 
+        errorgMessageEl2.innerHTML = "Sorry, check-in date needs to be before the check-out date ";
       }
     }
   }
@@ -659,7 +614,6 @@ $(document).on("click", ".reserve", function () {
   hotels = JSON.parse(localStorage.getItem("hotels"));
 
   //sets initial values if null
-
   if (hotels == null) {
     var hotels = [
       {
@@ -741,8 +695,7 @@ $(document).on("click", "#sort-hotel-rating", function () {
 /* -------------------- PROCESS REQUEST FOR CLICKING ON FAVORITES------------------ */
 
 $(document).on("click", "#favorites-btn", function () {
-  
-  
+
   $("#hotels-grid").empty();
   $("#hotel-favorites-grid").empty();
   searchingMessageEl2.innerHTML = "";
@@ -750,7 +703,7 @@ $(document).on("click", "#favorites-btn", function () {
   $("#hotels-sub-menu").hide(); // hide the sorting bar
   $("#hotel-favorites-grid").parent().show();
   setFavData();
-  }
+}
 
 );
 $(document).on("click", "#hotels-tab", function () {
@@ -764,7 +717,7 @@ $(document).on("click", "#hotels-tab", function () {
   errorgMessageEl2.innerHTML = "";
 
   if (tempHotel != null) {
-  
+
     getProperties(
       tempHotel.cityIdent,
       curr,
@@ -780,32 +733,27 @@ $(document).on("click", "#hotels-tab", function () {
 );
 
 /* -------------------- PROCESS REQUEST FOR DELETING FAVORITES------------------ */
-
-
 $(document).on("click", ".unreserve", function () {
   var propval = this.getAttribute("id");
   var inFavorites = ($(this).parent().parent().parent().attr("id")).includes("hotel-favorites-grid"); // Check if the request is coming from favorites or a search. 
-  
+
   unReserve(propval);
 
-  if (inFavorites){  // if request is coming from the favorite tag, then delete the favorite when user chooses to remove
-  localStorage.setItem("hotels", JSON.stringify(hotels));
-  //$(this).css("background", "DodgerBlue"); ---- REMOVE
+  if (inFavorites) {  // if request is coming from the favorite tag, then delete the favorite when user chooses to remove
+    localStorage.setItem("hotels", JSON.stringify(hotels));
 
-  $("#hotels-grid").empty();
-  $("#hotel-favorites-grid").empty();
-  
-  hotels = JSON.parse(localStorage.getItem("hotels"));
-  // Display favorites
-  setFavData();
-} 
-else {  // If request is coming from a search, then you can toggle the button to add or delete the favorite
-localStorage.setItem("hotels", JSON.stringify(hotels));
-$(this).html("FAVORITES");
-$(this).removeClass("unreserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-danger uk-border-rounded").addClass("reserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded");
+    $("#hotels-grid").empty();
+    $("#hotel-favorites-grid").empty();
 
-}
-
+    hotels = JSON.parse(localStorage.getItem("hotels"));
+    // Display favorites
+    setFavData();
+  }
+  else {  // If request is coming from a search, then you can toggle the button to add or delete the favorite
+    localStorage.setItem("hotels", JSON.stringify(hotels));
+    $(this).html("FAVORITES");
+    $(this).removeClass("unreserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-danger uk-border-rounded").addClass("reserve uk-button uk-margin-small-top uk-margin-small-bottom uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded");
+  }
 });
 
 /* -------------------- GO TO NEXT PAGE OF SEARCH RESULTS (PAGEINATION)----------------- */
@@ -813,14 +761,11 @@ $(document).on("click", "#nextButton", function () {
   hotels = JSON.parse(localStorage.getItem("hotels"));
   pageNumber = pageNumber + 1;
   propData();
-  
 });
 
 /* -------------------- GO TO PREVIOUS PAGE OF SEARCH RESULTS (PAGEINATION)----------------- */
 $(document).on("click", "#previousButton", function () {
-
   hotels = JSON.parse(localStorage.getItem("hotels"));
   pageNumber = pageNumber - 1;
   propData();
 });
-
