@@ -9,10 +9,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-// api get request from flights search to get access token from amadeus
-app.get('/api/amadeus-access-token', (req, res) => {
-
-  /* ------------------- fetches access token from amadeus -------------------- */
+/* ------------------- fetches access token from amadeus -------------------- */
+function fetchAmadeusAccessToken(req, res) {
   const amadeusRequestAccessTokenBody = 'grant_type=client_credentials&client_id=' + process.env.AMADEUS_API_KEY + '&client_secret=' + process.env.AMADEUS_API_SECRET;
 
   fetch('https://test.api.amadeus.com/v1/security/oauth2/token', {
@@ -32,7 +30,10 @@ app.get('/api/amadeus-access-token', (req, res) => {
     .catch(function (error) {
       console.log(error);
     });
-})
+};
+
+// api get request from flights search to get access token from amadeus
+app.get('/api/amadeus-access-token', fetchAmadeusAccessToken);
 
 /* ------------------- sends rapid api key to frontend -------------------- */
 app.get('/api/rapid-api-key', (req, res) => {
