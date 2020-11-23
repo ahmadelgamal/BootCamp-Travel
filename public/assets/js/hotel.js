@@ -102,16 +102,16 @@ var displayPropertyInfo = function (
 var GetIdhotel = function (City, checkIn, checkOut) {
   
   fetch(
-    "https://cors-anywhere.herokuapp.com/https://hotels4.p.rapidapi.com/locations/search?locale=en_US&query=" +
+    "https://hotels4.p.rapidapi.com/locations/search?locale=en_US&query=" +
+    // "https://cors-anywhere.herokuapp.com/https://hotels4.p.rapidapi.com/locations/search?locale=en_US&query=" +
     City,
     {
       method: "GET",
       headers: {
-        "x-rapidapi-host": "hotels4.p.rapidapi.com",
         "x-rapidapi-key": rapidApiKey,
-      },
-    }
-  )
+        "x-rapidapi-host": "hotels4.p.rapidapi.com"
+      }
+    })
     .then(function (response) {
       // request was successful
       if (response.ok) {
@@ -168,7 +168,8 @@ var getProperties = function (
 ) {
   searchingMessageEl2.innerHTML = "Searching...";
   var url6 =
-    "https://cors-anywhere.herokuapp.com/https://hotels4.p.rapidapi.com/properties/list?currency=" +
+    "https://hotels4.p.rapidapi.com/properties/list?currency=" +
+    // "https://cors-anywhere.herokuapp.com/https://hotels4.p.rapidapi.com/properties/list?currency=" +
     currency +
     "&locale=en_US&sortOrder=" +
     sortOrder +
@@ -185,14 +186,12 @@ var getProperties = function (
     "&adults=" +
     adultNumber;
 
-  console.log(rapidApiKey);
-  
   fetch(url6, {
     method: "GET",
     headers: {
-      "x-rapidapi-host": "hotels4.p.rapidapi.com",
       "x-rapidapi-key": rapidApiKey,
-    },
+      "x-rapidapi-host": "hotels4.p.rapidapi.com"
+    }
   })
     .then(function (response) {
       // request was successful
