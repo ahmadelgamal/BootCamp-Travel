@@ -1,3 +1,6 @@
+// to avoid getting validation error for using `const` declarations
+/*jshint esversion: 6 */
+
 /* -------------------- BEGINS DECLARATIONS OF GLOBAL VARIABLES -------------------- */
 var city = ""; // Identifies city to be searched
 var checkInDt = ""; //Check-in date
@@ -93,7 +96,7 @@ var displayPropertyInfo = function (
       '</div>  </div>'
     );
   }
-}
+};
 
 /* -------------------- OBTAIN ID FOR CITY REQUIRED FOR PROPERTY SEARCH-------------------- */
 var GetIdhotel = function (City, checkIn, checkOut) {
@@ -206,7 +209,7 @@ var getProperties = function (
             }
 
             // get page number and total count 
-            if ((typeof data6.data.body.searchResults.pagination != "undefined")) {
+            if ((typeof data6.data.body.searchResults.pagination !== "undefined")) {
               var pagen = data6.data.body.searchResults.pagination.currentPage;
               var nextPage = data6.data.body.searchResults.pagination.nextPageNumber;
 
@@ -225,7 +228,7 @@ var getProperties = function (
             }
 
             // Get remaining information about the hotel properties
-            for (i = 0; i < propId.length; i++) {
+            for (let i = 0; i < propId.length; i++) {
               // the if statements account for any information on the server that might be undefined 
               var propIde = [];
               propIde[i] = data6.data.body.searchResults.results[i].id;
@@ -264,12 +267,10 @@ var getProperties = function (
               }
 
               if (((typeof data6.data.body.searchResults.results[i].address.streetAddress) || (typeof data6.data.body.searchResults.results[i].address.locality) || (typeof data6.data.body.searchResults.results[i].address.region) || (typeof data6.data.body.searchResults.results[i].address.postalCode) || (typeof data6.data.body.searchResults.results[i].address.countryName)) == "undefined") {
-                var address = "Missing Address Information"
+                var address = "Missing Address Information";
               }
               else {
-
                 var address = data6.data.body.searchResults.results[i].address.streetAddress + "<br>" + data6.data.body.searchResults.results[i].address.locality + ", " + data6.data.body.searchResults.results[i].address.region + " " + data6.data.body.searchResults.results[i].address.postalCode + "<br>" + data6.data.body.searchResults.results[i].address.countryName;
-
               }
 
               if ((typeof data6.data.body.searchResults.results[i].neighbourhood) == "undefined") {
@@ -303,7 +304,7 @@ var getProperties = function (
                 price
               );
 
-              if (hotels != null) {
+              if (hotels !== null) {
 
                 for (k = 0; k < hotels.length; k++) {
 
@@ -343,7 +344,7 @@ var setInitial = function () {
     localStorage.removeItem("tempHotel");
   }
   setFavData();
-}
+};
 
 /* -------------------- SET SORTING ORDER AND DISPLAY -------------------- */
 var SortOrderFunction = function (sortSelect) {
@@ -352,7 +353,7 @@ var SortOrderFunction = function (sortSelect) {
   if (sortSelect == "#sort-hotel-price") {
     var sortPrice = ele[0].innerText;
     var splitPrice = sortPrice.split(" ");
-    if (splitPrice[1] == "↓" || splitPrice[1] == undefined) {
+    if (splitPrice[1] == "↓" || splitPrice[1] === undefined) {
       sortOrd = "PRICE";
       var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
       $("#hotels-grid").empty();
@@ -394,7 +395,7 @@ var SortOrderFunction = function (sortSelect) {
   } else if (sortSelect == "#sort-hotel-rating") {
     var sortRating = ele[0].innerText;
     var splitRating = sortRating.split(" ");
-    if (splitRating[1] == "↓" || splitRating[1] == undefined) {
+    if (splitRating[1] == "↓" || splitRating[1] === undefined) {
       sortOrd = "STAR_RATING_LOWEST_FIRST";
       var tempHotel = JSON.parse(localStorage.getItem("tempHotel"));
       $("#hotels-grid").empty();
@@ -439,7 +440,7 @@ var SortOrderFunction = function (sortSelect) {
 /*--------------------- CHECK FOR EXISTING FAVORITES ------------------*/
 var unReserve = function (propval) {
   hotels = JSON.parse(localStorage.getItem("hotels"));
-  if (hotels != "") {
+  if (hotels !== "") {
     for (i = 0; i < hotels.length; i++) {
 
       if (hotels[i].IdCity == propval) {
@@ -447,14 +448,14 @@ var unReserve = function (propval) {
       }
     }
   }
-}
+};
 
 /* --------------------- GET FAVORITES DATA -----------------*/
 var setFavData = function () {
 
   hotels = JSON.parse(localStorage.getItem("hotels"));
   // Display forvorites
-  if (hotels != null) {
+  if (hotels !== null) {
     for (i = 0; i < hotels.length; i++) {
       displayPropertyInfo(
         newInitlay,
@@ -474,7 +475,7 @@ var setFavData = function () {
       );
     }
   }
-}
+};
 
 /* --------------------- GET PROPERTY DATA FUNCTION CALL -----------------*/
 var propData = function () {
@@ -487,7 +488,7 @@ var propData = function () {
   searchingMessageEl2.innerHTML = "";
   errorgMessageEl2.innerHTML = "";
 
-  if (tempHotel != null) {
+  if (tempHotel !== null) {
 
     getProperties(
       tempHotel.cityIdent,
@@ -500,7 +501,7 @@ var propData = function () {
       adults
     );
   }
-}
+};
 
 /* -------------------- PULL LOCAL STORAGE-------------------- */
 setInitial();
@@ -519,7 +520,7 @@ $("#form").on("submit", function (event) {
     // Read city value from form
     city = $("#hotel-city").val();
 
-    if (city == "") {
+    if (city === "") {
       errorgMessageEl2.innerHTML = "Sorry, the city name is missing. Please try again ";
     }
     else {
@@ -614,7 +615,7 @@ $(document).on("click", ".reserve", function () {
   hotels = JSON.parse(localStorage.getItem("hotels"));
 
   //sets initial values if null
-  if (hotels == null) {
+  if (hotels === null) {
     var hotels = [
       {
         // Object for local storage
@@ -716,7 +717,7 @@ $(document).on("click", "#hotels-tab", function () {
   searchingMessageEl2.innerHTML = "";
   errorgMessageEl2.innerHTML = "";
 
-  if (tempHotel != null) {
+  if (tempHotel !== null) {
 
     getProperties(
       tempHotel.cityIdent,
