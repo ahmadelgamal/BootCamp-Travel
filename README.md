@@ -71,7 +71,7 @@ This app is very simple to use. Just follow these steps:
 
 If you wish to clone this app, you will need to:
 
-1. Generate your own API credentials for flights, from Amadeus.
+1. Generate your own API credentials for flights, from Amadeus (flight offers search).
 1. Generate your own API Key for hotels, from RapidApi.
 1. For testing on your local machine, there is a sample file in `lib/v2-assets` named `dotenv`:
    1. Rename that file to `.env`.

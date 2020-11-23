@@ -1,8 +1,8 @@
-// to avoid getting validation error for using `const` declarations
+// to avoid getting validation errors for using `const` declarations
 /*jshint esversion: 6 */
 
 /* ---------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ----------- */
-// ui settings. rgb were chosen over hexadecimals because console was loggin hexa in rgb
+// ui settings. rgb were chosen over hexadecimals because console was logging hexa in rgb
 const favoritesBtnColor = "rgb(255, 165, 0)";
 const deletedFavoritesBtnColor = "rgb(255, 0, 0)";
 
@@ -87,12 +87,17 @@ var toggleInterval; // timer for toggling "searching" message
 /* ------------------------ BEGINS HANDLER FUNCTIONS ------------------------ */
 /* --------------------------- search-form handler -------------------------- */
 var searchFormHandler = function (event) {
-  // if (goingFromEl.value !== "" && goingToEl.value !== "" && dateDepartureEl.value !== "") {
-    if (flightsTabEl.className === "uk-active") {
-      event.preventDefault(); // prevents the search-form submit from triggering a refresh of index.html
+  if (flightsTabEl.className === "uk-active") {
+    event.preventDefault(); // prevents the search-form submit from triggering a refresh of index.html
+    showFlights(); // calls function defined in script.js to display id=flights-container (overall flights container)
+    amadeusData = []; // clears previous fetch from memory;
+    clearInterval(toggleInterval); // stops toggling searching message
+    searchingMessageEl.innerHTML = ""; // clears searching message from previous search
+    flightsGridEl.innerHTML = ""; // clears data from previous search
+
+    /* ----- checks to see that search form fields are filled ----- */
+    if (goingFromEl.value !== "" && goingToEl.value !== "" && dateDepartureEl.value !== "") {
       collectSearchForm();
-      amadeusData = []; // clears previous fetch from memory;
-      showFlights(); // calls function defined in script.js to display id=flights-container (overall flights container)
       searchingMessage(); // informs user that search is running
       errorMessageEl.innerHTML = ""; // clears error message from previous search
       saveUrl();
@@ -106,12 +111,17 @@ var searchFormHandler = function (event) {
         .then(data => {
           let accessToken = data;
           fetchFlightOffersSearch(accessToken);
+        })
+        .catch((error) => {
+          clearInterval(toggleInterval); // stops toggling searching message
+          searchingMessageEl.innerHTML = ""; // clears searching message from previous search
+          errorMessageEl.innerHTML = error + "<br />Please check internet connection"; // clears error message from previous search
+          console.error(error + '\nPlease check internet connection');
         });
-      }
-  // } else {
-  //     event.preventDefault(); // prevents the search-form submit from triggering a refresh of index.html
-  //     showFlights(); // calls function defined in script.js to display id=flights-container (overall flights container)
-  //     errorMessageEl.innerHTML = "Please complete the form above"; // error message in case the search form has not been filled up
+    } else {
+      errorMessageEl.innerHTML = "Please complete the form above"; // error message in case the search form has not been filled up
+    }
+  }
 };
 
 /* ------------------------ handler for flights tab ------------------------- */
@@ -303,7 +313,7 @@ var fetchFlightOffersSearch = function (accessToken) {
       Authorization: "Bearer " + accessToken,
     },
   })
-  .then()
+    .then()
     .then(function (response) {
       return response.json();
     })
@@ -526,9 +536,6 @@ var sortByDeparture = function () {
 /* ------------------- BEGINS DOM-MANIPULATION FUNCTIONS -------------------- */
 /* ------ writes data from "flight offers search" amadeus api to html ------- */
 var createFlightElements = function (data) {
-  // clears data from previous search
-  flightsGridEl.innerHTML = "";
-
   // shows flights sorting menu
   sortFlightsMenuEl.style.display = "";
 
