@@ -103,7 +103,6 @@ var GetIdhotel = function (City, checkIn, checkOut) {
   
   fetch(
     "https://hotels4.p.rapidapi.com/locations/search?locale=en_US&query=" +
-    // "https://cors-anywhere.herokuapp.com/https://hotels4.p.rapidapi.com/locations/search?locale=en_US&query=" +
     City,
     {
       method: "GET",
@@ -169,7 +168,6 @@ var getProperties = function (
   searchingMessageEl2.innerHTML = "Searching...";
   var url6 =
     "https://hotels4.p.rapidapi.com/properties/list?currency=" +
-    // "https://cors-anywhere.herokuapp.com/https://hotels4.p.rapidapi.com/properties/list?currency=" +
     currency +
     "&locale=en_US&sortOrder=" +
     sortOrder +
