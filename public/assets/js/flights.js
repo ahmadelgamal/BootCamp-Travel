@@ -87,25 +87,31 @@ var toggleInterval; // timer for toggling "searching" message
 /* ------------------------ BEGINS HANDLER FUNCTIONS ------------------------ */
 /* --------------------------- search-form handler -------------------------- */
 var searchFormHandler = function (event) {
-  if (flightsTabEl.className === "uk-active") {
-    event.preventDefault(); // prevents the search-form submit from triggering a refresh of index.html
-    collectSearchForm();
-    amadeusData = []; // clears previous fetch from memory;
-    showFlights(); // calls function defined in script.js to display id=flights-container (overall flights container)
-    searchingMessage(); // informs user that search is running
-    errorMessageEl.innerHTML = ""; // clears error message from previous search
-    saveUrl();
-    fetch('/api/access-token', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
+  if (goingFromEl.value !== "" && goingToEl.value !== "" && dateDepartureEl.value !== "") {
+    if (flightsTabEl.className === "uk-active") {
+      event.preventDefault(); // prevents the search-form submit from triggering a refresh of index.html
+      collectSearchForm();
+      amadeusData = []; // clears previous fetch from memory;
+      showFlights(); // calls function defined in script.js to display id=flights-container (overall flights container)
+      searchingMessage(); // informs user that search is running
+      errorMessageEl.innerHTML = ""; // clears error message from previous search
+      saveUrl();
+      fetch('/api/access-token', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+        .then(res => res.json())
+        .then(data => {
+          let accessToken = data;
+          fetchFlightOffersSearch(accessToken);
+        });
       }
-    })
-      .then(res => res.json())
-      .then(data => {
-        let accessToken = data;
-        fetchFlightOffersSearch(accessToken);
-      });
+  } else {
+      event.preventDefault(); // prevents the search-form submit from triggering a refresh of index.html
+      showFlights(); // calls function defined in script.js to display id=flights-container (overall flights container)
+      errorMessageEl.innerHTML = "Please complete the form above"; // error message in case the search form has not been filled up
   }
 };
 
@@ -298,6 +304,7 @@ var fetchFlightOffersSearch = function (accessToken) {
       Authorization: "Bearer " + accessToken,
     },
   })
+  .then()
     .then(function (response) {
       return response.json();
     })
@@ -311,7 +318,7 @@ var fetchFlightOffersSearch = function (accessToken) {
     })
     .catch(function (error) {
       clearInterval(toggleInterval); // stops toggling searching message
-      searchingMessageEl.textContent = ""; // clears searching message
+      searchingMessageEl.innerHTML = ""; // clears searching message
       errorMessageEl.innerHTML = error + "<br />Please check the dates and airport codes.";
     });
 };

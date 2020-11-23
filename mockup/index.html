@@ -190,6 +190,8 @@
               placeholder="&#xf783;  Departs:"
               />
               
+              <!-- type="text" -->
+            <!-- type="text" -->
             <input
               class="uk-input uk-border-rounded uk-width-2-5 fa"
               readonly="true"
@@ -257,6 +259,7 @@
       id="hotel-favorites-grid"
       class="uk-grid uk-width-1-1 uk-padding-remove-horizontal margin-zero uk-margin-top"
     >
+      <!-- class="uk-grid uk-width-1-1 uk-border-rounded uk-background-muted uk-padding-remove-horizontal margin-zero" -->
       <!-- ends single past hotels search (favorite hotels) -->
     </div>
       <!-- ends past hotels search (hotel favorites) grid-->
@@ -354,11 +357,54 @@
         class="uk-grid uk-width-1-1 uk-padding-remove-horizontal margin-zero uk-margin-top"
       >
         <!--this is a single hotel. this grid must be generated dynamically through JS and appended to the div above (id="hotels-container")-->
+        <div
+          class="uk-grid uk-border-rounded uk-background-default uk-padding-remove-horizontal margin-zero test-border"
+        >
+          <div
+            class="uk-border-rounded uk-width-1-3@m uk-width1-1@s uk-background-default padding-none uk-flex uk-flex-middle margin-zero"
+          >
+            <img
+              class="uk-border-rounded"
+              src="https://images.trvl-media.com/hotels/1000000/30000/20900/20835/88bc9393.jpg"
+            />
+          </div>
+
+          <div class="uk-grid uk-width-2-3@m uk-width-1-1@s">
+            <div class="uk-width-1-2 uk-margin-medium">
+              <h4>Travelodge by Wyndham, Santa Clarita/Valencia</h4>
+              <p>
+                Canyon Country <br />
+                <span class="uk-text-success">Reserve Now, Pay Later</span
+                ><br />
+                <span class="uk-text-success">Free Cancellation</span>
+                <span class="uk-position-bottom uk-position-relative"
+                  >3.3/5 Rating (1000 Reviews)</span
+                >
+              </p>
+            </div>
+
+            <div
+              class="uk-border-rounded uk-width-1-2 uk-padding-small uk-padding-remove-horizontal price"
+            >
+              <h2 class="uk-margin-remove-vertical">
+                $109
+              </h2>
+              <b>per Night</b>
+              <button
+                class="uk-button uk-margin-large-top uk-margin-remove-horizontal uk-button-large uk-button-primary uk-border-rounded hide"
+              >
+                Reserve
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- end of single hotel grid-->
       </div>
 
       <h3 id="hotels-searching-message"></h3>
       <h3 id="hotels-error-message"></h3>
+
     
       <!-- end of hotels grid -->
     </div>
