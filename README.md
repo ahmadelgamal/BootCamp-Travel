@@ -12,11 +12,16 @@ Do you travel? If yes, and you want to compare prices for airfare and lodging to
 - [How to Use the App](#How-to-Use-the-App)
 - [Technologies Used](#Technologies-Used)
 - [Cloning](#Cloning)
+- [Future Upgrades](#Future-Upgrades)
 - [Collaborators](#Collaborators)
 
 ## Version 2
 
-The main improvement in version 2 is that the access token for the Amadeus API, that generates the flight search information, is now dynamically generated, instead of being hardcoded as in version 1.
+- The access token for the Amadeus API, that generates the flight search information, is now dynamically generated, instead of being hardcoded as in version 1.
+- The Rapid API key, that generates the hotel search information, has been moved to the backend for better security.
+- Fixes an error when deleting a favorite flight.
+- Adds an error message if the internet is disconnected in flights search.
+- Adds an error message if the search flights button is submitted without filling up the search form.
 
 ## Purpose of App
 
@@ -80,12 +85,18 @@ If you wish to clone this app, you will need to:
    1. Enter your Rapid API Key in the corresponding variable.
 1. For production, set the API credentials manually in `heroku` configurations, or whatever other host you use.
 
+## Future Upgrades
+
+1. Perform flight fetch requests on the backend to hide the Amadeus access token.
+1. Perform hotel fetch requests on the backend to hide the Rapid API Key.
+1. Use the same error messages for flights and hotels search.
+
 ## Collaborators
 
 Bootcamp Travel is group 7's project 1 at the University of California, Berkeley, extension, blended-online full-stack web-development part-time bootcamp. The group is:
 
-| Name              | GitHub Page                     | Main Responsibilities                      | Main Files                               |
-| ----------------- | ------------------------------- | ------------------------------------------ | ---------------------------------------- |
-| Gautam Tankha     | https://github.com/gtankha      | Project Manager & Hotel search             | `hotel.js`                               |
-| Marco Evangelista | https://github.com/marcobjj     | User Interface (Structure & Styling)       | `index.html`, `style.css`, & `script.js` |
-| Ahmad El Gamal    | https://github.com/ahmadelgamal | Flights search& backend (routing & heroku) | `flights.js` & `server.js`               |
+| Name              | GitHub Page                     | Main Responsibilities                | Main Files                               |
+| ----------------- | ------------------------------- | ------------------------------------ | ---------------------------------------- |
+| Gautam Tankha     | https://github.com/gtankha      | Project Manager & Hotel search       | `hotel.js`                               |
+| Marco Evangelista | https://github.com/marcobjj     | User Interface (Structure & Styling) | `index.html`, `style.css`, & `script.js` |
+| Ahmad El Gamal    | https://github.com/ahmadelgamal | Flights search, routing & deployment | `flights.js` & `server.js`               |
