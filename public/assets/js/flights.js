@@ -91,7 +91,7 @@ var searchFormHandler = function (event) {
     event.preventDefault(); // prevents the search-form submit from triggering a refresh of index.html
     collectSearchForm();
     amadeusData = []; // clears previous fetch from memory;
-    showFlights(); // calls function in script.js to display id=flights-container (overall flights container)
+    showFlights(); // calls function defined in script.js to display id=flights-container (overall flights container)
     searchingMessage(); // informs user that search is running
     errorMessageEl.innerHTML = ""; // clears error message from previous search
     saveUrl();
@@ -252,7 +252,7 @@ var collectFavoriteFlightData = function (favoriteFlightBtn) {
 
 /* ---------------- uses iata airport code to get city name ----------------- */
 var collectCity = function (iataAirport) {
-  return mainAirports[iataAirport].city; // calls object in a different file
+  return mainAirports[iataAirport].city; // calls object defined in airports.js
 };
 /* --------------------- ENDS DATA COLLECTION FUNCTIONS --------------------- */
 
@@ -725,7 +725,7 @@ var createPriceElements = function (data, flightCounter, epochTimeStamp) {
 
 /* --------- creates favorite flight elements on visit and refresh ---------- */
 var createFavoriteFlightsElements = function (favoriteFlightsLS) {
-  showSearchHistory(); // calls function in script.js to show favorites
+  showSearchHistory(); // calls function defined in script.js to show favorites
 
   flightsFavoritesGridEl.innerHTML = ""; // clears previous favorites
 

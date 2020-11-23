@@ -153,17 +153,17 @@ var showSearchHistory = function () {
   searchContainer.style.display = "";
 };
 
-var flightsHandler = function (event) {
+var flightsHandler = function () {
   showFlightsMenu();
   showFlights();
 };
 
-var hotelsHandler = function (event) {
+var hotelsHandler = function () {
   showHotelsMenu();
   showHotels();
 };
 
-var toggleTripHandler = function (event) {
+var toggleTripHandler = function () {
   if (this.options[0].selected) {
     document.querySelector("#date-return").style.display = "none";
   }
@@ -188,29 +188,23 @@ var tabsHandler = function (event) {
 
 
   if (event.target.id == "flights-btn" || event.target.parentElement.id == "flights-btn") {
-
     activeTab = "flights";
   }
 
   if (event.target.id == "hotels-btn" || event.target.parentElement.id == "hotels-btn") {
-
     activeTab = "hotels";
   }
 
   if (event.target.id == "favorites-btn" || event.target.parentElement.id == "favorites-btn") {
-
     setTimeout(function () {
       document.querySelector("#" + activeTab + "-tab").className = "uk-active";
-
       document.querySelector("#favorites-tab").className = "";
     }, 300);
-
   }
-
-}
+};
 
 var inputBlurHandler = function (event) {
-  if (tempAutoCompleteValue == "") {
+  if (tempAutoCompleteValue === "") {
     return;
   }
 
@@ -240,7 +234,7 @@ function autocomplete(inp, arr) {
 
   var currentFocus;
   /*execute a function when someone writes in the text field:*/
-  inp.addEventListener("input", function (e) {
+  inp.addEventListener("input", function () {
     var a,
       b,
       i,
@@ -261,7 +255,6 @@ function autocomplete(inp, arr) {
     this.parentNode.appendChild(a);
 
     /*for each item in the array...*/
-    //  for (i = 0; i < arr.length; i++) {
     for (i in arr) {
       /*check if the item starts with the same letters as the text field value:*/
       if (
@@ -270,11 +263,9 @@ function autocomplete(inp, arr) {
         if (max++ >= 4) break;
         /*create a DIV element for each matching element:*/
         b = document.createElement("DIV");
-
         b.clasName = "auto-complete";
 
         /*make the matching letters bold:*/
-
         if (this.id == "going-from") icon = "&#xf5b0; ";
         if (this.id == "going-to") icon = "&#xf5af; ";
         if (this.id == "hotel-city") {
@@ -282,12 +273,11 @@ function autocomplete(inp, arr) {
 
           b.innerHTML =
             "<strong>" + arr[i].city + "</strong> ";
+
           b.innerHTML +=
             ", " +
-            arr[i].country
-
-            + " (" + arr[i].iata + ")";
-
+            arr[i].country +
+            " (" + arr[i].iata + ")";
 
           b.innerHTML +=
             "<input class='fa' type='hidden' value='" +
@@ -296,13 +286,12 @@ function autocomplete(inp, arr) {
             ", " +
             arr[i].country +
             "'>";
-
         }
         else {
           /*insert a input field that will hold the current array item's value:*/
-
           b.innerHTML =
             "<strong>" + arr[i].iata + "</strong> ";
+
           b.innerHTML +=
             ", " +
             arr[i].name +
@@ -310,8 +299,6 @@ function autocomplete(inp, arr) {
             arr[i].city +
             ", " +
             arr[i].country;
-
-
 
           b.innerHTML +=
             "<input class='fa' type='hidden' value='" +
@@ -326,10 +313,8 @@ function autocomplete(inp, arr) {
         if (max == 1)
           tempAutoCompleteValue = b.getElementsByTagName("input")[0].value;
 
-        var test = b.getElementsByTagName("input");
-
         /*execute a function when someone clicks on the item value (DIV element):*/
-        b.addEventListener("mousedown", function (e) {
+        b.addEventListener("mousedown", function () {
           /*insert the value for the autocomplete text field:*/
           inp.value = this.getElementsByTagName("input")[0].value;
           tempAutoCompleteValue = "";
@@ -341,8 +326,6 @@ function autocomplete(inp, arr) {
       }
     }
   });
-
-
 }
 
 function autocompleteCities(inp, arr) {
@@ -351,7 +334,7 @@ function autocompleteCities(inp, arr) {
 
   var currentFocus;
   /*execute a function when someone writes in the text field:*/
-  inp.addEventListener("input", function (e) {
+  inp.addEventListener("input", function () {
     var a,
       b,
       i,
@@ -381,25 +364,20 @@ function autocompleteCities(inp, arr) {
         if (max++ >= 12) break;
         /*create a DIV element for each matching element:*/
         b = document.createElement("DIV");
-
         b.clasName = "auto-complete";
 
         /*make the matching letters bold:*/
-
-
         icon = "&#xf594; ";
 
         /*insert a input field that will hold the current array item's value:*/
-
         b.innerHTML =
           "<strong>" + arr[i].name + "</strong> ";
+
         b.innerHTML +=
           ", " +
           arr[i].subcountry +
           ", " +
           arr[i].country;
-
-
 
         b.innerHTML +=
           "<input class='fa' type='hidden' value='" +
@@ -412,10 +390,8 @@ function autocompleteCities(inp, arr) {
         if (max == 1)
           tempAutoCompleteValue = b.getElementsByTagName("input")[0].value;
 
-        var test = b.getElementsByTagName("input");
-
         /*execute a function when someone clicks on the item value (DIV element):*/
-        b.addEventListener("mousedown", function (e) {
+        b.addEventListener("mousedown", function () {
           /*insert the value for the autocomplete text field:*/
           inp.value = this.getElementsByTagName("input")[0].value;
           tempAutoCompleteValue = "";
@@ -427,8 +403,6 @@ function autocompleteCities(inp, arr) {
       }
     }
   });
-
-
 }
 
 function closeAllLists(elmnt, inp) {
@@ -443,9 +417,9 @@ function closeAllLists(elmnt, inp) {
 }
 
 /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-autocomplete(document.getElementById("going-from"), mainAirports);
-autocomplete(document.getElementById("going-to"), mainAirports);
-autocompleteCities(document.getElementById("hotel-city"), mainCities);
+autocomplete(document.getElementById("going-from"), mainAirports); // mainAirports is defined in airports.js
+autocomplete(document.getElementById("going-to"), mainAirports); // mainAirports is defined in airports.js
+autocompleteCities(document.getElementById("hotel-city"), mainCities); // mainCities is defined in world-cities.js
 
 flightsBtn.addEventListener("click", flightsHandler);
 hotelsBtn.addEventListener("click", hotelsHandler);
@@ -457,7 +431,5 @@ document.addEventListener("keydown", tabKeyHandler);
 document
   .querySelector("#form")
   .addEventListener("blur", inputBlurHandler, true);
-
-
 
 init();
