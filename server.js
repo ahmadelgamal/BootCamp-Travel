@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // api get request from flights search to get access token from amadeus
-app.get('/api/access-token', (req, res) => {
+app.get('/api/amadeus-access-token', (req, res) => {
 
   /* ------------------- fetches access token from amadeus -------------------- */
   const amadeusRequestAccessTokenBody = 'grant_type=client_credentials&client_id=' + process.env.AMADEUS_API_KEY + '&client_secret=' + process.env.AMADEUS_API_SECRET;
@@ -32,7 +32,12 @@ app.get('/api/access-token', (req, res) => {
     .catch(function (error) {
       console.log(error);
     });
-
 })
+
+/* ------------------- sends rapid api key to frontend -------------------- */
+app.get('/api/rapid-api-key', (req, res) => {
+  const rapidApiKey = process.env.RAPID_API_KEY;
+  res.json(rapidApiKey);
+});
 
 app.listen(port, () => console.log(`App listening on port ${port}`));

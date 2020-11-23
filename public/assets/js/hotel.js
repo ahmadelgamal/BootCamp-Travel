@@ -8,7 +8,7 @@ var checkOutDt = ""; // Check-out date
 var id = 0;
 var urls = []; // URLs of the images
 var maxHistoryLength = 100; // History length
-var urlKey = "5d5909e26bmshfb2a825f7b2cf74p1f485ajsna344ade586d8"; // URL Key
+let rapidApiKey = ""; // Rapid API Key
 const newHotellay = document.getElementById("hotels-grid"); // Get parent element of HTML document from search
 const newInitlay = document.getElementById("hotel-favorites-grid");// Get parent element of HTML document during initalization
 const searchingMessageEl2 = document.getElementById("searching-message-hotel"); // constant that points to searching message element
@@ -100,6 +100,7 @@ var displayPropertyInfo = function (
 
 /* -------------------- OBTAIN ID FOR CITY REQUIRED FOR PROPERTY SEARCH-------------------- */
 var GetIdhotel = function (City, checkIn, checkOut) {
+  
   fetch(
     "https://cors-anywhere.herokuapp.com/https://hotels4.p.rapidapi.com/locations/search?locale=en_US&query=" +
     City,
@@ -107,7 +108,7 @@ var GetIdhotel = function (City, checkIn, checkOut) {
       method: "GET",
       headers: {
         "x-rapidapi-host": "hotels4.p.rapidapi.com",
-        "x-rapidapi-key": urlKey,
+        "x-rapidapi-key": rapidApiKey,
       },
     }
   )
@@ -184,11 +185,13 @@ var getProperties = function (
     "&adults=" +
     adultNumber;
 
+  console.log(rapidApiKey);
+  
   fetch(url6, {
     method: "GET",
     headers: {
       "x-rapidapi-host": "hotels4.p.rapidapi.com",
-      "x-rapidapi-key": urlKey,
+      "x-rapidapi-key": rapidApiKey,
     },
   })
     .then(function (response) {
@@ -508,8 +511,19 @@ setInitial();
 
 /* -------------------- PROCESS REQUEST FOR HOTEL SEARCH-------------------- */
 $("#form").on("submit", function (event) {
+
   if (hotelsTabEl.className === "uk-active") {
     event.preventDefault();
+
+    fetch('/api/rapid-api-key', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      rapidApiKey = data;
 
     $("#hotels-grid").empty(); // Empties previous display
     $("#hotel-favorites-grid").empty();
@@ -563,6 +577,7 @@ $("#form").on("submit", function (event) {
         errorgMessageEl2.innerHTML = "Sorry, check-in date needs to be before the check-out date ";
       }
     }
+  })
   }
 });
 

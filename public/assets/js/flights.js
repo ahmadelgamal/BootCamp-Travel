@@ -87,7 +87,7 @@ var toggleInterval; // timer for toggling "searching" message
 /* ------------------------ BEGINS HANDLER FUNCTIONS ------------------------ */
 /* --------------------------- search-form handler -------------------------- */
 var searchFormHandler = function (event) {
-  if (goingFromEl.value !== "" && goingToEl.value !== "" && dateDepartureEl.value !== "") {
+  // if (goingFromEl.value !== "" && goingToEl.value !== "" && dateDepartureEl.value !== "") {
     if (flightsTabEl.className === "uk-active") {
       event.preventDefault(); // prevents the search-form submit from triggering a refresh of index.html
       collectSearchForm();
@@ -96,7 +96,7 @@ var searchFormHandler = function (event) {
       searchingMessage(); // informs user that search is running
       errorMessageEl.innerHTML = ""; // clears error message from previous search
       saveUrl();
-      fetch('/api/access-token', {
+      fetch('/api/amadeus-access-token', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -108,11 +108,10 @@ var searchFormHandler = function (event) {
           fetchFlightOffersSearch(accessToken);
         });
       }
-  } else {
-      event.preventDefault(); // prevents the search-form submit from triggering a refresh of index.html
-      showFlights(); // calls function defined in script.js to display id=flights-container (overall flights container)
-      errorMessageEl.innerHTML = "Please complete the form above"; // error message in case the search form has not been filled up
-  }
+  // } else {
+  //     event.preventDefault(); // prevents the search-form submit from triggering a refresh of index.html
+  //     showFlights(); // calls function defined in script.js to display id=flights-container (overall flights container)
+  //     errorMessageEl.innerHTML = "Please complete the form above"; // error message in case the search form has not been filled up
 };
 
 /* ------------------------ handler for flights tab ------------------------- */
