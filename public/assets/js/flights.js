@@ -328,7 +328,7 @@ var fetchFlightOffersSearch = function (accessToken) {
     .catch(function (error) {
       clearInterval(toggleInterval); // stops toggling searching message
       searchingMessageEl.innerHTML = ""; // clears searching message
-      errorMessageEl.innerHTML = error + "<br />Please check the dates and airport codes.";
+      errorMessageEl.innerHTML = "No flights found! Please change your search criteria.";
     });
 };
 

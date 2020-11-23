@@ -35,7 +35,13 @@ Do you travel? If yes, and you want to compare prices for airfare and lodging to
 
 ## Demo
 
+### Flights Search
+
 ![Flights Search Gif Animation](./public/assets/images/flights-animation.gif)
+
+### Hotel Search
+
+![Hotel Search Gif Animation](./public/assets/images/hotels-animation.gif)
 
 ## Heroku Deployment URL
 
