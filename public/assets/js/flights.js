@@ -795,7 +795,9 @@ var removeFavoriteColor = function (favoriteFlightObject) {
   )[0];
   // check if the flight is still there on the search flights grid
   if (removedFavorite !== null) {
-    removedFavorite.style.backgroundColor = "";
+    if (typeof removedFavorite !== 'undefined') {
+      removedFavorite.style.backgroundColor = "";
+    }
   }
 };
 
