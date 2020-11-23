@@ -2,9 +2,21 @@
 
 Do you travel? If yes, and you want to compare prices for airfare and lodging to make a more informed decision when you are ready to pay, then BootCamp Travel can help you search, save favorites, and retreive them as needed!
 
-## Version
+## Table of Contents
 
-This is version 2 of the app. Version 1 was only frontend. This version (2) includes both frontend and backend development.
+- [Version 2](#Version-2)
+- [Purpose of App](#Purpose-of-App)
+- [Demo](#Demo)
+- [Heroku Deployment URL](#Heroku-Deployment-URL)
+- [GitHub Repo URL](#GitHub-Repo-URL)
+- [How to Use the App](#How-to-Use-the-App)
+- [Technologies Used](#Technologies-Used)
+- [Cloning](#Cloning)
+- [Collaborators](#Collaborators)
+
+## Version 2
+
+The main improvement in version 2 is that the access token for the Amadeus API, that generates the flight search information, is now dynamically generated, instead of being hardcoded as in version 1.
 
 ## Purpose of App
 
@@ -67,7 +79,7 @@ If you wish to clone this app, you will need to:
    1. Enter your Amadeus API credentials in the corresponding variables.
 1. Set the Amadeus API credentials in `heroku` configurations, or whatever other host you use.
 
-## Collaborators (Group Members)
+## Collaborators
 
 Bootcamp Travel is group 7's project 1 at the University of California, Berkeley, extension, blended-online full-stack web-development part-time bootcamp. The group is:
 
@@ -76,7 +88,3 @@ Bootcamp Travel is group 7's project 1 at the University of California, Berkeley
 | Gautam Tankha     | https://github.com/gtankha      | Project Manager & Hotel search             | `hotel.js`                               |
 | Marco Evangelista | https://github.com/marcobjj     | User Interface (Structure & Styling)       | `index.html`, `style.css`, & `script.js` |
 | Ahmad El Gamal    | https://github.com/ahmadelgamal | Flights search& backend (routing & heroku) | `flights.js` & `server.js`               |
-
-## Wiki
-
-For more information, please visit our Wiki page at: https://github.com/gtankha/bootcamptravel/wiki
