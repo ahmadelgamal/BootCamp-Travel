@@ -5,8 +5,6 @@
 var city = ""; // Identifies city to be searched
 var checkInDt = ""; //Check-in date
 var checkOutDt = ""; // Check-out date
-var id = 0;
-var urls = []; // URLs of the images
 var maxHistoryLength = 100; // History length
 let rapidApiKey = ""; // Rapid API Key
 const newHotellay = document.getElementById("hotels-grid"); // Get parent element of HTML document from search
@@ -19,7 +17,10 @@ var adults = 1; // # of adults
 var curr = "USD"; // Currency
 var sortOrd = "PRICE"; // Sort order
 var outcome = false;
-var symbol = "↑";
+var i =0 ;
+var k=0;
+var hotels = [];
+var guestReviews = "";
 
 var hotelsTabEl = document.getElementById("hotels-tab");
 
@@ -281,7 +282,7 @@ var getProperties = function (
               }
 
               if ((typeof data6.data.body.searchResults.results[i].ratePlan == "undefined")) {
-                price = "Missing";
+                var price = "Missing";
               }
               else {
                 var price = data6.data.body.searchResults.results[i].ratePlan.price.current;
@@ -574,7 +575,7 @@ $("#form").on("submit", function (event) {
         errorgMessageEl2.innerHTML = "Sorry, check-in date needs to be before the check-out date ";
       }
     }
-  })
+  });
   }
 });
 

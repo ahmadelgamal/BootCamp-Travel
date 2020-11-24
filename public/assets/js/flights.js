@@ -1,8 +1,8 @@
-// to avoid getting validation error for using `const` declarations
+// to avoid getting validation errors for using `const` declarations
 /*jshint esversion: 6 */
 
 /* ---------- BEGINS DECLARATIONS OF GLOBAL CONSTANTS & VARIABLES ----------- */
-// ui settings. rgb were chosen over hexadecimals because console was loggin hexa in rgb
+// ui settings. rgb were chosen over hexadecimals because console was logging hexa in rgb
 const favoritesBtnColor = "rgb(255, 165, 0)";
 const deletedFavoritesBtnColor = "rgb(255, 0, 0)";
 
@@ -70,7 +70,7 @@ const currencyCode = "USD"; // default is EUR.
 /* ---------------- declares variables for amadeus api urls ----------------- */
 var oneWayFlightOffersSearchApiUrl;
 var roundTripFlightOffersSearchApiUrl;
-var apiUrl;
+var flightsApiUrl;
 
 /* ---------------- declares constants for daisycon api urls ---------------- */
 const daisyconHost = "https://daisycon.io/images/airline/?";
@@ -87,12 +87,17 @@ var toggleInterval; // timer for toggling "searching" message
 /* ------------------------ BEGINS HANDLER FUNCTIONS ------------------------ */
 /* --------------------------- search-form handler -------------------------- */
 var searchFormHandler = function (event) {
-  // if (goingFromEl.value !== "" && goingToEl.value !== "" && dateDepartureEl.value !== "") {
-    if (flightsTabEl.className === "uk-active") {
-      event.preventDefault(); // prevents the search-form submit from triggering a refresh of index.html
+  if (flightsTabEl.className === "uk-active") {
+    event.preventDefault(); // prevents the search-form submit from triggering a refresh of index.html
+    showFlights(); // calls function defined in script.js to display id=flights-container (overall flights container)
+    amadeusData = []; // clears previous fetch from memory;
+    clearInterval(toggleInterval); // stops toggling searching message
+    searchingMessageEl.innerHTML = ""; // clears searching message from previous search
+    flightsGridEl.innerHTML = ""; // clears data from previous search
+
+    /* ----- checks to see that search form fields are filled ----- */
+    if (goingFromEl.value !== "" && goingToEl.value !== "" && dateDepartureEl.value !== "") {
       collectSearchForm();
-      amadeusData = []; // clears previous fetch from memory;
-      showFlights(); // calls function defined in script.js to display id=flights-container (overall flights container)
       searchingMessage(); // informs user that search is running
       errorMessageEl.innerHTML = ""; // clears error message from previous search
       saveUrl();
@@ -106,12 +111,17 @@ var searchFormHandler = function (event) {
         .then(data => {
           let accessToken = data;
           fetchFlightOffersSearch(accessToken);
+        })
+        .catch((error) => {
+          clearInterval(toggleInterval); // stops toggling searching message
+          searchingMessageEl.innerHTML = ""; // clears searching message from previous search
+          errorMessageEl.innerHTML = error + "<br />Please check internet connection"; // clears error message from previous search
+          console.error(error + '\nPlease check internet connection');
         });
-      }
-  // } else {
-  //     event.preventDefault(); // prevents the search-form submit from triggering a refresh of index.html
-  //     showFlights(); // calls function defined in script.js to display id=flights-container (overall flights container)
-  //     errorMessageEl.innerHTML = "Please complete the form above"; // error message in case the search form has not been filled up
+    } else {
+      errorMessageEl.innerHTML = "Please complete the form above"; // error message in case the search form has not been filled up
+    }
+  }
 };
 
 /* ------------------------ handler for flights tab ------------------------- */
@@ -287,23 +297,23 @@ var saveUrl = function () {
 
   // one-way was selected
   if (returnDate === "") {
-    apiUrl = oneWayFlightOffersSearchApiUrl;
+    flightsApiUrl = oneWayFlightOffersSearchApiUrl;
     // roundtrip was selected
   } else if (returnDate !== "") {
-    apiUrl = roundTripFlightOffersSearchApiUrl;
+    flightsApiUrl = roundTripFlightOffersSearchApiUrl;
   }
 };
 
 /* --- gets flight search results from "flight offers search" amadeus api --- */
 var fetchFlightOffersSearch = function (accessToken) {
 
-  fetch(apiUrl, {
+  fetch(flightsApiUrl, {
     method: "GET",
     headers: {
       Authorization: "Bearer " + accessToken,
     },
   })
-  .then()
+    .then()
     .then(function (response) {
       return response.json();
     })
@@ -312,13 +322,13 @@ var fetchFlightOffersSearch = function (accessToken) {
       clearInterval(toggleInterval); // stops toggling searching message
       searchingMessageEl.innerHTML =
         amadeusData.meta.count + " flights available!"; // displays number of matching search results
-      priceSortingArrow.textContent = "↑"; // resets sorting order with every new search to price increasing
+      priceSortingArrow.innerHTML = "↑"; // resets sorting order with every new search to price increasing
       createFlightElements(amadeusData);
     })
     .catch(function (error) {
       clearInterval(toggleInterval); // stops toggling searching message
       searchingMessageEl.innerHTML = ""; // clears searching message
-      errorMessageEl.innerHTML = error + "<br />Please check the dates and airport codes.";
+      errorMessageEl.innerHTML = "No flights found! Please change your search criteria.";
     });
 };
 
@@ -448,10 +458,10 @@ var sortByPrice = function () {
   // creates a disconnected copy of the data object
   var sortedData = JSON.parse(JSON.stringify(amadeusData));
 
-  if (priceSortingArrow.textContent === "↑") {
+  if (priceSortingArrow.innerHTML === "↑") {
     // resets the data to its original order (sorted by price up)
     sortedData = JSON.parse(JSON.stringify(amadeusData));
-  } else if (priceSortingArrow.textContent === "↓") {
+  } else if (priceSortingArrow.innerHTML === "↓") {
     // reverses the default sort order to become price down
     var reversedArray = sortedData.data.reverse();
     sortedData.data = reversedArray;
@@ -480,9 +490,9 @@ var sortByArrival = function () {
     } else if (timeA < timeB) {
       comparison = -1;
     }
-    if (arrivalSortingArrow.textContent === "↑") {
+    if (arrivalSortingArrow.innerHTML === "↑") {
       return comparison;
-    } else if (arrivalSortingArrow.textContent === "↓") {
+    } else if (arrivalSortingArrow.innerHTML === "↓") {
       return comparison * -1;
     }
   }
@@ -509,9 +519,9 @@ var sortByDeparture = function () {
     } else if (timeA < timeB) {
       comparison = -1;
     }
-    if (departureSortingArrow.textContent === "↑") {
+    if (departureSortingArrow.innerHTML === "↑") {
       return comparison;
-    } else if (departureSortingArrow.textContent === "↓") {
+    } else if (departureSortingArrow.innerHTML === "↓") {
       return comparison * -1;
     }
   }
@@ -788,7 +798,9 @@ var removeFavoriteColor = function (favoriteFlightObject) {
   )[0];
   // check if the flight is still there on the search flights grid
   if (removedFavorite !== null) {
-    removedFavorite.style.backgroundColor = "";
+    if (typeof removedFavorite !== 'undefined') {
+      removedFavorite.style.backgroundColor = "";
+    }
   }
 };
 
