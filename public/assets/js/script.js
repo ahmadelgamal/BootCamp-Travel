@@ -9,6 +9,7 @@ var hotelsContainer = document.querySelector("#hotels-container");
 var searchContainer = document.querySelector("#past-search-container");
 
 var tempAutoCompleteValue = "";
+var tempInput = null;
 
 var activeTab = "flights";
 
@@ -312,16 +313,9 @@ function autocomplete(inp, arr) {
         }
         if (max == 1)
           tempAutoCompleteValue = b.getElementsByTagName("input")[0].value;
-
+          tempInput = inp;
         /*execute a function when someone clicks on the item value (DIV element):*/
-        b.addEventListener("mousedown", function () {
-          /*insert the value for the autocomplete text field:*/
-          inp.value = this.getElementsByTagName("input")[0].value;
-          tempAutoCompleteValue = "";
-          /*close the list of autocompleted values
-                    (or any other open lists of autocompleted values:*/
-          closeAllLists(null, inp);
-        });
+        b.addEventListener("mousedown", autoComplete_mouseDown);
         a.appendChild(b);
       }
     }
@@ -391,18 +385,23 @@ function autocompleteCities(inp, arr) {
           tempAutoCompleteValue = b.getElementsByTagName("input")[0].value;
 
         /*execute a function when someone clicks on the item value (DIV element):*/
-        b.addEventListener("mousedown", function () {
-          /*insert the value for the autocomplete text field:*/
-          inp.value = this.getElementsByTagName("input")[0].value;
-          tempAutoCompleteValue = "";
-          /*close the list of autocompleted values
-                    (or any other open lists of autocompleted values:*/
-          closeAllLists(null, inp);
-        });
+        b.addEventListener("mousedown", autoComplete_mouseDown);
         a.appendChild(b);
       }
     }
   });
+}
+
+function autoComplete_mouseDown (event)
+{
+ 
+    /*insert the value for the autocomplete text field:*/
+    tempInput.value = this.getElementsByTagName("input")[0].value;
+    tempAutoCompleteValue = "";
+    /*close the list of autocompleted values
+              (or any other open lists of autocompleted values:*/
+    closeAllLists(null, tempInput);
+  
 }
 
 function closeAllLists(elmnt, inp) {
