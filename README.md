@@ -118,7 +118,6 @@ Bootcamp Travel is group 7's project 1 at the University of California, Berkeley
 1. Use the same error messages for flights and hotels search.
 
 ## Questions
-Please send your questions and / or comments to **Gautam Tankha** at ahmadelgamal@gmail.com, or contact me on [GitHub](https://github.com/gtankha).
-
+For questions and / or comments, please contact any of the developers listed in the [Collaborators](#collaborators) section above.
 ## License
 This project is licensed under the terms of the [MIT](https://opensource.org/licenses/MIT) license.
