@@ -23,10 +23,11 @@
 Do you travel? If yes, and you want to compare prices for airfare and lodging to make a more informed decision when you are ready to pay, then BootCamp Travel can help you search, save favorites, and retreive them as needed!
 
 ## Table of Contents
-- [Deployment URL](#Deployment-URL)
-- [Repo URL](#Repo-URL)
+- [Deployment URL](#Heroku-Deployment-URL)
+- [Repo URL](#GitHub-Repo-URL)
 - [Features](#Features)
 - [Installation](#Installation)
+- [Cloning](#Cloning)
 - [Usage](#Usage)
 - [Demo](#Demo)
 - [Technologies Used](#Technologies-Used)
