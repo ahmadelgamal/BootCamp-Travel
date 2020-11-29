@@ -505,10 +505,20 @@ var propData = function () {
 };
 
 /* -------------------- PULL LOCAL STORAGE-------------------- */
-setInitial();
+
+
+    setInitial();
+  
 
 /* -------------------- PROCESS REQUEST FOR HOTEL SEARCH-------------------- */
 $("#form").on("submit", function (event) {
+
+  // check if connection in online
+  if (!navigator.onLine){
+    $("#hotels-grid").empty(); // Empties previous display
+    $("#hotel-favorites-grid").empty();
+  errorgMessageEl2.innerHTML = "Sorry, something is wrong with the Internet connection. Please reconnect ";
+  }
 
   if (hotelsTabEl.className === "uk-active") {
     event.preventDefault();
