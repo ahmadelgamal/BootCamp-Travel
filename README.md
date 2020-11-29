@@ -52,7 +52,7 @@ https://github.com/gtankha/bootcamptravel/
    1. and access my favorites list in the future
 
 ## Version
-The main updates from version 1.0.0 to this version number 1.1.0 are:
+The main updates from Version 1.0.0 to this current **Version 1.1.0** are:
 - The access token for the Amadeus API, that generates the flight search information, is now dynamically generated, instead of being hardcoded.
 - The Rapid API key, that generates the hotel search information, has been moved to the backend for better security.
 - Fixes an error when deleting a favorite flight.
