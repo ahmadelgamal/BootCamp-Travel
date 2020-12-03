@@ -313,6 +313,7 @@ function autocomplete(inp, arr) {
         }
         if (max == 1)
           tempAutoCompleteValue = b.getElementsByTagName("input")[0].value;
+
           tempInput = inp;
         /*execute a function when someone clicks on the item value (DIV element):*/
         b.addEventListener("mousedown", autoComplete_mouseDown);
@@ -384,6 +385,9 @@ function autocompleteCities(inp, arr) {
         if (max == 1)
           tempAutoCompleteValue = b.getElementsByTagName("input")[0].value;
 
+
+          tempInput = inp;
+
         /*execute a function when someone clicks on the item value (DIV element):*/
         b.addEventListener("mousedown", autoComplete_mouseDown);
         a.appendChild(b);
@@ -396,6 +400,7 @@ function autoComplete_mouseDown (event)
 {
  
     /*insert the value for the autocomplete text field:*/
+  
     tempInput.value = this.getElementsByTagName("input")[0].value;
     tempAutoCompleteValue = "";
     /*close the list of autocompleted values
