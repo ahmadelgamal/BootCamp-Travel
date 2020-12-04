@@ -542,7 +542,7 @@ $("#form").on("submit", function (event) {
     // Read city value from form
     city = $("#hotel-city").val();
 
-    if (city === "") {
+    if (city === "" || city.split("")[1] === undefined || !city.split("")[1]) {
       errorgMessageEl2.innerHTML = "Sorry, the city name is missing. Please try again ";
     }
     else {

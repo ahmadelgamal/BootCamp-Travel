@@ -53,11 +53,12 @@ https://github.com/gtankha/bootcamptravel/
 
 ## Version
 The main updates from Version 1.0.0 to this current **Version 1.1.0** are:
-- The access token for the Amadeus API, that generates the flight search information, is now dynamically generated, instead of being hardcoded.
-- The Rapid API key, that generates the hotel search information, has been moved to the backend for better security.
-- Fixes an error when deleting a favorite flight.
-- Adds an error message if the internet is disconnected.
-- Adds an error message if the search form is submitted without being filled up.
+1. The access token for the Amadeus API, that generates the flight search information, is now dynamically generated, instead of being hardcoded.
+1. The Rapid API key, that generates the hotel search information, has been moved to the backend for better security.
+1. Fixes an error when deleting a favorite flight.
+1. Adds an error message if the internet is disconnected.
+1. Adds an error message if the search form is submitted without being filled up.
+1. Fixes an error when filling the city field in hotel search form.
 
 ## Installation
 No installation necessary. Simply visit the website.
