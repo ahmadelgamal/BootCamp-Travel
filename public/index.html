@@ -1,9 +1,43 @@
+<!-- @format -->
+
 <!DOCTYPE html>
 <html lang="en" class="uk-background-muted">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <!-- favicon links -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/images/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/images/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/images/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/assets/images/favicon/site.webmanifest" />
+    <link
+      rel="mask-icon"
+      href="/assets/images/favicon/safari-pinned-tab.svg"
+      color="#5bbad5"
+    />
+    <link rel="shortcut icon" href="/assets/images/favicon/favicon.ico" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta
+      name="msapplication-config"
+      content="/assets/images/favicon/browserconfig.xml"
+    />
+    <meta name="theme-color" content="#ffffff" />
 
     <!-- UIkit CSS -->
     <link
@@ -31,7 +65,7 @@
     <!-- begins navbar / topbar -->
     <nav class="uk-navbar-container" uk-navbar>
       <div class="uk-navbar-center">
-        <h3><span class="fa">&#xf19c;</span> Bootcamp Travel</h3>
+        <h3><img src="/assets/images/favicon/favicon.ico" alt="logo">Bootcamp Travel</h3>
       </div>
     </nav>
     <!-- ends navbar / topbar -->
@@ -116,7 +150,6 @@
           <div class="uk-form-controls">
             <input
               class="uk-input uk-border-rounded fa"
-              
               data-uk-datepicker="{minDate:0,format:'MM/DD/YYYY'}"
               id="check-in"
               type="text"
@@ -188,8 +221,8 @@
               data-uk-datepicker="{minDate:0,format:'YYYY-MM-DD'}"
               id="date-departure"
               placeholder="&#xf783;  Departs:"
-              />
-              
+            />
+
             <input
               class="uk-input uk-border-rounded uk-width-2-5 fa"
               readonly="true"
@@ -247,18 +280,18 @@
         class="uk-grid uk-width-1-1 uk-border-rounded uk-background-muted uk-padding-remove-horizontal margin-zero"
       >
         <!-- begins single past flights search (favorite flights), should be created dynamically with JS-->
-     
+
         <!-- ends single past flights search (favorite flights) -->
       </div>
       <!-- ends past flights search (favorite flights) grid-->
 
       <!-- begins past hotels search (hotel favorites) grid-->
       <div
-      id="hotel-favorites-grid"
-      class="uk-grid uk-width-1-1 uk-padding-remove-horizontal margin-zero uk-margin-top"
-    >
-      <!-- ends single past hotels search (favorite hotels) -->
-    </div>
+        id="hotel-favorites-grid"
+        class="uk-grid uk-width-1-1 uk-padding-remove-horizontal margin-zero uk-margin-top"
+      >
+        <!-- ends single past hotels search (favorite hotels) -->
+      </div>
       <!-- ends past hotels search (hotel favorites) grid-->
     </div>
     <!-- ends past search (favorites) container-->
@@ -310,7 +343,7 @@
         class="uk-grid uk-width-1-1 uk-border-rounded uk-padding-remove-horizontal margin-zero"
       >
         <!-- THIS IS NOT AN ELEMENT - begins single flight (trip) container, must be generated dymanically with JS and then appended to the div above (id="flights-grid") -->
-       
+
         <!-- THIS IS NOT AN ELEMENT - ends single flight (trip) container -->
       </div>
       <!-- ends flights grid -->
@@ -359,7 +392,7 @@
 
       <h3 id="hotels-searching-message"></h3>
       <h3 id="hotels-error-message"></h3>
-    
+
       <!-- end of hotels grid -->
     </div>
     <!-- ends overall hotels container -->
