@@ -59,6 +59,8 @@ The main updates from Version 1.0.0 to this current **Version 1.1.0** are:
 1. Adds an error message if the internet is disconnected.
 1. Adds an error message if the search form is submitted without being filled up.
 1. Fixes an error when filling the city field in hotel search form.
+1. Adds favicon.
+1. Changes logo to match favicon.
 
 ## Installation
 No installation necessary. Simply visit the website.
